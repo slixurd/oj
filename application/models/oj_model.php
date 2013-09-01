@@ -94,15 +94,17 @@ user_array给出要插入的user表的列和值
 user_state_array给出要插入的user_state表的列和值
 */
 
-/**
+
 	public function add_user($user_array=array('name'=>"name",'email'=>"example@qq.com",'password'=>"123456"),$user_state_array=array('submit'=>0,'solved'=>0)){
+		$this->db->trans_start();
 		$user_sql = $this->db->insert_string('user', $user_array); 
-		$user_state_sql = $this->db->insert_string('user_state', $user_state_array);
 		$this->db->query($user_sql);
 		$query=$this->db->query("SELECT userId FROM user WHERE name = ".$this->db->escape($user_array['name'])."");
 		$row=$query->row_array(0);
 		$user_state_array['userId']=$row['userId'];
+		$user_state_sql = $this->db->insert_string('user_state', $user_state_array);
 		$this->db->query($user_state_sql);
+		$this->db->trans_complete();
 	}
-*/
+
 }
