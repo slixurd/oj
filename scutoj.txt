@@ -21,7 +21,7 @@ KEY(email)
 
 CREATE TABLE user_state(
 userId INT(11) NOT NULL,
-accesstime DATETIME ,
+accessTime DATETIME ,
 submit INT(11) DEFAULT 0,
 solved INT(11) DEFAULT 0,
 PRIMARY KEY(userId)
