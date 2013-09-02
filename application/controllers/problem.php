@@ -13,7 +13,15 @@ class Problem extends CI_Controller {
   
 	public function index()
 	{
-		$data['problem']=$this->oj_model->get_problem_list(TRUE,array('title','output'),"title = 'titletest'");
+		$column_array=array('problemId','title','source','accepted','submit');
+		$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE);
 		$this->load->view('problem_list_view',$data);
 	}
+	
+	public function get_item($id)
+	{
+		$data['problem']=$this->oj_model->get_problem_item($id);
+		$this->load->view('problem_item_view',$data);
+	}
+	
 }
