@@ -2,4 +2,3 @@
 <?php foreach($problem_list as $problem): ?>
 <?php echo $problem['title']."  ".$problem['problemId'] ?><br>
 <?php endforeach; ?>
-

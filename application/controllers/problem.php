@@ -18,10 +18,17 @@ class Problem extends CI_Controller {
 		$this->load->view('problem_list_view',$data);
 	}
 	
-	public function get_item($id)
+	public function get_problem($id)
 	{
-		$data['problem']=$this->oj_model->get_problem_item($id);
-		$this->load->view('problem_item_view',$data);
+		$problem=array(' * ');
+		$data['problem']=$this->oj_model->get_problem_item($id,$problem);
+		if(! empty($data['problem'])){
+			$this->load->view('problem_item_view',$data);
+		}
+		else{
+			$this->index()
+			//show_404();
+		}
 	}
 	
 }
