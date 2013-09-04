@@ -29,9 +29,9 @@ class User extends CI_Controller {
 		$this->form_validation->set_rules('email');
 		if($this->form_validation->run() === TRUE ){
 			$user=array(
-				'name'=>$this->input->post('username'),
-				'password'=>$this->input->post('pa'),
-				'email'=>$this->input->post('email'),
+				'name'=>$this->input->post('username',TRUE),
+				'password'=>$this->input->post('pa',TRUE),
+				'email'=>$this->input->post('email',TRUE),
 				'defunct'=>0
 			);
 			$this->oj_model->add_user($user);
