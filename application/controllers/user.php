@@ -21,6 +21,9 @@ class User extends CI_Controller {
 	
 	public function register()
 	{
+		$this->load->helper('date');
+		$date_str="%Y-%m-%d %H:%i:%s";
+		$this->load->library('encrypt');
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		
@@ -34,6 +37,8 @@ class User extends CI_Controller {
 				'email'=>$this->input->post('email',TRUE),
 				'defunct'=>0
 			);
+			$user['password']=$this->encrypt->encode($user['password']);
+			$user['regTime']=mdate($date_str);
 			$this->oj_model->add_user($user);
 			$this->load->view('register_success_view');
 		}

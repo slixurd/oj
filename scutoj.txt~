@@ -6,7 +6,7 @@ CREATE TABLE user(
 userId INT(11) NOT NULL AUTO_INCREMENT,
 name VARCHAR(20) NOT NULL UNIQUE,
 email VARCHAR(100) NOT NULL UNIQUE,
-password VARCHAR(32) NOT NULL,
+password VARCHAR(50) NOT NULL,
 type VARCHAR(10),
 programLan VARCHAR(10),
 language VARCHAR(20),
@@ -21,7 +21,7 @@ KEY(email)
 
 CREATE TABLE user_state(
 userId INT(11) NOT NULL,
-accesstime DATETIME ,
+accessTime DATETIME ,
 submit INT(11) DEFAULT 0,
 solved INT(11) DEFAULT 0,
 PRIMARY KEY(userId)
@@ -93,7 +93,7 @@ code TEXT,
 PRIMARY KEY(solutionId)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE compil_info(
+CREATE TABLE compile_info(
 problemId INT(11) NOT NULL,
 error TEXT,
 PRIMARY KEY(problemId)
