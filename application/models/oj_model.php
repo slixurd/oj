@@ -202,6 +202,40 @@ class Oj_model extends CI_Model
 		return $userId;
 	}
 	
+/**
+ * 根据所给的列数组更改user信息
+ * 请先对where的相关数据进行转义
+ */
+	public function update_user($column_array=array('nick'=>"helloc",'school'=>"scut"),$where_str="userId = 1")
+	{
+		$sql=$this->db->update_string('user',$column_array,$where_str);
+		$query=$this->db->query($sql);
+	}
+	
+/**
+ *根据所给的列信息和where字符串更爱user_state信息
+ * 请先对where的相关数据进行转义
+ */
+	public function update_user_state($column_array=array('solved'=>0,'accepted'=>0),$where_str="userId = 1")
+	{
+		$sql=$this->db->update_string('user_state',$column_array,$where_str);
+		$query=$this->db->query($sql);
+	}
+	
+/**
+ *删除指定id的user，由于破坏力太强大，现在只提供id删除
+ */
+ 
+	public function delete_user_id($id)
+	{
+		if(is_numeric($id)){
+			$sql="DELETE FROM user WHERE userId = ".$this->db->escape($id)." ";
+			$this->db->query($sql);
+			$sql="DELETE FROM user_state WHERE userId = ".$this->db->escape($id)." ";
+			$this->db->query($sql);
+		}
+	}
+	
 	
 /**
  * 函数插入一条contest记录
