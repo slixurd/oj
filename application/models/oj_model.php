@@ -21,8 +21,14 @@ class Oj_model extends CI_Model
  */
 
 
+	public function get_problem_row($where_str="defunct = 0"){
+		$sql="SELECT count(problemId) as row FROM problem WHERE ".$where_str." ";
+		$query=$this->db->query($sql);
+		return $query->row_array(0);
+	}
+
 	public function get_problem_list($column_array=array('problemId','title','source','accepted','submit'),
-	$order_by="problemId",$is_desc=FALSE,$limit=NULL,$is_defunct=FALSE)
+	$order_by="problemId",$is_desc=FALSE,$limit_from=NULL,$limit_row=NULL,$is_defunct=FALSE)
 	{
 		$sql="SELECT ".implode(" , ",$column_array)." FROM problem ";
 		if($is_defunct == FALSE){
@@ -37,8 +43,8 @@ class Oj_model extends CI_Model
 		else{
 			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." DESC ";
 		}
-		if(is_numeric($limit) && ($limit >= 0)){
-			$sql=$sql."LIMIT ".$this->db->escape($limit)."";
+		if((is_numeric($limit_from) && is_numeric($limit_row)) && ($limit_from >= 0)){
+			$sql=$sql."LIMIT ".$limit_from." , ".$limit_row." ";
 		}
 		$query=$this->db->query($sql);
 		return $query->result_array();
@@ -50,7 +56,7 @@ class Oj_model extends CI_Model
  */
 
 	public function get_problem_list_where($column_array=array('problemId','title','source','accepted','submit'), 
-	$order_by="problemId",$is_desc=FALSE,$where_str="defunct = 0",$limit=NULL)
+	$order_by="problemId",$is_desc=FALSE,$where_str="defunct = 0",$limit_from=NULL,$limit_row=NULL)
 	{
 		$sql="SELECT ".implode(" , ",$column_array)." FROM problem ";
 		$sql=$sql.$where_str;
@@ -60,8 +66,8 @@ class Oj_model extends CI_Model
 		else{
 			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." ";
 		}
-		if(is_numeric($limit) && ($limit >= 0)){
-			$sql=$sql."LIMIT ".$this->db->escape($limit)."";
+		if((is_numeric($limit_from) && is_numeric($limit_row)) && ($limit >= 0)){
+			$sql=$sql."LIMIT ".$limit_from." , ".$limit_row." ";
 		}
 		$query=$this->db->query($sql);
 		return $query->result_array();
@@ -109,7 +115,7 @@ class Oj_model extends CI_Model
  *获取用户list通过where语句
  */
 	public function get_user_list($user_array=array('userId','name','nick'),$state_array=array('solved','accepted'),
-	$order_by="solved",$is_desc=FALSE,$limit = "no data")
+	$order_by="solved",$is_desc=FALSE,$limit_from = "no data",$limit_row="nodata")
 	{
 		for($i=0;$i<count($user_array);$i++){
 			$user_array[$i]="user.".$user_array[$i];
@@ -119,8 +125,8 @@ class Oj_model extends CI_Model
 		}
 		$sql="SELECT ".implode(" , ",$user_array)." , ".implode(" , ",$state_array)." FROM user INNER JOIN user_state ON user.userId =
 		 user_state.userId ORDER BY ".$this->db->escape($order_by)." ";
-		if(is_numeric($limit)){
-			$sql=$sql.$limit;
+		if(is_numeric($limit_from)&&is_numeric($limit_row)){
+			$sql=$sql."LIMIT ".$limit_from." , ".$limit_row."";
 		}
 	}
 	
@@ -129,7 +135,7 @@ class Oj_model extends CI_Model
  *获取用户list
  */
 	public function get_user_list_where($user_array=array('userId','name','nick'),$state_array=array('solved','accepted'),
-	$order_by="solved",$is_desc=FALSE,$where_str="defunct = 0",$limit = "no data")
+	$order_by="solved",$is_desc=FALSE,$where_str="defunct = 0",$limit_from = "no data",$limit_row="nodata")
 	{
 		for($i=0;$i<count($user_array);$i++){
 			$user_array[$i]="user.".$user_array[$i];
@@ -139,8 +145,8 @@ class Oj_model extends CI_Model
 		}
 		$sql="SELECT ".implode(" , ",$user_array)." , ".implode(" , ",$state_array)." FROM user INNER JOIN user_state ON user.userId =
 		 user_state.userId ORDER BY ".$this->db->escape($order_by)." WHERE ".$where." ";
-		if(is_numeric($limit)){
-			$sql=$sql.$limit;
+		if(is_numeric($limit_from)&&is_numeric($limit_to)){
+			$sql=$sql."LIMIT ".$limit_from." , ".$limit_row."";
 		}
 	}
 			
@@ -334,5 +340,17 @@ class Oj_model extends CI_Model
 		$this->db->trans_complete();	
 		return $solutionId;
 	}
+	
+	public function get_status_list($solution_array=array('solutionId','problemId','result','memory','runTime','inDate'),$userId=0)
+	{
+		for($i=0;$i<count(solution_array);$i++){
+			$solution_array[$i]="solution.".$solution_array[$i];
+		}
+		$sql="SELECT ".implode(" , ",$solution_array)." FROM ( solution INNER JOIN user  ON solution.userId = user.userId ) INNER JOIN 
+		 problem ON solution.problemId = problem.problemId WHERE solution.userId = ".$userId." ORDER BY inDate ";
+		 $query=$this->db->query($sql);
+		 return $query->array_result();
+	}
+	
 		
 }
