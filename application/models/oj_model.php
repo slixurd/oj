@@ -98,6 +98,16 @@ class Oj_model extends CI_Model
 		$problemId=$this->db->insert_id();
 		return $problemId;
 	}
+	
+/**
+ * update_problem 根据数组$probelm_array给定的参数，where_str参数
+ */
+	
+	public function update_problem($problem_array=array('title'=>"hello"),$where_str="problemId < 10000")
+	{
+		$this->db->update_string('problem',$problem_array,$where_str);
+		$this->query($sql);
+	}
 
 /**
  *get_user_item_name 按照id获取指定用户基本信息不包含用户state(submmit，accept这类)信息
@@ -152,7 +162,7 @@ class Oj_model extends CI_Model
 			
 
 /**
- *get_user_item_id 按照id获取指定用户基本信息不包含用户state(submmit，accept这类)信息
+ *get_user_item 按照id获取指定用户基本信息不包含用户state(submmit，accept这类)信息
  */
 	public function get_user_item_name($name,$column_array=array('userId','name','email','password'))
 	{
@@ -161,6 +171,25 @@ class Oj_model extends CI_Model
 		return $query->row_array(0);
 		//return $sql;
 	}
+	
+/**
+ *按照给定的用户info--name或者email，和pass验证用户是否正确或存在，返回一维数组，不正确则是空数组
+ */
+ 
+ 
+	public function get_user_item($info,$pass,$column_array=array('userId','name','email','password'))
+	{
+		$sql="SELECT ".implode(" , ",$column_array)." FROM user WHERE (name = ".$this->db->escape($info)." OR email =
+		 ".$this->db->escape($info).")";
+		$query=$this->db->query($sql);
+		$user=$query->row_array(0);
+		if(count($user)==0)
+		return FALSE;
+		else
+		return $user;
+		//return $sql;
+	}
+	
 
 /**
  *get_user_state_item获取user_state信息函数通过id
@@ -184,6 +213,16 @@ class Oj_model extends CI_Model
 			$user_state_column_array[$i]="user_state.".$user_column_array[$i];
 		}
 		$sql="SELECT ".implode(" , ",$user_column_array)." , ".implode(" , ",$user_state_column_array)." FROM user INNER JOIN user_state ON user.userId = user_state.userId WHERE user.userId = ".$this->db->escape($id)."";
+		$query=$this->db->query($sql);
+		return $query->row_array(0);
+	}
+	
+/**
+ * 获取用户总数量，where_str指定限制条件,返回一维数组
+ */
+	public function get_user_row($where_str="defunct = 0")
+	{
+		$sql ="SELECT count(userId) as row FROM user WHERE ".$where_str."";
 		$query=$this->db->query($sql);
 		return $query->row_array(0);
 	}
@@ -258,6 +297,24 @@ class Oj_model extends CI_Model
 	}
 	
 /**
+ * delete_contest
+ */
+	public function delete_contest($where_str)
+	{
+		$sql="DELETE FROM contest WHERE ".$where_str." ";
+		$this->db->query($sql);
+	}
+	
+/**
+ * update_contest
+ */
+	public function update_contest($contest_array=array('private'=>1),$where_str)
+	{
+		$sql=$this->db->update_string('contest',$contest_array,$where_str);
+		$this->db->query($sql);
+	}
+	
+/**
  * 获取指定条件的contest数组
  * $column_array指定要获取的列，$where_str为where条件，传递where_str之前保证相关数据转义
  * 函数返回满足指定条件的二维数组
@@ -323,6 +380,25 @@ class Oj_model extends CI_Model
 		return $query->array_result();
 	}
 	
+/**
+ * update_contest_privilege
+ */
+	public function update_contest_privilege($column_array=array('priType'=>"read"),$where_str)
+	{
+		$sql=$this->db->update_string('contest_privilege',$column_array,$where_str);
+		$this->db->query($sql);
+	}
+	
+/**
+ * delete_contest_privilege
+ */
+ 
+	public function delete_contest_privilege($contestId,$userId)
+	{
+		$sql="DELETE FROM contest_privilege WHERE contestId = ".$this->db->escape($contestId)." AND userId = ".$this->db->escape($userId)." ";
+		$this->db->query($sql);
+	}
+	
 	
 /**
  * 插入solution和solution_code作为事物提交
@@ -341,15 +417,47 @@ class Oj_model extends CI_Model
 		return $solutionId;
 	}
 	
+/**
+ * delete_solution 这里只需要给出solution的where条件函数会同时删除solution_code
+ */
+ 
+	public function delete_solution($where_str)
+	{
+		$sql="DELETE FROM solution_code WHERE solutionId IN (SELECT solutionId FROM solution WHERE ".$where_str." ";
+		$this->db->query($sql);
+		$sql="DELETE FROM solution WHERE ".$where_str." ";
+		$this->db->query($sql);
+	}
+	
+	
+/**
+ *获取status按照给定的solution列，除了返回solution指定列之外还返回，username，language,顾名思义就是专门用于statu的
+ */
 	public function get_status_list($solution_array=array('solutionId','problemId','result','memory','runTime','inDate'),$userId=0)
 	{
 		for($i=0;$i<count(solution_array);$i++){
 			$solution_array[$i]="solution.".$solution_array[$i];
 		}
-		$sql="SELECT ".implode(" , ",$solution_array)." FROM ( solution INNER JOIN user  ON solution.userId = user.userId ) INNER JOIN 
-		 problem ON solution.problemId = problem.problemId WHERE solution.userId = ".$userId." ORDER BY inDate ";
+		$sql="SELECT ".implode(" , ",$solution_array)." , user.name ,problem.programLan FROM ( solution INNER JOIN user  ON solution.userId = user.userId ) 
+		INNER JOIN problem ON solution.problemId = problem.problemId WHERE solution.userId = ".$userId." ORDER BY inDate ";
 		 $query=$this->db->query($sql);
 		 return $query->array_result();
+	}
+	
+	public function is_session($session_id){
+		$sql="SELECT count(session_id) FROM ci_sessions WHERE session_id = ".$this->db->escape($session_id)." ";
+		$query=$this->db->query($sql);
+		$session=$query->row_array(0);
+		if(count($session)==0){
+			return FALSE;
+		}
+		else
+		return TRUE;
+	}
+	
+	public function unset_session($session_id){
+		$sql="DELETEsss FROM ci_sessions WHERE session_id = ".$this->db->escape($session_id)." ";
+		$query=$this->db->query($sql);
 	}
 	
 		
