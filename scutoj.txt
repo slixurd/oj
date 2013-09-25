@@ -80,9 +80,9 @@ memory INT(11) NOT NULL,
 inDate DATETIME ,
 result SMALLINT(6) NOT NULL,
 programLan VARCHAR(20) NOT NULL,
-contestId INT(11) NOT NULL,
-unitId INT(11) NOT NULL,
-valid TINYINT(0) NOT NULL,
+contestId INT(11),
+unitId INT(11),
+valid TINYINT(0),
 judgeTime DATETIME ,
 PRIMARY KEY(solutionId)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;

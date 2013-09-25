@@ -54,6 +54,7 @@ class User_help {
 	}
 	
 	public function get_session(){
+		$CI =& get_instance();
 		return $CI->session->all_userdata();
 	}
 	

@@ -11,6 +11,15 @@ class Oj_model extends CI_Model
 	{
 		$this->load->database();
 	}
+/**
+ * 获取where条件指定问题的总数，返回一个整数
+ */
+	public function get_problem_row($where_str="defunct = 0"){
+		$sql="SELECT count(problemId) as row FROM problem WHERE ".$where_str." ";
+		$query=$this->db->query($sql);
+		$data=$query->row_array(0);
+		return $data['row'];
+	}
 
 /**
  *get_problem_list()给定参数的问题列表
@@ -19,13 +28,6 @@ class Oj_model extends CI_Model
  *oder_by指示依据什么来排序，默认problem_id,$is_desc是否采用逆序，$limit取多少列
  *is_defunct指出是否取屏蔽题目
  */
-
-
-	public function get_problem_row($where_str="defunct = 0"){
-		$sql="SELECT count(problemId) as row FROM problem WHERE ".$where_str." ";
-		$query=$this->db->query($sql);
-		return $query->row_array(0);
-	}
 
 	public function get_problem_list($column_array=array('problemId','title','source','accepted','submit'),
 	$order_by="problemId",$is_desc=FALSE,$limit_from=NULL,$limit_row=NULL,$is_defunct=FALSE)
@@ -427,6 +429,16 @@ class Oj_model extends CI_Model
 		$this->db->query($sql);
 		$sql="DELETE FROM solution WHERE ".$where_str." ";
 		$this->db->query($sql);
+	}
+	
+/**
+ * 获取solution_list列表
+ */
+ 
+	public function get_solution_list_where($column=array('problemId','userId','result'),$where_str="result =1"){
+		$sql="SELECT ".implode(" ,",$column)." FROM  solution WHERE ".$where_str." ";
+		$query=$this->db->query($sql);
+		return $query->result_array();
 	}
 	
 	
