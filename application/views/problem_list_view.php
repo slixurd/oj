@@ -3,11 +3,17 @@
 	<div class="container">
 		<div class="sub-header">
 			<div class="search">
-				<div class="search-wrapper">
-					<button>S</button>
-					<span>ID <img src="/scutoj/assets/img/list_button.png"></span>
-					<input />
-				</div>
+				<form class="search-wrapper" action="./" method="post">
+					<button type="submit">S</button>
+					<span id="search-method">
+						<span>ID</span><img src="/scutoj/assets/img/list_button.png">
+						<ul>
+							<li><span class="s_id">ID</span></li>
+							<li><span class="s_title">题目</span></li>
+						</ul>
+					</span>
+					<input name="s_id" type="text" />
+				</form>
 			</div>
 			<h3>题集</h3>
 		</div>

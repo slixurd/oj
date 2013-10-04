@@ -29,27 +29,30 @@ body{
 
 .header{
 	width: 100%;
-	height:55px;
 	background-color: @header-color;
 	color: @blue-bg-font;
 	font-size: 16px;
-	line-height: 51px;
+	line-height: 20px;
 	//.box-shadow(0 0 10px 1px #777);
 	a,a:hover,a:visit{
 		color: @blue-bg-font;
 	}
-	ul{
-			a{
+	.main-nav{
+		
+		>li{
+			> a{
+				width: 130px;
+				display: block;
+				color: @blue-bg-font;
 				margin-left: -4px;//去掉li自带的间隔
+				padding: 15px 0px;
 			}		
-			li{
-			color: @blue-bg-font;
+			
 			display: inline-block;
 			//border-right:1px solid #69c7bf;
 			border-top:4px solid @header-color;
-			width:130px;
 			text-align: center;
-
+			position: relative;
 			cursor: pointer;
 			img{
 				vertical-align: middle;
@@ -65,8 +68,34 @@ body{
 		li:hover{
 			border-top:4px solid @strong;
 			background-color: #F9F9F9;
+			.sub-nav{
+				display: block;
+				li{
+					border: none;
+					line-height: 28px;
+					font-size: 14px;					
+				}
+				li:hover{
+					background-color: @strong;
+					a{
+						color: white;
+					}
+				}
+			}
 		}
 	}
+
+	.sub-nav{
+		display: none;
+		position: absolute;
+		background-color: #F9F9F9;
+		a{
+			width: 130px;
+			color:@blue-bg-font;
+			display: block;
+		}		
+	}
+
 
 	#log-reg{
 
@@ -83,6 +112,7 @@ body{
 
 }
 
+//主体部分
 .wrapper{
 	margin-top: 20px;
 	.container{
@@ -111,7 +141,7 @@ body{
 			display: inline-block;
 			border:1px solid #E9E9E9;
 			width: 340px;
-			span{
+			> span{
 				border-right: 1px solid #E9E9E9;
 				cursor: pointer;
 				text-align: center;
@@ -140,6 +170,28 @@ body{
 			width: 40px;
 			height: 40px;
 		}
+
+		#search-method{
+			position: relative;
+			ul{
+				background-color: #FCFCFC;
+				left: -1px;
+				width:70+2px;//这两条规则是为了对齐span原本带有的border的位置
+				display: none;
+				position: absolute;
+				li{
+					border: 1px solid #E9E9E9;
+					margin-top: -1px;
+				}
+			}
+
+			&:hover{
+				ul{
+					display: block;
+				}
+			}
+		}
+
 
 	}
 }
