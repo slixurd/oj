@@ -12,38 +12,62 @@ class Problem extends CI_Controller {
     $this->load->model('oj_model');
     $this->load->library('user_help');
   }
+
+/**
+ * 这里的表单直接用的post传递过来就可以了
+ * s_title,s_id
+ */
   
 	public function index($page=1)
 	{
+		$this->load->helper('form');
+		$this->load->library('form_validation');
+		$total=0;
+		$by_id=FALSE;//是否按照id来查找
+		$by_title=FALSE;//是佛按照title来查找，这里可以扩展成混合查找
+		
+		if(isset($_POST['s_id'])){
+			$by_id=TRUE;
+			$total=$this->oj_model->get_problem_row("defunct =0 AND problemId = ".$this->db->escape($_POST['s_id'])." ");
+		}else if(isset($_POST['s_title'])){
+			$by_title=TRUE;
+			$total=$this->oj_model->get_problem_row("defunct =0 AND title LIKE ".$this->db->escape("%".$_POST['s_title']."%")." ");
+		}else
 		$total=$this->oj_model->get_problem_row();
 		if($page>=1 && is_numeric($page) && (($page-1)*10<$total)){
 			$column_array=array('problemId','title','source','accepted','submit');
+			if($by_id===TRUE){
+				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
+				"defunct =0 AND problemId = ".$this->db->escape($_POST['s_id'])." ",($page-1)*10,10);
+			}else if($by_title===TRUE){
+				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
+				"defunct =0 AND title LIKEsss ".$this->db->escape("%".$_POST['s_title']."%")." ",($page-1)*10,10);
+			}else
 			$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE,($page-1)*10,10);
 			
 			if(!$this->user_help->is_session()){
 			//用户还没有登录
-				for($i=0;$i<count($data['problem_list']);$i++)
-				$data['problem_list'][$i]['status']="No";
-			}else{
-				$user=$this->user_help->get_session();
-				$userId=$user['userId'];
-				$firstId=$data['problem_list'][0]['problemId'];
-				$lastId=$data['problem_list'][count($data['problem_list'])-1]['problemId'];
-				$solution_array=array('problemId','userId','result');
-				$status=$this->oj_model->get_solution_list_where($solution_array,"result = 1 AND userId = ".$userId." AND 
-				(problemId BETWEEN ".$firstId." AND ".$lastId." )");
-				
-				for($i=0;$i<count($data['problem_list']);$i++){
-					for($j=0;$j<count($status);$j++){
-					if(($status[$j]['result'] == 1)&&(($status[$j]['problemId'] == $data['problem_list'][$i]['problemId']))){
-						$data['problem_list'][$i]['status']="Yes";
-						break;
-					}
-					$data['problem_list'][$i]['status']="No";
+			for($i=0;$i<count($data['problem_list']);$i++)
+			$data['problem_list'][$i]['status']="No";
+		}else{
+			$user=$this->user_help->get_session();
+			$userId=$user['userId'];
+			$firstId=$data['problem_list'][0]['problemId'];
+			$lastId=$data['problem_list'][count($data['problem_list'])-1]['problemId'];
+			$solution_array=array('problemId','userId','result');
+			$status=$this->oj_model->get_solution_list_where($solution_array,"result = 1 AND userId = ".$userId." AND 
+			(problemId BETWEEN ".$firstId." AND ".$lastId." )");
+			
+			for($i=0;$i<count($data['problem_list']);$i++){
+				for($j=0;$j<count($status);$j++){
+				if(($status[$j]['result'] == 1)&&(($status[$j]['problemId'] == $data['problem_list'][$i]['problemId']))){
+					$data['problem_list'][$i]['status']="Yes";
+					break;
 				}
+				$data['problem_list'][$i]['status']="No";
+			}
 			}
 		}
-
 		
 			$this->load->library('pagination');
 			$config['first_link'] = TRUE;
