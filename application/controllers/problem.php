@@ -2,9 +2,6 @@
 
 class Problem extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 */
 	 
 	public function __construct()
   {
@@ -26,14 +23,25 @@ class Problem extends CI_Controller {
 		$by_id=FALSE;//是否按照id来查找
 		$by_title=FALSE;//是佛按照title来查找，这里可以扩展成混合查找
 		
+		$data['is_login']=FALSE;
+		if($this->user_help->is_session()){
+			$data['is_login']=TRUE;
+			$data['user']=$this->user_help->get_session();
+		}//这里用来表示用户是否登录传递到view页面
+		
 		if(isset($_POST['s_id'])){
+			//判断是否是id搜索
 			$by_id=TRUE;
-			$total=$this->oj_model->get_problem_row("defunct =0 AND problemId = ".$this->db->escape($_POST['s_id'])." ");
+			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND problemId = ".$this->db->escape($_POST['s_id'])." ");
 		}else if(isset($_POST['s_title'])){
+			//title搜索
 			$by_title=TRUE;
-			$total=$this->oj_model->get_problem_row("defunct =0 AND title LIKE ".$this->db->escape("%".$_POST['s_title']."%")." ");
+			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND title LIKE ".$this->db->escape("%".$_POST['s_title']."%")." ");
 		}else
-		$total=$this->oj_model->get_problem_row();
+		$total=$this->oj_model->get_row();//直接获取行数
+		if($total==0){
+			//问题集合为空或者搜索结果为空
+		}
 		if($page>=1 && is_numeric($page) && (($page-1)*10<$total)){
 			$column_array=array('problemId','title','source','accepted','submit');
 			if($by_id===TRUE){
@@ -45,11 +53,12 @@ class Problem extends CI_Controller {
 			}else
 			$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE,($page-1)*10,10);
 			
-			if(!$this->user_help->is_session()){
-			//用户还没有登录
+			if(!$data['is_login']){
+			//用户还没有登录status全部设置为no
 			for($i=0;$i<count($data['problem_list']);$i++)
 			$data['problem_list'][$i]['status']="No";
 		}else{
+			//用户已经登录获取本页每个问题的status
 			$user=$this->user_help->get_session();
 			$userId=$user['userId'];
 			$firstId=$data['problem_list'][0]['problemId'];
@@ -59,6 +68,8 @@ class Problem extends CI_Controller {
 			(problemId BETWEEN ".$firstId." AND ".$lastId." )");
 			
 			for($i=0;$i<count($data['problem_list']);$i++){
+				if(count($status)===0)
+				$data['problem_list'][$i]['status']="No";
 				for($j=0;$j<count($status);$j++){
 				if(($status[$j]['result'] == 1)&&(($status[$j]['problemId'] == $data['problem_list'][$i]['problemId']))){
 					$data['problem_list'][$i]['status']="Yes";
@@ -110,12 +121,17 @@ class Problem extends CI_Controller {
 	
 	public function get_problem($id)
 	{
+		$data['is_login']=FALSE;
+		if($this->user_help->is_session()){
+			$data['is_login']=TRUE;
+		}//这里用来表示用户是否登录传递到view页面
 		$problem=array(' * ');
 		$data['problem']=$this->oj_model->get_problem_item($id,$problem);
 		if(! empty($data['problem'])){
 			$this->load->view('problem_item_view',$data);
 		}
 		else{
+			//这里是用来表示用户传递错误参数或者问题为空时的页面
 			$this->index();
 			//show_404();
 		}

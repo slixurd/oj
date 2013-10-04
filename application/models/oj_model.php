@@ -12,10 +12,10 @@ class Oj_model extends CI_Model
 		$this->load->database();
 	}
 /**
- * 获取where条件指定问题的总数，返回一个整数
+ * 获取指定的table，指定的column，where条件指定问题的总数，返回一个整数
  */
-	public function get_problem_row($where_str="defunct = 0"){
-		$sql="SELECT count(problemId) as row FROM problem WHERE ".$where_str." ";
+	public function get_row($table="problem",$column="problemId",$where_str="defunct = 0"){
+		$sql="SELECT count(".$this->db->escape($column).") as row FROM ".$table." WHERE ".$where_str." ";
 		$query=$this->db->query($sql);
 		$data=$query->row_array(0);
 		return $data['row'];
@@ -66,9 +66,9 @@ class Oj_model extends CI_Model
 			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." ";
 		}
 		else{
-			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." ";
+			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." DESC";
 		}
-		if((is_numeric($limit_from) && is_numeric($limit_row)) && ($limit >= 0)){
+		if((is_numeric($limit_from) && is_numeric($limit_row)) && ($limit_from >= 0)){
 			$sql=$sql."LIMIT ".$limit_from." , ".$limit_row." ";
 		}
 		$query=$this->db->query($sql);
@@ -322,9 +322,18 @@ class Oj_model extends CI_Model
  * 函数返回满足指定条件的二维数组
  */
 	
-	public function get_contest_list_where($column_array=array('contestId','title','startTime','endTime','defunct','private'),$where_str="(now() BETWEEN startTime AND endTime) AND defunct = 0")
+	public function get_contest_list_where($column_array=array('contestId','title','startTime','endTime','defunct','private'),
+	$order_by="contestId",$is_desc=TRUE,$where_str="defunct = 0",$limit_from=NULL,$limit_row=NULL)
 	{
-		$sql="SELECT ".implode(" , ",$column_array)." FROM contest WHERE ".$where_str." ";
+		$sql="SELECT ".implode(" , ",$column_array)." FROM contest WHERE ".$where_str." ORDER BY ".$order_by." ";
+		if($is_desc){
+			$sql=$sql." DESC";
+		}
+		if((is_numeric($limit_from) && ($limit_from >= 0))){
+			$sql=$sql." LIMIT ".$this->db->escape($limit_from)." ";
+			if(is_numeric($limit_row))
+			$sql=$sql.", ".$this->db->escape($limit_row)." ";
+		}
 		$query=$this->db->query($sql);
 		return $query->result_array();
 	}
@@ -345,7 +354,8 @@ class Oj_model extends CI_Model
  * 函数返回二维数组
  */
  
-	public function get_contest_problem_list($contestId="1000",$contest_problem_array=array('contestId','problemId','num'),$problem_array=array('problemId','title','source','accepted','submit'))
+	public function get_contest_problem_list($contestId="1000",$contest_problem_array=array('contestId','problemId','num'),
+	$problem_array=array('problemId','title','source','accepted','submit'))
 	{
 		$sql="SELCET ";
 		for($i=0;$i<count($contest_problem_array);$i++){
@@ -354,7 +364,8 @@ class Oj_model extends CI_Model
 		for($i=0;$i<count($problem_array);$i++){
 			$problem_array[$i]="problem.".$problem_array[$i];
 		}
-		$sql="SELECT ".implode(" , ",$contest_problem_array)." , ".implode(" , ",$problem_array)." FROM contest_problem INNER JOIN problem ON contest_problem.problemId = problem.problemId WHERE contest_problem.contestId = ".$this->db->escape($contestId)." ";
+		$sql="SELECT ".implode(" , ",$contest_problem_array)." , ".implode(" , ",$problem_array).
+		" FROM contest_problem INNER JOIN problem ON contest_problem.problemId = problem.problemId WHERE contest_problem.contestId = ".$this->db->escape($contestId)." ";
 		$query=$this->db->query($sql);
 		return $query->result_array();
 	}
