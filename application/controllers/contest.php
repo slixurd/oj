@@ -33,7 +33,7 @@ class Contest extends CI_Controller {
 			$config['uri_segment']=3;
 			$config['num_links'] = 7;
 			$config['use_page_numbers'] = TRUE;
-			$config['base_url'] = 'http://localhost/scutoj/index.php/contest/index/';
+			$config['base_url'] = site_url("contest/index");
 			$config['total_rows'] = $total;
 			$config['per_page'] = 10;
 

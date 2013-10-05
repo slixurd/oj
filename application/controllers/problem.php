@@ -8,6 +8,7 @@ class Problem extends CI_Controller {
     parent::__construct();
     $this->load->model('oj_model');
     $this->load->library('user_help');
+    $this->load->helper('url');
   }
 
 /**
@@ -87,7 +88,7 @@ class Problem extends CI_Controller {
 			$config['uri_segment']=3;
 			$config['num_links'] = 7;
 			$config['use_page_numbers'] = TRUE;
-			$config['base_url'] = 'http://localhost/scutoj/index.php/problem/index/';
+			$config['base_url'] = site_url("problem/index");
 			$config['total_rows'] = $total;
 			$config['per_page'] = 10;
 
