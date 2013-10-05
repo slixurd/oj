@@ -43,7 +43,7 @@ class Problem extends CI_Controller {
 			$data['problem_list']=array();
 			$data['is_empty']=TRUE;//搜索结果为空
 		}
-		if($page>=1 && is_numeric($page) && (($page-1)*10<$total)){
+		if($page>=1 && is_numeric($page) && (($page-1)*10<=$total)){
 			$column_array=array('problemId','title','source','accepted','submit');
 			if($by_id===TRUE){
 				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
