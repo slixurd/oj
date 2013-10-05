@@ -49,7 +49,7 @@ class Problem extends CI_Controller {
 				"defunct =0 AND problemId = ".$this->db->escape($_POST['s_id'])." ",($page-1)*10,10);
 			}else if($by_title===TRUE){
 				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
-				"defunct =0 AND title LIKEsss ".$this->db->escape("%".$_POST['s_title']."%")." ",($page-1)*10,10);
+				"defunct =0 AND title LIKE ".$this->db->escape("%".$_POST['s_title']."%")." ",($page-1)*10,10);
 			}else
 			$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE,($page-1)*10,10);
 			

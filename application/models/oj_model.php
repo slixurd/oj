@@ -60,7 +60,7 @@ class Oj_model extends CI_Model
 	public function get_problem_list_where($column_array=array('problemId','title','source','accepted','submit'), 
 	$order_by="problemId",$is_desc=FALSE,$where_str="defunct = 0",$limit_from=NULL,$limit_row=NULL)
 	{
-		$sql="SELECT ".implode(" , ",$column_array)." FROM problem ";
+		$sql="SELECT ".implode(" , ",$column_array)." FROM problem WHERE ";
 		$sql=$sql.$where_str;
 		if($is_desc == FALSE){
 			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." ";
