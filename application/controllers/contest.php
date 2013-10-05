@@ -17,8 +17,10 @@ class Contest extends CI_Controller {
 			$data['user']=$this->user_help->get_session();
 		}//这里用来表示用户是否登录传递到view页面
 		$total=$this->oj_model->get_row("contest","contestId","defunct = 0");//contest总行数
+		$data['is_empty']=FALSE;
 		if($total==0){
-			//没有竞赛
+			$data['is_empty']=TRUE;
+			$data['problem_list']=array();
 		}
 		if(is_numeric($page) && $page>=1 && (($page-1)*10<$total)){
 			$column_array=array('contestId','title','startTime','endTime','defunct','private');
@@ -62,5 +64,37 @@ class Contest extends CI_Controller {
 			//show(404);
 		}
 		
+	}
+	
+	public function get_contest($id){
+		if(!is_numeric($id)){
+			show_404();//用户可能进行非法操作
+			exit();
+		}
+		$data['permission']="no";
+		$data['is_login']=FALSE;
+		if($this->user_help->is_session()){
+			$data['is_login']=TRUE;
+			$data['user']=$user=$this->user_help->get_session();
+		}//这里用来表示用户是否登录传递到view页面
+		$data['contest_item']=$this->oj_model->get_contest_item($id);
+		$data['contest_problem_list']=$this->oj_model->get_contest_problem_list($id);
+		if(empty($data['contest_item'])){
+			show_404();//没有索取的竞赛
+		}else{
+			if($data['contest_item']['private']==0){
+				$data['permission']="yes";
+			}	
+			else if($data['is_login']==FALSE){//用户没有登录
+				$data['permission']="no";
+			}else{//用户登录
+				$data['permission']="no";
+				$data['problem_privilege']=$this->oj_model->get_contest_privilege($id,$user['userId']);
+				if(!empty($data['problem_privilege'])){//用户有权限
+					$data['permission']="yes";
+				}
+			}
+			$this->load->view('contest_item_view',$data);
+		}
 	}
 }

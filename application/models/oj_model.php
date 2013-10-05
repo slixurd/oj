@@ -299,6 +299,17 @@ class Oj_model extends CI_Model
 	}
 	
 /**
+ * get_contest_item
+ */
+ 
+	public function get_contest_item($contest_id,$column=array('contestId','title','startTime','endTime','private')){
+		$sql="SELECT ".implode(" , " ,$column)." FROM contest"." WHERE contestId = ".$this->db->escape($contest_id)."";
+		$query=$this->db->query($sql);
+		return $query->row_array(0);
+	}
+	
+	
+/**
  * delete_contest
  */
 	public function delete_contest($where_str)
@@ -354,9 +365,13 @@ class Oj_model extends CI_Model
  * 函数返回二维数组
  */
  
-	public function get_contest_problem_list($contestId="1000",$contest_problem_array=array('contestId','problemId','num'),
-	$problem_array=array('problemId','title','source','accepted','submit'))
+	public function get_contest_problem_list($contestId=1000,$contest_problem_array=array('contestId','problemId','title','num'),
+	$problem_array=array('problemId','title','source','accepted','submit'),$order_by="contest_problem.num",$is_desc=FALSE,
+	$limit_from=0,$limit_row=10)
 	{
+		for($i=0;$i<count($contest_problem_array);$i++)
+		if($contest_problem_array[$i]=="title")
+		$contest_problem_array[$i]=$contest_problem_array[$i]." as contest_problem_title ";
 		$sql="SELCET ";
 		for($i=0;$i<count($contest_problem_array);$i++){
 			$contest_problem_array[$i]="contest_problem.".$contest_problem_array[$i];
@@ -366,6 +381,10 @@ class Oj_model extends CI_Model
 		}
 		$sql="SELECT ".implode(" , ",$contest_problem_array)." , ".implode(" , ",$problem_array).
 		" FROM contest_problem INNER JOIN problem ON contest_problem.problemId = problem.problemId WHERE contest_problem.contestId = ".$this->db->escape($contestId)." ";
+		$sql=$sql." ORDER BY ".$order_by." ";
+		if($is_desc===TRUE)
+		$sql=$sql." DESC ";
+		$sql=$sql." LIMIT ".$limit_from." , ".$limit_row." ";
 		$query=$this->db->query($sql);
 		return $query->result_array();
 	}
@@ -388,9 +407,9 @@ class Oj_model extends CI_Model
  
 	public function get_contest_privilege($contestId,$userId)
 	{
-		$sql="SELECT priType FROM contest_privilege WHERE contestId = ".$this->db->escape($constestId,$userId)." AND userId = ".$this->db->escape($userId)." ";
+		$sql="SELECT priType FROM contest_privilege WHERE contestId = ".$this->db->escape($contestId)." AND userId = ".$this->db->escape($userId)." ";
 		$query=$this->db->query($sql);
-		return $query->array_result();
+		return $query->result_array();
 	}
 	
 /**
@@ -412,6 +431,7 @@ class Oj_model extends CI_Model
 		$this->db->query($sql);
 	}
 	
+
 	
 /**
  * 插入solution和solution_code作为事物提交
