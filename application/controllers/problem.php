@@ -40,7 +40,8 @@ class Problem extends CI_Controller {
 		}else
 		$total=$this->oj_model->get_row();//直接获取行数
 		if($total==0){
-			//问题集合为空或者搜索结果为空
+			$data['problem_list']=array();
+			$data['is_empty']=TRUE;//搜索结果为空
 		}
 		if($page>=1 && is_numeric($page) && (($page-1)*10<$total)){
 			$column_array=array('problemId','title','source','accepted','submit');
