@@ -28,7 +28,10 @@
 					<th class="span1">状态</th>
 				</tr>
 			</thead>
-			<tbody>				
+			<tbody>			
+				<?php if(isset($is_empty)) 
+					echo "<tr><td colspan='5' class='empty-answer'>搜索结果为空</td></tr>"
+				?>	
 				<?php foreach($problem_list as $problem): ?>
 				<tr>
 					<td><?php echo $problem['problemId'] ?></td>
@@ -36,6 +39,7 @@
 					<td><?php echo $problem['accepted'] ?></td>
 					<td><?php echo $problem['submit'] ?></td>
 					<td><?php echo $problem['status'] ?></td>
+
 				</tr>
 				<?php endforeach; ?>
 			</tbody>

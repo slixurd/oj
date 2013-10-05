@@ -1,6 +1,6 @@
 @import 'base';
 @import 'table';
- 
+@import 'problem_detail';
 
 //通用变量声明
 //1.所有蓝底字的颜色酱
@@ -33,7 +33,7 @@ body{
 	color: @blue-bg-font;
 	font-size: 16px;
 	line-height: 20px;
-	//.box-shadow(0 0 10px 1px #777);
+	.box-shadow(0 0 0 4px #EEE);
 	a,a:hover,a:visit{
 		color: @blue-bg-font;
 	}
@@ -98,10 +98,8 @@ body{
 
 
 	#log-reg{
-
-		
+		padding: 15px;		
 		float: right;
-		padding-left: 20px;
 		span{
 			cursor: pointer;
 			a{
@@ -115,13 +113,13 @@ body{
 //主体部分
 .wrapper{
 	margin-top: 20px;
+	margin-bottom: 20px;
 	.container{
-		> div{
-			padding: 15px;
-		}
+		padding-bottom: 15px;
 		margin-top: 30px;
 		background-color: #FCFCFC;
 	}
+	//contest以及problem的表格
 	table{
 		>thead{
 			background-color: #F4F4F4;
@@ -134,10 +132,12 @@ body{
 			}
 		}
 	}
+	//problem列表的搜索栏
 	.search{
 		margin-top: 15px;
 		float: right;
 		.search-wrapper{
+			margin-right: 15px;
 			display: inline-block;
 			border:1px solid #E9E9E9;
 			width: 340px;
@@ -161,7 +161,7 @@ body{
 			padding-left: 8px;
 			height: 40px;
 		}
-		button{
+		.search-button{
 			border-left: 1px solid #E9E9E9;
 			background-color: inherit;
 			float: right;
@@ -191,9 +191,99 @@ body{
 				}
 			}
 		}
-
-
 	}
+
+	//两边带蓝色border的子标题
+	h4{
+		width: 960-4px*2-20px;
+		//box-sizing:border-box;//为了兼容不用border-box
+		border-right: 4px solid @strong;
+		border-left: 4px solid @strong;
+		font-size: 14px;
+		color: #3B3B3B;
+		background-color: #F4F4F4;
+		padding: 16px 0 16px 20px;
+		font-weight: normal;
+		
+	}
+	//=================提交问题页面===============
+	.container 	
+	.submit-code{
+		color: #3B3B3B;
+		padding-top: 35px;
+
+		> form > div >span{
+			vertical-align: top;
+			display: inline-block;
+			width: 80px;
+			padding: 10px 0;
+		}
+		button{
+			padding: 4px 20px;
+		}
+		a{
+			margin-left: 15px;
+		}
+		.table-sel{
+			display: inline-block;
+			position: relative;
+			select{
+				position: absolute;
+				top: 0;
+				left: 0;
+				opacity: 0;
+				z-index: 2;
+				width: 245px;
+				height: 40px;
+				font-size: 14px;
+				color: #999;
+				option{
+					margin-left: 10px;
+				}
+			}
+			span{
+				z-index: 1;
+			}
+			width: 245px;
+			height: 40px;
+			background-color: #F8F8F8;
+			border: 1px solid #CCC;
+			color: #999;
+			i{
+				margin-top: 5px;
+				float: right;
+				margin-right: 10px;
+			}
+			.sel-title{
+				float: left;
+				margin-left: 10px;
+				color: #777;
+				line-height: 40px;
+				font-size: 12px;
+			}
+		}
+
+		textarea{
+			background: #F8F8F8;
+			width: 735px;
+			height: 300px;
+		}
+		::-webkit-scrollbar{
+            background-color: #DDD;
+            width: 4px;
+            opacity: 0.1;
+          }
+          ::-webkit-scrollbar-thumb {
+            box-shadow: inset 0 0 70px #777;
+            border: solid transparent;
+            background-color: #777;
+            border-width: 5px 3px;
+          }
+          .util-block{
+          	margin:30px 0 25px 80px;
+          }
+	}
+
 }
 
 
@@ -236,9 +326,10 @@ hr{
 .sub-header{
 	height: 70px;
 	h3{
+		padding: 15px;
 		font-weight: normal;
 		font-size: 28px;
-		line-height: 70px;
+		line-height: 40px;
 		color: @strong;
 	}
 }
@@ -246,7 +337,7 @@ hr{
 
 //表格相关公共模块
 tbody tr:hover{
-	color:#F6A22E;
+	//color:#F6A22E;
 }
 thead th{
 	font-size: 18px;
@@ -255,4 +346,34 @@ thead th{
 tbody{
 	font-size: 14px;
 	color: #2E2E2E;
+}
+td.empty-answer{
+	text-align: center;
+	font-size: 18px;
+	padding: 20px;
+	border-bottom: 1px solid #ccc;
+}
+//按钮
+.common-button{
+	.border-radius(2px);
+	color: white;
+	background-color: @strong;
+}
+a{
+	color:inherit;
+}
+//textarea
+.textarea{
+	padding: 5px; 
+	border: 1px solid #CCC;
+	color: inherit;
+	font-size: 14px;
+	word-wrap: break-word; 
+	line-height: 18px; 
+	overflow-y: auto; 
+	overflow-x: hidden; 
+	outline: none;
+	background:transparent;
+	resize: none;
+
 }

@@ -1,0 +1,51 @@
+div.wrapper>.side-split{
+	background-color: transparent;
+	h4{
+		width: 700-4px*2-20px;
+	}
+}
+@side-color: #FCFCFC;
+.wrapper{
+	.side-main{
+		width: 700px;
+		background-color: @side-color;
+		.problem-info{
+			span{
+				display: inline-block;
+				font-size: 14px;
+				line-height: 20px;
+				padding: 10px 20px; 
+				margin-bottom: 5px;
+			}
+		}
+	}
+
+	.side-appendix{
+		border-top: 4px solid @strong;
+		margin-left: 30px;
+		float: right;
+		padding: 15px;
+		width: 200px;
+		background-color: @side-color;
+		span{
+			display: inline-block;
+		}
+		.problem-appendix{
+			div{
+				border-bottom: 1px solid #D7D7D7;
+				padding: 6px 0;
+			}
+			span:first-child{
+				width: 80px;
+			}	
+		}
+
+		.button-side{
+			margin-top: 20px;
+			text-align: center;
+			button{
+				padding: 4px 20px;
+			}
+		}
+	}
+}
