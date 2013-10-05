@@ -8,6 +8,7 @@ class Contest extends CI_Controller {
     parent::__construct();
     $this->load->model('oj_model');
     $this->load->library('user_help');
+    $this->load->helper('url');
   }
 
 	public function index($page=1){
