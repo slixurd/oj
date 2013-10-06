@@ -130,12 +130,13 @@ class Problem extends CI_Controller {
 		$problem=array(' * ');
 		$data['problem']=$this->oj_model->get_problem_item($id,$problem);
 		if(! empty($data['problem'])){
+			$this->load->view('common/header',$data);
 			$this->load->view('problem_item_view',$data);
+			$this->load->view('common/footer',$data);
 		}
 		else{
-			//这里是用来表示用户传递错误参数或者问题为空时的页面
-			$this->index();
-			//show_404();
+			
+			show_404();
 		}
 	}
 	
