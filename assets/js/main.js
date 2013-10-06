@@ -18,4 +18,8 @@ $(document).ready(function(){
 		result.text(x);
 	})
 
+	$('#login').on("click",function(){
+		$(".login-popup").fadeToggle("fast");
+	});
+
 });

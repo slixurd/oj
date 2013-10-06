@@ -12,6 +12,8 @@ class Problem_submit extends CI_Controller {
   }
   
   public function index($problemId=10000){
+
+  	  $data['page_title']='提交';
 	  $data['is_login']=FALSE;
 		if($this->user_help->is_session()){
 			$data['is_login']=TRUE;

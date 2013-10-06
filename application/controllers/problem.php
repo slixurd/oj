@@ -25,6 +25,7 @@ class Problem extends CI_Controller {
 		$by_id=FALSE;//是否按照id来查找
 		$by_title=FALSE;//是佛按照title来查找，这里可以扩展成混合查找
 		
+		$data['page_title']='题目列表';
 		$data['is_login']=FALSE;
 		if($this->user_help->is_session()){
 			$data['is_login']=TRUE;

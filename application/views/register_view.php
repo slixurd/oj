@@ -1,28 +1,43 @@
-<html>
-<head>
-<title>My Form</title>
-</head>
-<body>
-
 <?php echo validation_errors(); ?>
 
-<?php echo form_open('user/register'); ?>
+<div class="wrapper">
+	<div class="container">
+		<div class="sub-header">
+			<h3>注册</h3>
+		</div>
+		<div class="reg-indicator">
+			<span>这里是注册提示啊提示.这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示</span>
+		</div>
+		<form class="register" action="<?php echo site_url("user/register"); ?>">
+			<!-- div>
+				<span>ID</span>
+				<input name="id"/>
+			</div -->
+			<div>
+				<span>昵称</span>
+				<input name="username"/>
+			</div>
+			<div>
+				<span>密码</span>
+				<input name="pa" type="password"/>
+			</div>
+			<div>
+				<span>确认密码</span>
+				<input name="paconf" type="password"/>
+			</div>
+			<div>
+				<span>邮箱</span>
+				<input name="email" type="email"/>
+			</div>
+			<div>
+				<span>学校</span>
+				<input />
+			</div>
+			<div>
+				<span></span>
+				<button type="submit" class="common-button">提交注册</button>
+			</div>
+		</form>
 
-<h5>Username</h5>
-<input type="text" name="username" value="" size="50" />
-
-<h5>Password</h5>
-<input type="text" name="pa" value="" size="50" />
-
-<h5>Password Confirm</h5>
-<input type="text" name="paconf" value="" size="50" />
-
-<h5>Email Address</h5>
-<input type="text" name="email" value="" size="50" />
-
-<div><input type="submit" value="Submit" /></div>
-
-</form>
-
-</body>
-</html>
+	</div>
+</div>

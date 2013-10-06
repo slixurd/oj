@@ -21,6 +21,7 @@ class User extends CI_Controller {
 	
 	public function register()
 	{
+		$data['page_title']='注册';
 		$this->load->library('user_help');
 		$this->load->helper('date');
 		$date_str="%Y-%m-%d %H:%i:%s";
