@@ -37,11 +37,11 @@ class User_help {
 		$CI->load->library('encrypt');
 		$CI->load->library('session');
 		$user=NULL;
-		if(($user=$CI->oj_model->get_user_item($info,array('userId','name','email')))===FALSE){
+		if(($user=$CI->oj_model->get_user_item($info,array('userId','name','email','salt','password')))===FALSE){
 			//用户名不正确
 			return FALSE;
 		}else{
-			if($CI->encrypt->decode($user['password'])==$pass){
+			if($user['password']==$CI->encrypt->sha1($user['salt'].$pass)){
 				$CI->session->set_userdata($user);
 				//成功登录
 				return $CI->session->all_userdata();
@@ -56,6 +56,30 @@ class User_help {
 	public function get_session(){
 		$CI =& get_instance();
 		return $CI->session->all_userdata();
+	}
+	
+	public function salt($min,$max){
+		if(is_numeric($min) && is_numeric($max) && ($max>=$min)){
+			$salt_str="";
+			$lenth=rand($min,$max);
+			for($j=0;$j<$lenth;$j++){
+				$i=rand(0,2);
+				switch($i){
+					case 0 :
+						$salt_str=$salt_str.mt_rand(0,9);
+						break;
+					case 1:
+						$salt_str=$salt_str.chr(mt_rand(65,90));
+						break;
+					case 2:
+						$salt_str=$salt_str.chr(mt_rand(97,122));
+						break;
+					}
+				}
+				return $salt_str;
+		}else{
+			return FALSE;
+		}
 	}
 	
 }

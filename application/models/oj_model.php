@@ -110,6 +110,8 @@ class Oj_model extends CI_Model
 		$this->db->update_string('problem',$problem_array,$where_str);
 		$this->query($sql);
 	}
+	
+
 
 /**
  *get_user_item_name 按照id获取指定用户基本信息不包含用户state(submmit，accept这类)信息
@@ -179,7 +181,7 @@ class Oj_model extends CI_Model
  */
  
  
-	public function get_user_item($info,$pass,$column_array=array('userId','name','email','password'))
+	public function get_user_item($info,$column_array=array('userId','name','email','password'))
 	{
 		$sql="SELECT ".implode(" , ",$column_array)." FROM user WHERE (name = ".$this->db->escape($info)." OR email =
 		 ".$this->db->escape($info).")";
@@ -238,7 +240,7 @@ class Oj_model extends CI_Model
  */
 
 
-	public function add_user($user_array=array('name'=>"name",'email'=>"example@qq.com",'password'=>"123456"),$user_state_array=array('submit'=>0,'solved'=>0))
+	public function add_user($user_array=array('name'=>"name",'email'=>"example@qq.com",'password'=>"123456",'salt'=>""),$user_state_array=array('submit'=>0,'solved'=>0))
 	{
 		$this->db->trans_start();
 		$this->db->insert('user',$user_array);
