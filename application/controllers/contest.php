@@ -11,20 +11,47 @@ class Contest extends CI_Controller {
     $this->load->helper('url');
   }
 
-	public function index($page=1){
+	public function index($s_type=0,$s_content=NULL,$page=1){
+		$by_id=FALSE;//是否按照id来查找
+		$by_title=FALSE;//是佛按照title来查找，这里可以扩展成混合查找
 		$data['is_login']=FALSE;
 		if($this->user_help->is_session()){
 			$data['is_login']=TRUE;
 			$data['user']=$this->user_help->get_session();
 		}//这里用来表示用户是否登录传递到view页面
+		if(isset($_POST['s_id']) || ($s_type==1 && is_numeric($s_content))){
+			//判断是否是id搜索
+			if(isset($_POST['s_id']))
+			$s_id=$_POST['s_id'];
+			else
+			$s_id=$s_content;
+			$s_type=1;
+			$by_id=TRUE;
+			$total=$this->oj_model->get_row("contest","contestId","defunct =0 AND contestId = ".$this->db->escape($s_id)." ");
+		}else if(isset($_POST['s_title']) || ($s_type==2 && $s_content!=NULL)){
+			//title搜索
+			if(isset($_POST['s_title']))
+			$s_title=$_POST['s_title'];
+			else
+			$s_title=$s_content;
+			$s_type=2;
+			$by_title=TRUE;
+			$total=$this->oj_model->get_row("contest","contestId","defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ");
+		}else
 		$total=$this->oj_model->get_row("contest","contestId","defunct = 0");//contest总行数
-		$data['is_empty']=FALSE;
 		if($total==0){
 			$data['is_empty']=TRUE;
-			$data['problem_list']=array();
+			$data['contest_list']=array();
 		}
-		if(is_numeric($page) && $page>=1 && (($page-1)*10<$total)){
+		if(is_numeric($page) && $page>=1 && (($page-1)*10<=$total)){
 			$column_array=array('contestId','title','startTime','endTime','defunct','private');
+			if($by_id===TRUE){
+				$data['contest_list']=$this->oj_model->get_contest_list_where($column_array,'contestId',FALSE,
+				"defunct =0 AND contestId = ".$this->db->escape($s_id)." ",($page-1)*10,10);
+			}else if($by_title===TRUE){
+				$data['contest_list']=$this->oj_model->get_contest_list_where($column_array,'contestId',FALSE,
+				"defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ",($page-1)*10,10);
+			}else
 			$data['contest_list']=$this->oj_model->get_contest_list_where($column_array,
 			"contestId",TRUE,"defunct = 0",($page-1)*10,10);
 			
@@ -35,6 +62,10 @@ class Contest extends CI_Controller {
 			$config['num_links'] = 7;
 			$config['use_page_numbers'] = TRUE;
 			$config['base_url'] = site_url("contest/index");
+			if($s_type==1)
+			$config['base_url'] = $config['base_url']."/".$s_type."/".$s_id;
+			else if($s_type==2)
+			$config['base_url'] = $config['base_url']."/".$s_type."/".$s_title;
 			$config['total_rows'] = $total;
 			$config['per_page'] = 10;
 

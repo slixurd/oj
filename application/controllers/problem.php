@@ -16,8 +16,9 @@ class Problem extends CI_Controller {
  * s_title,s_id
  */
   
-	public function index($page=1)
+	public function index($s_type=0,$s_content=NULL,$page=1)
 	{
+		//s_type=0,1,2分别表示不开启搜索,按id，title搜索
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		$total=0;
@@ -30,14 +31,24 @@ class Problem extends CI_Controller {
 			$data['user']=$this->user_help->get_session();
 		}//这里用来表示用户是否登录传递到view页面
 		
-		if(isset($_POST['s_id'])){
+		if(isset($_POST['s_id']) || ($s_type==1 && is_numeric($s_content))){
 			//判断是否是id搜索
+			if(isset($_POST['s_id']))
+			$s_id=$_POST['s_id'];
+			else
+			$s_id=$s_content;
+			$s_type=1;
 			$by_id=TRUE;
-			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND problemId = ".$this->db->escape($_POST['s_id'])." ");
-		}else if(isset($_POST['s_title'])){
+			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND problemId = ".$this->db->escape($s_id)." ");
+		}else if(isset($_POST['s_title']) || ($s_type==2 && $s_content!=NULL)){
 			//title搜索
+			if(isset($_POST['s_title']))
+			$s_title=$_POST['s_title'];
+			else
+			$s_title=$s_content;
+			$s_type=2;
 			$by_title=TRUE;
-			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND title LIKE ".$this->db->escape("%".$_POST['s_title']."%")." ");
+			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ");
 		}else
 		$total=$this->oj_model->get_row();//直接获取行数
 		if($total==0){
@@ -48,10 +59,10 @@ class Problem extends CI_Controller {
 			$column_array=array('problemId','title','source','accepted','submit');
 			if($by_id===TRUE){
 				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
-				"defunct =0 AND problemId = ".$this->db->escape($_POST['s_id'])." ",($page-1)*10,10);
+				"defunct =0 AND problemId = ".$this->db->escape($s_id)." ",($page-1)*10,10);
 			}else if($by_title===TRUE){
 				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
-				"defunct =0 AND title LIKE ".$this->db->escape("%".$_POST['s_title']."%")." ",($page-1)*10,10);
+				"defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ",($page-1)*10,10);
 			}else
 			$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE,($page-1)*10,10);
 			
@@ -59,7 +70,7 @@ class Problem extends CI_Controller {
 			//用户还没有登录status全部设置为no
 			for($i=0;$i<count($data['problem_list']);$i++)
 			$data['problem_list'][$i]['status']="No";
-		}else{
+		}else if(!empty($data['problem_list'][0])){
 			//用户已经登录获取本页每个问题的status
 			$user=$this->user_help->get_session();
 			$userId=$user['userId'];
@@ -89,6 +100,10 @@ class Problem extends CI_Controller {
 			$config['num_links'] = 7;
 			$config['use_page_numbers'] = TRUE;
 			$config['base_url'] = site_url("problem/index");
+			if($s_type==1)
+			$config['base_url'] = $config['base_url']."/".$s_type."/".$s_id;
+			else if($s_type==2)
+			$config['base_url'] = $config['base_url']."/".$s_type."/".$s_title;
 			$config['total_rows'] = $total;
 			$config['per_page'] = 10;
 
