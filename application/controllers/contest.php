@@ -19,22 +19,15 @@ class Contest extends CI_Controller {
 			$data['is_login']=TRUE;
 			$data['user']=$this->user_help->get_session();
 		}//这里用来表示用户是否登录传递到view页面
-		if(isset($_POST['s_id']) || ($s_type==1 && is_numeric($s_content))){
+
+		if(isset($_POST['s_id'])){
 			//判断是否是id搜索
-			if(isset($_POST['s_id']))
 			$s_id=$_POST['s_id'];
-			else
-			$s_id=$s_content;
-			$s_type=1;
 			$by_id=TRUE;
 			$total=$this->oj_model->get_row("contest","contestId","defunct =0 AND contestId = ".$this->db->escape($s_id)." ");
-		}else if(isset($_POST['s_title']) || ($s_type==2 && $s_content!=NULL)){
+		}else if(isset($_POST['s_title'])){
 			//title搜索
-			if(isset($_POST['s_title']))
 			$s_title=$_POST['s_title'];
-			else
-			$s_title=$s_content;
-			$s_type=2;
 			$by_title=TRUE;
 			$total=$this->oj_model->get_row("contest","contestId","defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ");
 		}else
@@ -62,10 +55,6 @@ class Contest extends CI_Controller {
 			$config['num_links'] = 7;
 			$config['use_page_numbers'] = TRUE;
 			$config['base_url'] = site_url("contest/index");
-			if($s_type==1)
-			$config['base_url'] = $config['base_url']."/".$s_type."/".$s_id;
-			else if($s_type==2)
-			$config['base_url'] = $config['base_url']."/".$s_type."/".$s_title;
 			$config['total_rows'] = $total;
 			$config['per_page'] = 10;
 
@@ -126,7 +115,9 @@ class Contest extends CI_Controller {
 					$data['permission']="yes";
 				}
 			}
+			$this->load->view('common/header',$data);
 			$this->load->view('contest_item_view',$data);
+			$this->load->view('common/footer',$data);
 		}
 	}
 }

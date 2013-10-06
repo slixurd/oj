@@ -16,7 +16,7 @@ class Problem extends CI_Controller {
  * s_title,s_id
  */
   
-	public function index($s_type=0,$s_content=NULL,$page=1)
+	public function index($page=1)
 	{
 		//s_type=0,1,2分别表示不开启搜索,按id，title搜索
 		$this->load->helper('form');
@@ -30,23 +30,15 @@ class Problem extends CI_Controller {
 			$data['is_login']=TRUE;
 			$data['user']=$this->user_help->get_session();
 		}//这里用来表示用户是否登录传递到view页面
-		
-		if(isset($_POST['s_id']) || ($s_type==1 && is_numeric($s_content))){
+
+		if(isset($_POST['s_id'])){
 			//判断是否是id搜索
-			if(isset($_POST['s_id']))
 			$s_id=$_POST['s_id'];
-			else
-			$s_id=$s_content;
-			$s_type=1;
 			$by_id=TRUE;
 			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND problemId = ".$this->db->escape($s_id)." ");
-		}else if(isset($_POST['s_title']) || ($s_type==2 && $s_content!=NULL)){
+		}else if(isset($_POST['s_title'])){
 			//title搜索
-			if(isset($_POST['s_title']))
 			$s_title=$_POST['s_title'];
-			else
-			$s_title=$s_content;
-			$s_type=2;
 			$by_title=TRUE;
 			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ");
 		}else
@@ -100,10 +92,6 @@ class Problem extends CI_Controller {
 			$config['num_links'] = 7;
 			$config['use_page_numbers'] = TRUE;
 			$config['base_url'] = site_url("problem/index");
-			if($s_type==1)
-			$config['base_url'] = $config['base_url']."/".$s_type."/".$s_id;
-			else if($s_type==2)
-			$config['base_url'] = $config['base_url']."/".$s_type."/".$s_title;
 			$config['total_rows'] = $total;
 			$config['per_page'] = 10;
 
