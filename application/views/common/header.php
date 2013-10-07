@@ -31,19 +31,19 @@
 				</div>
 			</div>
 			<div style="font-size:20px;">|</div>
-			<div><a href="">注册</a></div>
+			<div><a href="<?php echo site_url("user/register"); ?>">注册</a></div>
 		</div>
 		<ul class="main-nav">
-			<li><a href="">主页</a></li>
+			<li><a href="<?php echo site_url("/"); ?>">主页</a></li>
 			
 			<li>
-				<a href="">
+				<a href="<?php echo site_url("problem/index"); ?>">
 					<span>题集</span>
 					<img src="/scutoj/assets/img/list_button.png">
 				</a>
 				<ul class="sub-nav">
-					<li><a href="">课程</a></li>
-					<li><a href="">比赛</a></li>
+					<li><a href="<?php echo site_url("problem/index"); ?>">题目</a></li>
+					<li><a href="<?php echo site_url("contest/index"); ?>">比赛</a></li>
 					<li><a href="">全部</a></li>
 				</ul>
 			</li>

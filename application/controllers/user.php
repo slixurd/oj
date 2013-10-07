@@ -9,7 +9,9 @@ class User extends CI_Controller {
   {
     parent::__construct();
     $this->load->model('oj_model');
-  }
+	$this->load->helper('url');
+	$this->load->library('user_help');  
+}
   
 	public function index()
 	{
@@ -44,10 +46,14 @@ class User extends CI_Controller {
 			$user['salt']=$salt;
 			$user['regTime']=mdate($date_str);
 			$this->oj_model->add_user($user);
+			$this->load->view('common/header');
 			$this->load->view('register_success_view');
+			$this->load->view('common/footer');
 		}
 		else{
+			$this->load->view('common/header');
 			$this->load->view('register_view');
+			$this->load->view('common/footer');
 		}
 	}
 	
