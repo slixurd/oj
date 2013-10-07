@@ -53,6 +53,15 @@ class User_help {
 		
 	}
 	
+	
+/*
+ * 此函数查询是否已经存在用户，如果用户名已经存在返回1,email已经存在返回2,不存在返回0
+ */
+	public function is_user($name,$email){
+		$CI->load->model('oj_model');
+		return $this->oj_model->is_user($name,$email);
+	}
+	
 	public function get_session(){
 		$CI =& get_instance();
 		return $CI->session->all_userdata();

@@ -14,6 +14,8 @@ class Contest extends CI_Controller {
 	public function index($s_type=0,$s_content=NULL,$page=1){
 		$by_id=FALSE;//是否按照id来查找
 		$by_title=FALSE;//是佛按照title来查找，这里可以扩展成混合查找
+
+		$data['page_title']='竞赛列表';
 		$data['is_login']=FALSE;
 		if($this->user_help->is_session()){
 			$data['is_login']=TRUE;

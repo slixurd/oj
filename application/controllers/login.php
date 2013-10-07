@@ -9,40 +9,34 @@ class Login extends CI_Controller {
   {
     parent::__construct();
     $this->load->model('oj_model');
+    $this->load->library('url');
+    $this->load->library('user_help');
+	$this->load->library('form_validation');
   }
   
 	public function index(){
 		$this->output->enable_profiler(TRUE);
-		$this->load->library('user_help');
-		$this->load->library('form_validation');
 		
 		$this->form_validation->set_rules('username');
 		$this->form_validation->set_rules('pa');
 		
 		if($this->form_validation->run()===TRUE){
 			if($this->user_help->is_session()){
-				//已经登陆了
-				$this->load->helper('form');
-				$this->load->view('login_view');
+				//提示用户已经登录退回去
 			}else{
 				$info=$this->input->post('username',TRUE);
 				$pass=$this->input->post('pa',TRUE);
 				$userdata=NULL;
 			if(($userdata=$this->user_help->set_session($info,$pass))!=FALSE){
-					$data['userdata']=$userdata;
-					$this->load->view('user_info_view',$data);
+					$data['user']=$userdata;
+					redirect(site_url("problem"));
+					//登录成功直接跳转到问题页面
 				}else{
-					$this->load->helper('form');
-					$this->load->view('login_view');
+					//提示用户用户名或者密码不正确
 				}
 			}
 		}
 			
-	}
-	
-	public function show(){
-		$this->load->helper('form');
-		$this->load->view('login_view');
 	}
 	
 }
