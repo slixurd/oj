@@ -8,6 +8,9 @@ class Logout extends CI_Controller {
 	  public function __construct()
   {
     parent::__construct();
+    $this->load->helper('url');
+    $this->load->library('session');
+     $this->load->library('form_validation');
   }
   
 	public function index(){
@@ -17,10 +20,10 @@ class Logout extends CI_Controller {
 			$this->load->view('login_view');
 		}else{
 			//销毁session
-			$this->load->library('session');
 			//$this->load->model('oj_model');
 			//$this->oj_model->unset_session($this->session->userdata('session_id'));
 			$this->session->sess_destroy();
+			redirect(site_url("problem/index"));
 		}
 			
 	}

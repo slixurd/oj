@@ -47,16 +47,25 @@ class Problem extends CI_Controller {
 			$data['problem_list']=array();
 			$data['is_empty']=TRUE;//搜索结果为空
 		}
+		if(isset($_POST['s_id']) || isset($_POST['s_title'])){
+				$limit_from=0;
+				$limit_row=$total;
+				$is_search=TRUE;
+			}else{
+				$is_search=FALSE;
+				$limit_from=($page-1)*10;
+				$limit_row=10;
+			}//判断是否是搜索模式是的话下面就不分页
 		if($page>=1 && is_numeric($page) && (($page-1)*10<=$total)){
 			$column_array=array('problemId','title','source','accepted','submit');
 			if($by_id===TRUE){
 				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
-				"defunct =0 AND problemId = ".$this->db->escape($s_id)." ",($page-1)*10,10);
+				"defunct =0 AND problemId = ".$this->db->escape($s_id)." ",$limit_from,$limit_row);
 			}else if($by_title===TRUE){
 				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
-				"defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ",($page-1)*10,10);
+				"defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ",$limit_from,$limit_row);
 			}else
-			$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE,($page-1)*10,10);
+			$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE,$limit_from,$limit_row);
 			
 			if(!$data['is_login']){
 			//用户还没有登录status全部设置为no
@@ -93,8 +102,10 @@ class Problem extends CI_Controller {
 			$config['use_page_numbers'] = TRUE;
 			$config['base_url'] = site_url("problem/index");
 			$config['total_rows'] = $total;
-			$config['per_page'] = 10;
-
+			if($is_search==TRUE){
+				$config['per_page'] =$total;
+			}else
+			$config['per_page'] =10;
 			$config['first_link'] = '首页';
 			$config['last_link'] = '末页';
 			$config['num_tag_open'] = '<li>';
@@ -110,10 +121,7 @@ class Problem extends CI_Controller {
 			$config['last_tag_open'] = '<li>';
 			$config['last_tag_close'] = '</li>';	
 			$this->pagination->initialize($config);
-
-
 			$data['pagination_block'] = $this->pagination->create_links();
-
 			$this->load->view('common/header',$data);
 			$this->load->view('problem_list_view',$data);
 			$this->load->view('common/footer',$data);

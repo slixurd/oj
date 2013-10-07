@@ -441,7 +441,8 @@ class Oj_model extends CI_Model
  * 返回刚刚插入的solutionId
  */
 
-	public function add_solution($solution_array=array('problemId'=>10000,'userId'=>1,'runTime'=>0,'memory'=>0,'result'=>0,'programLan'=>"C++",'contestId'=>1,'unitId'=>1,'valid'=>0),$code_array=array('code'=>"it is a test"))
+	public function add_solution($solution_array=array('problemId'=>10000,'userId'=>1,'runTime'=>0,'memory'=>0,
+	'result'=>0,'programLan'=>"cpp",'contestId'=>1,'unitId'=>1,'valid'=>0),$code_array=array('code'=>"it is a test"))
 	{
 		$this->db->trans_start();
 		$this->db->insert('solution',$solution_array);
@@ -501,8 +502,14 @@ class Oj_model extends CI_Model
 	}
 	
 	public function unset_session($session_id){
-		$sql="DELETEsss FROM ci_sessions WHERE session_id = ".$this->db->escape($session_id)." ";
+		$sql="DELETE FROM ci_sessions WHERE session_id = ".$this->db->escape($session_id)." ";
 		$query=$this->db->query($sql);
+	}
+	
+	public function get_course_item($colum_array=array('userId','name')){
+		$sql="SELECT ".implode(" , " ,$column_array)." FROM course";
+		$query=$this->db->query($sql);
+		return $query->row_array(0);
 	}
 	
 		
