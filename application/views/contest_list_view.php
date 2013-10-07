@@ -3,8 +3,8 @@
 	<div class="container">
 		<div class="sub-header">
 			<div class="search">
-				<form class="search-wrapper" action="<?php echo site_url("problem/index"); ?>" method="post">
-					<button type="submit">S</button>
+				<form class="search-wrapper" action="<?php echo site_url("contest/index"); ?>" method="post">
+					<button class="search-button" type="submit">S</button>
 					<span id="search-method">
 						<span>ID</span><img src="/scutoj/assets/img/list_button.png">
 						<ul>

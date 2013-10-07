@@ -49,6 +49,8 @@ class User extends CI_Controller {
 /**
  * 注册提交地址以post的方式注册
  */
+ 
+ 
 	
 	public function register_submit()
 	{

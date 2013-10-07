@@ -8,7 +8,7 @@
 		<div class="reg-indicator">
 			<span>这里是注册提示啊提示.这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示</span>
 		</div>
-		<form class="register" method="post" action="<?php echo site_url("user/register_submit"); ?>">
+		<form class="register"  method="post"  action="<?php echo site_url("user/register_submit"); ?>">
 			<!-- div>
 				<span>ID</span>
 				<input name="id"/>

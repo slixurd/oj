@@ -32,7 +32,9 @@ class Problem_submit extends CI_Controller {
 	  $date_str="%Y-%m-%d %H:%i:%s";
 	  $now=strtotime("now");
 	  if($data['is_login']===FALSE){
-		  redirect(site_url("problem"));//下面可以提示用户登录
+		  redirect(site_url("problem")); 
+		   
+		  //下面可以提示用户登录
 	  }else if(isset($_POST['problemId']) && isset($_POST['code']) && isset($_POST['language'])){
 		  if(isset($_POST['contestId'])&& is_numeric($_POST['contestId'])){
 			    $data['privilege']=$this->oj_model->get_contest_privilege($id,$user['userId']);
