@@ -6,7 +6,13 @@
 			<h3>注册</h3>
 		</div>
 		<div class="reg-indicator">
-			<span>这里是注册提示啊提示.这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示这里是注册提示啊提示</span>
+			<strong>欢迎来到全新的SCOJ Milestone1.0！</strong>
+			<p>在‘课程’目录下，你可以参加即将进行的实验和比赛</p>
+			<p>寻求帮助？请点击‘帮助’</p>
+			<p>有什么意见或建议给UP主，请戳→ <a href="https://gitcafe.com/SCOJ/scoj">GIT</a></p>
+
+			<p>Now,注册你的信息，加入我们</p>
+			<p>和小伙伴们一起，开始你的刷题之旅吧！''</p>
 		</div>
 		<form class="register"  method="post"  action="<?php echo site_url("user/register_submit"); ?>">
 			<!-- div>
@@ -30,7 +36,7 @@
 			</div>
 			<div>
 				<span>邮箱</span>
-				<input id="email-reg" name="email-reg" type="email" required="required"/>
+				<input id="email-reg" name="email" type="email" required="required"/>
 				<span id="email-status"></span>
 			</div>
 			<div>

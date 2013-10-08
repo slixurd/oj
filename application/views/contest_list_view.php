@@ -18,7 +18,7 @@
 			<h3>比赛</h3>
 		</div>
 
-		<table class="table">
+		<table id="contest-list" class="table">
 			<thead>
 				<tr>
 					<th class="span2">比赛ID</th>

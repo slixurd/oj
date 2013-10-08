@@ -33,9 +33,9 @@
 			<div><a href="<?php echo site_url("user/register"); ?>">注册</a></div>
 		</div>
 		<ul class="main-nav">
-			<li><a href="<?php echo site_url("/"); ?>">主页</a></li>
+			<li <?php if(preg_match("/index\.php\/?$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "class='active'"; ?> ><a href="<?php echo site_url("/"); ?>">主页</a></li>
 			
-			<li>
+			<li <?php if(preg_match("/contest|problem/",$_SERVER["REQUEST_URI"])) echo "class='active'" ?> >
 				<a href="<?php echo site_url("problem/index"); ?>">
 					<span>题集</span>
 					<img src="/scutoj/assets/img/list_button.png">

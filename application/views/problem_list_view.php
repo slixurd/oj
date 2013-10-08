@@ -18,7 +18,7 @@
 			<h3>题集</h3>
 		</div>
 
-		<table class="table">
+		<table id="problem-list" class="table">
 			<thead>
 				<tr>
 					<th class="span2">ID</th>
@@ -39,7 +39,6 @@
 					<td><?php echo $problem['accepted'] ?></td>
 					<td><?php echo $problem['submit'] ?></td>
 					<td><?php echo $problem['status'] ?></td>
-
 				</tr>
 				<?php endforeach; ?>
 			</tbody>

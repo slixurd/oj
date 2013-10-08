@@ -1,4 +1,6 @@
 $(document).ready(function(){
+	var base="/scutoj/index.php/";
+
 	$("#search-method > ul > li").on('click',function(){
 		$("#search-method > span").text($(this).children("span").text());
 		$(".search-wrapper > input").prop('name',$(this).children("span").prop('class'));
@@ -59,6 +61,8 @@ $(document).ready(function(){
 		}
 	});
 
+
+//检测用户名是否已经使用
 	$("input#username-reg").on("focusout",function(){
 		$.post('/scutoj/index.php/user/check_unique_username',{"username":$("input#username-reg").val()}).done(function(data) {
 		  var json = eval('(' + data + ')'); 
@@ -68,6 +72,7 @@ $(document).ready(function(){
 		  	$("#username-status").text("此用户名可以使用");
 		});
 	});
+//检测邮箱是否使用
 	$("input#email-reg").on("focusout",function(){
 		$.post('/scutoj/index.php/user/check_unique_email',{"email":$("input#email-reg").val()}).done(function(data) {
 		  var json = eval('(' + data + ')'); 
@@ -78,4 +83,14 @@ $(document).ready(function(){
 		});
 	});
 
+
+//表格的超链接
+	$("#problem-list tbody tr").on("click",function(){
+		window.location.href = base + 'problem/get_problem/'+$(this).find("td:first-child").text();
+	});
+//表格的超链接
+	$("#contest-list tbody tr").on("click",function(){
+		window.location.href = base + 'contest/get_contest/'+$(this).find("td:first-child").text();
+	});
+	
 });
