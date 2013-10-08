@@ -9,13 +9,13 @@ class Login extends CI_Controller {
   {
     parent::__construct();
     $this->load->model('oj_model');
-    $this->load->library('url');
+    $this->load->helper('url');
     $this->load->library('user_help');
 	$this->load->library('form_validation');
   }
   
 	public function index(){
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 		
 		$this->form_validation->set_rules('username');
 		$this->form_validation->set_rules('pa');
@@ -27,7 +27,7 @@ class Login extends CI_Controller {
 				$info=$this->input->post('username',TRUE);
 				$pass=$this->input->post('pa',TRUE);
 				$userdata=NULL;
-			if(($userdata=$this->user_help->set_session($info,$pass))!=FALSE){
+				if(($userdata=$this->user_help->set_session($info,$pass))!=FALSE){
 					$data['user']=$userdata;
 					redirect(site_url("problem"));
 					//登录成功直接跳转到问题页面

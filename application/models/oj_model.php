@@ -115,22 +115,24 @@ class Oj_model extends CI_Model
  * is_user()查看是否已经存在用户
  */
  
-	public function is_user($name,$email){
+	public function unique_user($name){
 		$sql="SELECT name FROM user WHERE name = ".$this->db->escape($name)." ";
-		$query=$this->query($sql);
+		$query=$this->db->query($sql);
 		$name=$query->row_array();
 		if(count($name)>0)
-		return 1;
-		$sql="SELECT email FROM user WHERE name = ".$this->db->escape($email)." ";
-		$query=$this->query($sql1);
-		$email=$query1->row_array();
-		if(count($email>0))
-		return 2;
-		else
-		return 0;
+			return 1;
+		else 
+			return 0;
 	}
-	
-
+	public function unique_email($email){
+		$sql="SELECT email FROM user WHERE email = ".$this->db->escape($email)." ";
+		$query=$this->db->query($sql);
+		$email=$query->row_array();
+		if(count($email)>0)
+			return 1;
+		else 
+			return 0;
+	}
 
 /**
  *get_user_item_name 按照id获取指定用户基本信息不包含用户state(submmit，accept这类)信息

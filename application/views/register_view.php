@@ -15,19 +15,23 @@
 			</div -->
 			<div>
 				<span>昵称</span>
-				<input name="username"/>
+				<input id="username-reg"  name="username" required="required"/>
+				<span id="username-status"></span>
 			</div>
 			<div>
 				<span>密码</span>
-				<input name="pa" type="password"/>
+				<input id="pa-reg" name="pa" type="password" required="required"/>
+				<span id="pa-status"></span>
 			</div>
 			<div>
 				<span>确认密码</span>
-				<input name="paconf" type="password"/>
+				<input id="paconf-reg" name="paconf" type="password" required="required"/>
+				<span id="paconf-status"></span>
 			</div>
 			<div>
 				<span>邮箱</span>
-				<input name="email" type="email"/>
+				<input id="email-reg" name="email-reg" type="email" required="required"/>
+				<span id="email-status"></span>
 			</div>
 			<div>
 				<span>学校</span>
@@ -35,7 +39,7 @@
 			</div>
 			<div>
 				<span></span>
-				<button type="submit" class="common-button">提交注册</button>
+				<button id="submit-reg" type="submit" class="common-button">提交注册</button>
 			</div>
 		</form>
 

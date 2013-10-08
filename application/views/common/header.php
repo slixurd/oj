@@ -16,7 +16,7 @@
 	<div class="container">
 		<div id="log-reg">
 			<div>
-				<button id="login" href="">登录</button>
+				<button id="login" href="" style="margin-right:15px;">登录</button>
 				<div class="login-popup">
 					<form>
 						<input placeholder="请输入登录邮箱" />
@@ -30,7 +30,6 @@
 
 				</div>
 			</div>
-			<div style="font-size:20px;">|</div>
 			<div><a href="<?php echo site_url("user/register"); ?>">注册</a></div>
 		</div>
 		<ul class="main-nav">

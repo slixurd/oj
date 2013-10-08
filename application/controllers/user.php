@@ -34,16 +34,21 @@ class User extends CI_Controller {
   
 	public function register()
 	{
-		 $data['page_title']='注册';
-		 $data['is_login']=FALSE;
-		 $data['user']=NULL;
-         if($this->user_help->is_session()){
+		$data['page_title']='注册';
+		$data['is_login']=FALSE;
+		$data['user']=NULL;
+		if($this->user_help->is_session()){
 			$data['is_login']=TRUE;
 			$data['user']=$this->user_help->get_session();
+			$this->load->view('common/header',$data);
+			echo "already login";
+			//$this->load->view('register_nonavailable_view',$data);
+			$this->load->view('common/footer',$data);
+		}else {
+			$this->load->view('common/header',$data);
+			$this->load->view('register_view',$data);
+			$this->load->view('common/footer',$data);
 		}
-		$this->load->view('common/header',$data);
-		$this->load->view('register_view',$data);
-		$this->load->view('common/footer',$data);
 	}
 	
 /**
@@ -74,7 +79,9 @@ class User extends CI_Controller {
 			$user['regTime']=mdate($date_str);
 			$this->oj_model->add_user($user);
 			if(($data['user']=$this->user_help->set_session($user['name'],$this->input->post('pa',TRUE)))!=FALSE){
-					redirect(site_url("problem"));
+					$this->load->view('common/header',$data);
+					$this->load->view('register_success_view',$data);
+					$this->load->view('common/footer',$data);
 				}else{
 					$this->index();
 				}
@@ -83,6 +90,18 @@ class User extends CI_Controller {
 		else{
 			$this->index();
 		}
+	}
+
+	public function check_unique_email(){
+		$email_to_check = $this->input->post('email',TRUE);
+		$unique = array('email' => $this->oj_model->unique_email($email_to_check) ); 
+		echo json_encode($unique);
+	}
+
+	public function check_unique_username(){
+		$name_to_check = $this->input->post('username',TRUE);
+		$unique = array('username' => $this->oj_model->unique_user($name_to_check) ); 
+		echo json_encode($unique);
 	}
 	
 }
