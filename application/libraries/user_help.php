@@ -2,7 +2,18 @@
 
 class User_help {
 
-
+/**
+ * 此类自动装载，函数在使用前请先声明Global $data
+ */
+	public function __construct(){
+		 Global $data;
+		 $data['is_login']=FALSE;
+		 $data['user']=array();
+         if($this->is_session()){
+			$data['is_login']=TRUE;
+			$data['user']=$this->get_session();
+		}
+	}
 	
 /**
  * 查看session是否存在，返回FALSE或者TRUE

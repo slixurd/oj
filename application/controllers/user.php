@@ -10,20 +10,12 @@ class User extends CI_Controller {
 	  public function __construct()
   {
     parent::__construct();
-    $this->load->model('oj_model');
-    $this->load->library('user_help');
-    $this->load->helper('url');
-    $this->load->helper('form');
-	$this->load->library('form_validation');
   }
   
 	public function index()
 	{
-		 $data['is_login']=FALSE;
-		 $data['user']=NULL;
-         if($this->user_help->is_session()){
-			$data['is_login']=TRUE;
-			$data['user']=$this->user_help->get_session();
+		Global $data;
+         if($data['is_login']){
 			$this->load->view('common/header',$data);
 			$this->load->view('user_info_view',$data);
 			$this->load->view('common/footer',$data);
@@ -34,15 +26,11 @@ class User extends CI_Controller {
   
 	public function register()
 	{
+		Global $data;
 		$data['page_title']='注册';
-		$data['is_login']=FALSE;
-		$data['user']=NULL;
-		if($this->user_help->is_session()){
-			$data['is_login']=TRUE;
-			$data['user']=$this->user_help->get_session();
+		if($data['is_login']){
 			$this->load->view('common/header',$data);
-			echo "already login";
-			//$this->load->view('register_nonavailable_view',$data);
+			$this->load->view('register_nonavailable_view',$data);
 			$this->load->view('common/footer',$data);
 		}else {
 			$this->load->view('common/header',$data);
@@ -77,7 +65,15 @@ class User extends CI_Controller {
 			$user['password']=$this->encrypt->sha1($salt.$user['password']);
 			$user['salt']=$salt;
 			$user['regTime']=mdate($date_str);
-			$this->oj_model->add_user($user);
+			$u_email=$this->oj_model->unique_email($user['email']);
+			$u_name=$this->oj_model->unique_user($user['name']);
+			if($u_email==1 && $u_name==1){
+				$this->oj_model->add_user($user);
+			}else{
+				$this->load->view('common/header',$data);
+				$this->load->view('register_fail_view',$data);
+				$this->load->view('common/footer',$data);
+			}
 			if(($data['user']=$this->user_help->set_session($user['name'],$this->input->post('pa',TRUE)))!=FALSE){
 					$this->load->view('common/header',$data);
 					$this->load->view('register_success_view',$data);

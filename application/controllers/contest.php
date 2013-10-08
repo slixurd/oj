@@ -6,21 +6,14 @@ class Contest extends CI_Controller {
 	public function __construct()
   {
     parent::__construct();
-    $this->load->model('oj_model');
-    $this->load->library('user_help');
-    $this->load->helper('url');
   }
 
 	public function index($s_type=0,$s_content=NULL,$page=1){
+		Global $data;
 		$by_id=FALSE;//是否按照id来查找
 		$by_title=FALSE;//是佛按照title来查找，这里可以扩展成混合查找
 
 		$data['page_title']='竞赛列表';
-		$data['is_login']=FALSE;
-		if($this->user_help->is_session()){
-			$data['is_login']=TRUE;
-			$data['user']=$this->user_help->get_session();
-		}//这里用来表示用户是否登录传递到view页面
 
 		if(isset($_POST['s_id'])){
 			//判断是否是id搜索
@@ -96,10 +89,7 @@ class Contest extends CI_Controller {
 		}
 		$data['permission']="no";
 		$data['is_login']=FALSE;
-		if($this->user_help->is_session()){
-			$data['is_login']=TRUE;
-			$data['user']=$user=$this->user_help->get_session();
-		}//这里用来表示用户是否登录传递到view页面
+		$user=$data['user'];
 		$data['contest_item']=$this->oj_model->get_contest_item($id);
 		$data['contest_problem_list']=$this->oj_model->get_contest_problem_list($id);
 		if(empty($data['contest_item'])){
@@ -108,7 +98,7 @@ class Contest extends CI_Controller {
 			if($data['contest_item']['private']==0){
 				$data['permission']="yes";
 			}	
-			else if($data['is_login']==FALSE){//用户没有登录
+			else if($data['is_login']===FALSE){//用户没有登录
 				$data['permission']="no";
 			}else{//用户登录
 				$data['permission']="no";

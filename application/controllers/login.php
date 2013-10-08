@@ -8,20 +8,15 @@ class Login extends CI_Controller {
 	  public function __construct()
   {
     parent::__construct();
-    $this->load->model('oj_model');
-    $this->load->helper('url');
-    $this->load->library('user_help');
-	$this->load->library('form_validation');
   }
   
 	public function index(){
-		//$this->output->enable_profiler(TRUE);
-		
+		Global $data;
 		$this->form_validation->set_rules('username');
 		$this->form_validation->set_rules('pa');
 		
 		if($this->form_validation->run()===TRUE){
-			if($this->user_help->is_session()){
+			if($data['is_login']){
 				//提示用户已经登录退回去
 			}else{
 				$info=$this->input->post('username',TRUE);
