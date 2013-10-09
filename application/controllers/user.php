@@ -24,6 +24,7 @@ class User extends CI_Controller {
 		}
 	}
   
+  //如果用户已经登录不予注册导入register_noavailable页面
 	public function register()
 	{
 		Global $data;
@@ -40,7 +41,7 @@ class User extends CI_Controller {
 	}
 	
 /**
- * 注册提交地址以post的方式注册
+ * 注册提交地址以post的方式注册,检查邮箱格式，用户名长度4-15数字字母,邮箱长度6-50,密码长度6-20数字字母否则不通过审核
  */
  
 	
@@ -55,6 +56,11 @@ class User extends CI_Controller {
 		$this->form_validation->set_rules('pa');
 		$this->form_validation->set_rules('email');
 		$salt=$this->user_help->salt(25,35);
+		if($data['is_login']){
+			$this->load->view('common/header',$data);
+			$this->load->view('register_nonavailable_view',$data);
+			$this->load->view('common/footer',$data);
+		}else
 		if($this->form_validation->run() === TRUE ){
 			$user=array(
 				'name'=>$this->input->post('username',TRUE),
@@ -71,8 +77,8 @@ class User extends CI_Controller {
 				$name_rt=$this->user_help->check_name($user['name']);
 				$email_rt=$this->user_help->check_email_preg($user['email']);
 				$pass_rt=$this->user_help->check_pass($this->input->post('pa',TRUE));
-				if($name_rt['name_preg'] == 0 || $name_rt['name_len']<=4 || $pass_rt['pass_preg']==0 || $pass_rt['pass_len']<6
-				|| $email_rt ==0){//用户注册信息不能通过审核
+				if($name_rt['name_preg'] == 0 || $name_rt['name_len']<=4 || $name_rt['name_len']>15 ||  $pass_rt['pass_preg']==0 || $pass_rt['pass_len']<6  ||
+				strlen($user['email'])<6  || $pass_rt['pass_len']>20 ||  $email_rt ==0  || strlen($user['email'])>50){//用户注册信息不能通过审核
 					$this->load->view('common/header',$data);
 					$this->load->view('register_fail_view',$data);
 					$this->load->view('common/footer',$data);

@@ -23,6 +23,7 @@ class Login extends CI_Controller {
 		if($this->form_validation->run()===TRUE){
 			$defunct=0;
 			$info=$this->input->post('username',TRUE);
+			
 			if($this->oj_model->get_row("user","userid","defunct = 1 AND
 					name = ".$this->db->escape($info)."  OR email = ".$this->db->escape($info)."")>0){
 				if($this->oj_model->get_row("login_log","info","result = 0 AND
@@ -39,8 +40,8 @@ class Login extends CI_Controller {
 			if($data['is_login'] && $defunct==0){//用户状态正常
 				$result = array('result'=>2);//用户已经登录了返回数组2
 				echo json_encode($result);
-			}else if(strlen($info=$this->input->post('username',TRUE))>=4 &&
-			strlen($pass=$this->input->post('pa',TRUE))>=6 && $defunct==0){//如果用户提交数据长度不符合返回3
+			}else if(strlen($info>=4) && strlen($info<=50) &&
+			strlen($pass)>=6 && strlen($pass)<=20 && $defunct==0){//如果用户提交数据长度不符合返回3
 				$info=$this->input->post('username',TRUE);
 				$pass=$this->input->post('pa',TRUE);
 				$userdata=NULL;
