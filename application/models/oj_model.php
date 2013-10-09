@@ -533,5 +533,9 @@ class Oj_model extends CI_Model
 		return $query->row_array(0);
 	}
 	
+	public function add_login_log($culumn_array=array('userId','password','ip','time','result')){
+		$this->db->insert('login_log',$culumn_array);
+	}
+	
 		
 }

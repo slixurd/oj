@@ -44,20 +44,29 @@ class User_help {
 	
 	public function set_session($info,$pass){
 		$CI =& get_instance();
-		$CI->load->model('oj_model');
 		$CI->load->library('encrypt');
-		$CI->load->library('session');
 		$user=NULL;
+		$CI->load->helper('date');
+		$date_str="%Y-%m-%d %H:%i:%s";
 		if(($user=$CI->oj_model->get_user_item($info,array('userId','name','email','salt','password')))===FALSE){
 			//用户名不正确
+			$ip=$CI->session->userdata('ip_address');
+			$CI->oj_model->add_login_log(array('info'=>$info,'password'=>$CI->encrypt->sha1($user['salt'].$pass),'ip'=>$ip,
+			'time'=>mdate($date_str),'result'=>0));
 			return FALSE;
 		}else{
 			if($user['password']==$CI->encrypt->sha1($user['salt'].$pass)){
+				$ip=$CI->session->userdata('ip_address');
+				$CI->oj_model->add_login_log(array('info'=>$info,'password'=>$user['password'],'ip'=>$ip,
+				'time'=>mdate($date_str),'result'=>1));
+				$user=array('userId'=>$user['userId'],'name'=>$user['name']);
 				$CI->session->set_userdata($user);
 				//成功登录
 				return $CI->session->all_userdata();
 			}else{
-				//密码不正确
+				$ip=$CI->session->userdata('ip_address');
+				$CI->oj_model->add_login_log(array('info'=>$info,'password'=>$CI->encrypt->sha1($user['salt'].$pass),'ip'=>$ip,
+				'time'=>mdate($date_str),'result'=>0));
 				return FALSE;
 			}
 		}
@@ -78,7 +87,7 @@ class User_help {
 		return $CI->session->all_userdata();
 	}
 	
-	public function salt($min,$max){
+	public function salt($min=25,$max=35){
 		if(is_numeric($min) && is_numeric($max) && ($max>=$min)){
 			$salt_str="";
 			$lenth=rand($min,$max);
@@ -100,6 +109,28 @@ class User_help {
 		}else{
 			return FALSE;
 		}
+	}
+	
+	public function check_name($name){//对密码或用户名进行检查
+		$preg= preg_match("/^[a-zA-Z0-9_]+$/", $name) ? 1:0; //1：符合格式，0不符合
+		$len=strlen($name);
+		$rt=array('name_preg'=>$preg,'name_len'=>$len);
+		return $rt;
+	}
+	
+	
+	public function check_pass($pass){//对密码或用户名进行检查
+		$preg= preg_match("/^[a-zA-Z0-9_]+$/", $pass) ? 1:0; //1：符合格式，0不符合
+		$len=strlen($pass);
+		$rt=array('pass_preg'=>$preg,'pass_len'=>$len);
+		return $rt;
+	}
+	
+	public function check_email_preg($email){
+		$reg_str='/^[a-z0-9][a-z\.0-9-_]+@[a-z0-9_-]+(?:\.[a-z]{0,3}\.[a-z]{0,2}|\.[a-z]{0,3}|\.[a-z]{0,2})$/i';
+		$preg = preg_match($reg_str,$email)?1:0;
+		$rt = array('email_preg'=>$preg);
+		return $rt;
 	}
 	
 }
