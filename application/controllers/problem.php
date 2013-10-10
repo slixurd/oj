@@ -6,9 +6,6 @@ class Problem extends CI_Controller {
 	public function __construct()
   {
     parent::__construct();
-    $this->load->model('oj_model');
-    $this->load->library('user_help');
-    $this->load->helper('url');
   }
 
 /**
@@ -18,6 +15,7 @@ class Problem extends CI_Controller {
   
 	public function index($page=1)
 	{
+		Global $data;
 		//s_type=0,1,2分别表示不开启搜索,按id，title搜索
 		$this->load->helper('form');
 		$this->load->library('form_validation');
@@ -26,11 +24,6 @@ class Problem extends CI_Controller {
 		$by_title=FALSE;//是佛按照title来查找，这里可以扩展成混合查找
 		
 		$data['page_title']='题目列表';
-		$data['is_login']=FALSE;
-		if($this->user_help->is_session()){
-			$data['is_login']=TRUE;
-			$data['user']=$this->user_help->get_session();
-		}//这里用来表示用户是否登录传递到view页面
 
 		if(isset($_POST['s_id'])){
 			//判断是否是id搜索
@@ -135,10 +128,7 @@ class Problem extends CI_Controller {
 	
 	public function get_problem($id)
 	{
-		$data['is_login']=FALSE;
-		if($this->user_help->is_session()){
-			$data['is_login']=TRUE;
-		}//这里用来表示用户是否登录传递到view页面
+		Global $data;
 		$problem=array(' * ');
 		$data['problem']=$this->oj_model->get_problem_item($id,$problem);
 		if(! empty($data['problem'])){
