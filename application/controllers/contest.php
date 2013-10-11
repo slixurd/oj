@@ -83,12 +83,12 @@ class Contest extends CI_Controller {
 	}
 	
 	public function get_contest($id){
+		Global $data;
 		if(!is_numeric($id)){
 			show_404();//用户可能进行非法操作
 			exit();
 		}
 		$data['permission']="no";
-		$data['is_login']=FALSE;
 		$user=$data['user'];
 		$data['contest_item']=$this->oj_model->get_contest_item($id);
 		$data['contest_problem_list']=$this->oj_model->get_contest_problem_list($id);
