@@ -31,7 +31,7 @@ class User extends CI_Controller {
 		$data['page_title']='注册';
 		if($data['is_login']){
 			$this->load->view('common/header',$data);
-			$this->load->view('register_nonavailable_view',$data);
+			$this->load->view('notice/register_nonavailable_view',$data);
 			$this->load->view('common/footer',$data);
 		}else {
 			$this->load->view('common/header',$data);
@@ -59,14 +59,14 @@ class User extends CI_Controller {
 		$salt=$this->user_help->salt(25,35);
 		if($data['is_login']){
 			$this->load->view('common/header',$data);
-			$this->load->view('register_nonavailable_view',$data);
+			$this->load->view('notice/register_nonavailable_view',$data);
 			$this->load->view('common/footer',$data);
 		}
 		else if($this->form_validation->run() === TRUE && $this->input->post('pa',TRUE) == $this->input->post('paconf',TRUE)){
 			$user=array(
 				'name'=>$this->input->post('username',TRUE),
 				'password'=>$this->input->post('pa',TRUE),
-				'email'=>$this->input->post('email-reg',TRUE),
+				'email'=>$this->input->post('email',TRUE),
 				'defunct'=>0
 			);
 			$user['password']=$this->encrypt->sha1($salt.$user['password']);
@@ -83,7 +83,7 @@ class User extends CI_Controller {
 				strlen($user['email'])<6  || $pass_rt['pass_len']>20 ||
 				  $email_rt ==0  || strlen($user['email'])>50){//用户注册信息不能通过审核
 					$this->load->view('common/header',$data);
-					$this->load->view('register_fail_view',$data);
+					$this->load->view('notice/register_fail_view',$data);
 					$this->load->view('common/footer',$data);
 				}
 				else
@@ -107,7 +107,7 @@ class User extends CI_Controller {
 		}
 		else{
 			$this->load->view('common/header',$data);
-			$this->load->view('register_fail_view',$data);
+			$this->load->view('notice/register_fail_view',$data);
 			$this->load->view('common/footer',$data);
 		}
 	}

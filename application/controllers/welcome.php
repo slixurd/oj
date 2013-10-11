@@ -29,6 +29,7 @@ class Welcome extends CI_Controller {
 
 	public function index()
 	{
+		Global $data;
 		$data['page_title']='SCUTOJ';
 		$this->load->view('common/header',$data);
 		$this->load->view('tmp_home');

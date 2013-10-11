@@ -5,32 +5,68 @@
 		<meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
 		<meta name="description" content=""/>
 		<meta name="author" content="slixurd"/>
-		<link rel="stylesheet" type="text/css" href="/scutoj/assets/css/scut2.css">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets") ?>/css/scut2.css">
 		<link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
 		<link rel="icon" href="favicon.ico" type="image/x-icon" />
-		<script src="/scutoj/assets/js/jquery-1.9.1.js"></script>
-		<script type="text/javascript" src="/scutoj/assets/js/main.js"></script>
+		<script src="<?php echo base_url("assets") ?>/js/jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="<?php echo base_url("assets") ?>/js/main.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$(".login-popup #login-submit").on("click",function(){
+					$.post("<?php echo site_url("login") ?>",
+						{"username":$(".login-popup input[name='username']").val(),
+						"pa":$(".login-popup input[name='pa']").val(),
+						"remember":$(".login-popup input[name='remember']").val()},
+						function(data){
+							data=$.parseJSON(data);
+							console.log(data.result);
+							//-1用户被冻结，0密码用户名不匹配，1登录成功，2用户已经登录，3长度不符合
+							if(data.result==0){
+								$(".login-popup input[name='username']").val("密码或用户名错误");
+							}else if(data.result==-1){
+								$("#login-submit").text("您的登录次数过多").attr({"disabled":"disabled"});
+							}else if(data.result==2){
+								$(".login-popup input[name='username']").val("您已经登录");
+							}else if(data.result==3){
+								$(".login-popup input[name='username']").val("用户名/密码长度不符");
+							}else if(data.result==1){
+								window.location.reload();
+							}
+					});
+				});
+			});
+		</script>
 </head>
 <body>
 <div class="header">
 	<div class="container">
 		<div id="log-reg">
-			<div>
-				<button id="login" href="" style="margin-right:15px;">登录</button>
-				<div class="login-popup">
-					<form action="<?php echo site_url("login") ?>" method="post">
-						<input name="username" placeholder="请输入登录账户" />
-						<input name="pa" type="password" placeholder="请输入密码"/>
-						<button type="submit">确认</button>
+			<?php if(!isset($is_login)||$is_login==FALSE) {
+				echo '
+				<div>
+					<button id="login" href="" style="margin-right:15px;">登录</button>
+					<div class="login-popup">
 						<div>
-							<span class="remember-pass"><input type="checkbox" name="remember"/>记住密码</span>
-							<span class="forget-pass"><a href="">忘记密码?</a></span>
-						</div>	
-					</form>
+							<input  name="username" placeholder="请输入登录账户" />
+							<input  name="pa" type="password" placeholder="请输入密码"/>
+							<button id="login-submit" type="submit">确认</button>
+							<div>
+								<span class="remember-pass"><input type="checkbox" name="remember"/>记住密码</span>
+								<span class="forget-pass"><a href="">忘记密码?</a></span>
+							</div>	
+						</div>
 
+					</div>
 				</div>
-			</div>
-			<div><a href="<?php echo site_url("user/register"); ?>">注册</a></div>
+				<div><a href="'.site_url("user/register").'">注册</a></div>';
+
+	//heredoc,需要置顶标注符
+
+				}else if(isset($is_login) && $is_login==TRUE){
+					echo $user["name"];
+					echo '<div><a href='.site_url("logout").'>登出</a></div>';
+				}
+			?>
 		</div>
 		<ul class="main-nav">
 			<li <?php if(preg_match("/index\.php\/?$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "class='active'"; ?> ><a href="<?php echo site_url("/"); ?>">主页</a></li>

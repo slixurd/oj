@@ -1,11 +1,10 @@
 <div class="wrapper">
 	<div class="container">
 		<div class="sub-header">
-			<h3>临时主页</h3>
+			<h3>注册失败</h3>
 		</div>
-		<div style="height:440px;">
-			
+		<div>抱歉,请登出以后再注册</div>
 
-		</div>
 	</div>
 </div>
+
