@@ -20,27 +20,27 @@
 				<input name="id"/>
 			</div -->
 			<div>
-				<span>昵称</span>
+				<span>*用户名</span>
 				<input id="username-reg"  name="username" required="required"/>
-				<span id="username-status"></span>
+				<span class="reg-status" id="username-status">可以由英文,数字,汉字组成,最少4位</span>
 			</div>
 			<div>
-				<span>密码</span>
+				<span>*密码</span>
 				<input id="pa-reg" name="pa" type="password" required="required"/>
-				<span id="pa-status"></span>
+				<span class="reg-status" id="pa-status">6~20位字符组成</span>
 			</div>
 			<div>
-				<span>确认密码</span>
+				<span>*确认密码</span>
 				<input id="paconf-reg" name="paconf" type="password" required="required"/>
-				<span id="paconf-status"></span>
+				<span class="reg-status" id="paconf-status">请重复输入密码</span>
 			</div>
 			<div>
-				<span>邮箱</span>
+				<span>*邮箱</span>
 				<input id="email-reg" name="email" type="email" required="required"/>
-				<span id="email-status"></span>
+				<span class="reg-status" id="email-status">请输入您的常用邮件地址,方便找回密码</span>
 			</div>
 			<div>
-				<span>学校</span>
+				<span>昵称</span>
 				<input />
 			</div>
 			<div>

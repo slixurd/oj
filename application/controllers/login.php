@@ -5,10 +5,10 @@ class Login extends CI_Controller {
 	/**
 	 * Index Page for this controller.
 	 */
-	  public function __construct()
-  {
-    parent::__construct();
-  }
+	public function __construct()
+	{
+		parent::__construct();
+	}
   //-1用户被冻结，0密码用户名不匹配，1登录成功，2用户已经登录，3长度不符合
 	public function index(){
 		Global $data;

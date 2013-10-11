@@ -7,6 +7,9 @@ div.wrapper>.side-split{
 @side-color: #FCFCFC;
 .wrapper{
 	.side-main{
+		h4{
+			font-weight: bold;
+		}
 		width: 700px;
 		background-color: @side-color;
 		.problem-info{
@@ -17,6 +20,14 @@ div.wrapper>.side-split{
 				padding: 10px 20px; 
 				margin-bottom: 5px;
 			}
+			padding:0 0 20px 0;
+		}
+		.button-side{
+			margin-top: 20px;
+			button{
+				margin-left: 20px;
+				padding: 4px 20px;
+			}
 		}
 	}
 
@@ -24,7 +35,7 @@ div.wrapper>.side-split{
 		border-top: 4px solid @strong;
 		margin-left: 30px;
 		float: right;
-		padding: 15px;
+		padding: 0 15px;
 		width: 200px;
 		background-color: @side-color;
 		span{
@@ -35,17 +46,14 @@ div.wrapper>.side-split{
 				border-bottom: 1px solid #D7D7D7;
 				padding: 6px 0;
 			}
+			div:last-child{
+				border-bottom: 0;
+			}
 			span:first-child{
 				width: 80px;
 			}	
 		}
 
-		.button-side{
-			margin-top: 20px;
-			text-align: center;
-			button{
-				padding: 4px 20px;
-			}
-		}
+
 	}
 }

@@ -18,9 +18,9 @@
 			<div>
 				<button id="login" href="" style="margin-right:15px;">登录</button>
 				<div class="login-popup">
-					<form>
-						<input placeholder="请输入登录邮箱" />
-						<input type="password" placeholder="请输入密码"/>
+					<form action="<?php echo site_url("login") ?>" method="post">
+						<input name="username" placeholder="请输入登录账户" />
+						<input name="pa" type="password" placeholder="请输入密码"/>
 						<button type="submit">确认</button>
 						<div>
 							<span class="remember-pass"><input type="checkbox" name="remember"/>记住密码</span>

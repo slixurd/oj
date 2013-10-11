@@ -8,10 +8,7 @@
 				<div><span>通过总数</span><span><?php echo $problem['accepted'] ?></span></div>
 				<div><span>提交总数</span><span><?php echo $problem['submit'] ?></span></div>
 			</div>
-			<div class="button-side">
-				<button class="common-button">提交</button>
-				<button class="common-button">状态</button>
-			</div>
+
 		</div>
 		<div class="side-main">
 			<div class="sub-header">
@@ -51,7 +48,11 @@
 				<div>
 					<h4>来源</h4>
 					<span><?php echo $problem['source'] ?></span>
-				</div>			
+				</div>	
+				<div class="button-side">
+					<button class="common-button">提交</button>
+					<button class="common-button">状态</button>
+				</div>		
 			</div>
 
 

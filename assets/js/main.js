@@ -20,6 +20,13 @@ $(document).ready(function(){
 		result.text(x);
 	})
 
+
+//==========================================//
+//	登录模块
+//==========================================//
+
+	var usernameUnique = true;
+	var emailUnique = true;
 	$('#login').on("click",function(){
 		$(".login-popup").fadeToggle("fast");
 	});
@@ -35,29 +42,25 @@ $(document).ready(function(){
 		var passConf = $("input#paconf-reg").val();
 		var username = $("input#username-reg").val();
 		var checkit=(function(){
-		    if(email.length>50||username.length<3||pass.length<6||pass.length>32||!isEmail(email))
-		    	return false;
-		    return true;
+			if(!usernameUnique || !emailUnique ||email.length>50||username.length<3||pass.length<6||pass.length>32||!isEmail(email))
+				return false;
+			return true;
 		})();
 		if(pass!=passConf){
-			check.preventDefault();
-			return false;
+			//check.preventDefault();
+			//return false;
 		}
 		if(!checkit){
 			if(!isEmail(email)){
 				//$("#email").attr('data-original-title',"邮箱格式错误").tooltip("show");
 			}
-			if(email.length==0){
 				//$("#email").attr('data-original-title',"邮箱不能为空").tooltip("show");
-			}			
-			if(pass.length==0){
+				//check.preventDefault();		
+			if(pass.length==0||pass.length>32||pass.length<6){
+
 				//$("#password").attr('data-original-title','密码不能为空').tooltip("show");
-			}else if(pass.length<6){
-				//$("#password").attr('data-original-title','密码过短').tooltip("show");
-			}else if(pass.length>32){
-				//$("#password").attr('data-original-title','密码过长').tooltip('show');
 			}
-			check.preventDefault();
+
 		}
 	});
 
@@ -65,22 +68,34 @@ $(document).ready(function(){
 //检测用户名是否已经使用
 	$("input#username-reg").on("focusout",function(){
 		$.post('/scutoj/index.php/user/check_unique_username',{"username":$("input#username-reg").val()}).done(function(data) {
-		  var json = eval('(' + data + ')'); 
-		  if(json.username == 1){
-		  	$("#username-status").text("此用户名已被占用");
-		  }else if(json.username == 0)
-		  	$("#username-status").text("此用户名可以使用");
+			var json = eval('(' + data + ')'); 
+			if(json.username == 1){
+				$("#username-status").text("此用户名已被占用");
+				usernameUnique = false;
+			}else if(json.username == 0)
+				$("#username-status").text("此用户名可以使用");
+				usernameUnique = true;
 		});
 	});
 //检测邮箱是否使用
 	$("input#email-reg").on("focusout",function(){
-		$.post('/scutoj/index.php/user/check_unique_email',{"email":$("input#email-reg").val()}).done(function(data) {
-		  var json = eval('(' + data + ')'); 
-		  if(json.email == 1){
-		  	$("#email-status").text("此邮箱已被占用");
-		  }else if(json.email == 0)
-		  	$("#email-status").text("此邮箱可以使用");
-		});
+		var email = $("input#email-reg").val();
+		if(isEmail(email) && email.length > 0){
+			$.post('/scutoj/index.php/user/check_unique_email',{"email":$("input#email-reg").val()}).done(function(data) {
+				var json = eval('(' + data + ')'); 
+				if(json.email == 1){
+					$("#email-status").text("此邮箱已被占用");
+					emailUnique = false;
+				}else if(json.email == 0){
+					$("#email-status").text("此邮箱可以使用");
+					emailUnique = true;
+				}
+			});
+
+		}else if(!isEmail(email)&& email.length > 0){
+			$("#email-status").text("请输入正确邮箱格式");
+		}
+		
 	});
 
 
