@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	var base="/scutoj/index.php/";
 
 	$("#search-method > ul > li").on('click',function(){
 		$("#search-method > span").text($(this).children("span").text());
@@ -99,13 +98,5 @@ $(document).ready(function(){
 	});
 
 
-//表格的超链接
-	$("#problem-list tbody tr").on("click",function(){
-		window.location.href = base + 'problem/get_problem/'+$(this).find("td:first-child").text();
-	});
-//表格的超链接
-	$("#contest-list tbody tr").on("click",function(){
-		window.location.href = base + 'contest/get_contest/'+$(this).find("td:first-child").text();
-	});
 	
 });
