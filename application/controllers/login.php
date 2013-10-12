@@ -27,7 +27,7 @@ class Login extends CI_Controller {
 			if($this->oj_model->get_row("user","userid","defunct = 1 AND
 					(name = ".$this->db->escape($info)."  OR email = ".$this->db->escape($info).")")>0){
 				if($this->oj_model->get_row("login_log","info","result = 0 AND
-					time > ".$this->db->escape($befor)."  AND info = ".$this->db->escape($info)."")>=0 && $defunct==0){
+					time > ".$this->db->escape($befor)."  AND info = ".$this->db->escape($info)."")>0 && $defunct==0){
 						$result = array('result'=>-1);//用户被冻结
 						$defunct=1;
 						echo json_encode($result); 
