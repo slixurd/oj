@@ -57,6 +57,8 @@ class User extends CI_Controller {
 		$this->form_validation->set_rules('paconf');
 		$this->form_validation->set_rules('email');
 		$salt=$this->user_help->salt(25,35);
+		$data['result']=0;//data['result']：0/注册成功，1/用户注册格式不能通过审核，2/注册成功但不能正常登录请自行登录，3/用户邮箱或者用户名已经存在
+		//4/表单不能正常提交通过验证或者用户密码确认不符合
 		if($data['is_login']){
 			$this->load->view('common/header',$data);
 			$this->load->view('notice/register_nonavailable_view',$data);
@@ -78,10 +80,11 @@ class User extends CI_Controller {
 				$name_rt=$this->user_help->check_name($user['name']);
 				$email_rt=$this->user_help->check_email_preg($user['email']);
 				$pass_rt=$this->user_help->check_pass($this->input->post('pa',TRUE));
-				if($name_rt['name_preg'] == 0 || $name_rt['name_len']<=4 || $name_rt['name_len']>15 ||
+				if($name_rt['name_preg'] == 0 || $name_rt['name_len']<4 || $name_rt['name_len']>15 ||
 				  $pass_rt['pass_preg']==0 || $pass_rt['pass_len']<6  ||
 				strlen($user['email'])<6  || $pass_rt['pass_len']>20 ||
 				  $email_rt ==0  || strlen($user['email'])>50){//用户注册信息不能通过审核
+					$data['result']=1;//注册信息格式不能通过审核
 					$this->load->view('common/header',$data);
 					$this->load->view('notice/register_fail_view',$data);
 					$this->load->view('common/footer',$data);
@@ -93,19 +96,21 @@ class User extends CI_Controller {
 					$this->load->view('register_success_view',$data);
 					$this->load->view('common/footer',$data);
 				}else{
+					$data['result']=2;//注册成功但不能正常创建seseeion并且登录
 					$this->load->view('common/header',$data);
 					$this->load->view('register_fail_view',$data);
 					$this->load->view('common/footer',$data);
 				}
 			}else{
-				if($u_name==1)
-				$this->check_unique_username();
-				if($u_email==1)
-				$this->check_unique_email();
+				$data['result']=3;//用户名或者邮箱已经存在
+				$this->load->view('common/header',$data);
+				$this->load->view('register_fail_view',$data);
+				$this->load->view('common/footer',$data);
 			}
 			
 		}
 		else{
+			$data['result']=4;//表单不能提交或者密码确认不符合
 			$this->load->view('common/header',$data);
 			$this->load->view('notice/register_fail_view',$data);
 			$this->load->view('common/footer',$data);
