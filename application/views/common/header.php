@@ -34,6 +34,17 @@
 							}
 					});
 				});
+
+				var base="<?php echo site_url("") ?>";
+
+			//表格的超链接
+				$("#problem-list tbody tr").on("click",function(){
+					window.location.href = '<?php echo site_url("problem/get_problem") ?>/'+$(this).find("td:first-child").text();
+				});
+			//表格的超链接
+				$("#contest-list tbody tr").on("click",function(){
+					window.location.href = base + '<?php echo site_url("contest/get_contest") ?>/'+$(this).find("td:first-child").text();
+				});
 			});
 		</script>
 </head>
@@ -69,12 +80,12 @@
 			?>
 		</div>
 		<ul class="main-nav">
-			<li <?php if(preg_match("/index\.php\/?$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "class='active'"; ?> ><a href="<?php echo site_url("/"); ?>">主页</a></li>
+			<li <?php if(preg_match("/\/$|index\.php\/?$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "class='active'"; ?> ><a href="<?php echo site_url("/"); ?>">主页</a></li>
 			
 			<li <?php if(preg_match("/contest|problem/",$_SERVER["REQUEST_URI"])) echo "class='active'" ?> >
 				<a href="<?php echo site_url("problem/index"); ?>">
 					<span>题集</span>
-					<img src="/scutoj/assets/img/list_button.png">
+					<img src="<?php echo base_url("assets") ?>/img/list_button.png">
 				</a>
 				<ul class="sub-nav">
 					<li><a href="<?php echo site_url("problem/index"); ?>">题目</a></li>
@@ -86,7 +97,7 @@
 			<li>
 				<a href="">
 					<span>课程</span>
-					<img src="/scutoj/assets/img/list_button.png">
+					<img src="<?php echo base_url("assets") ?>/img/list_button.png">
 				</a>
 				<ul class="sub-nav">
 					<li><a href="">课程</a></li>

@@ -6,7 +6,7 @@
 				<form class="search-wrapper" action="<?php echo site_url("contest/index"); ?>" method="post">
 					<button class="search-button" type="submit">S</button>
 					<span id="search-method">
-						<span>ID</span><img src="/scutoj/assets/img/list_button.png">
+						<span>ID</span><img src="<?php echo base_url("assets") ?>/img/list_button.png">
 						<ul>
 							<li><span class="s_id">ID</span></li>
 							<li><span class="s_title">名称</span></li>
