@@ -92,6 +92,8 @@ class User extends CI_Controller {
 				else
 					$this->oj_model->add_user($user);
 				if(($data['user']=$this->user_help->set_session($user['name'],$this->input->post('pa',TRUE)))!=FALSE){
+					$data['is_login']=TRUE;
+					$data['user'] = $this->user_help->get_session();
 					$this->load->view('common/header',$data);
 					$this->load->view('register_success_view',$data);
 					$this->load->view('common/footer',$data);

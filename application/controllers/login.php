@@ -24,7 +24,7 @@ class Login extends CI_Controller {
 			$defunct=0;
 			$info=$this->input->post('username',TRUE);
 			$pass=$this->input->post('pa',TRUE);
-			if($this->oj_model->get_row("user","userid","defunct = 1 AND
+			if($this->oj_model->get_row("user","userId","defunct = 1 AND
 					(name = ".$this->db->escape($info)."  OR email = ".$this->db->escape($info).")")>0){
 				if($this->oj_model->get_row("login_log","info","result = 0 AND
 					time > ".$this->db->escape($befor)."  AND info = ".$this->db->escape($info)."")>0 && $defunct==0){

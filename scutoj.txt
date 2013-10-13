@@ -86,6 +86,7 @@ contestId INT(11),
 unitId INT(11),
 valid TINYINT(0),
 judgeTime DATETIME ,
+codeLenth INT(11),
 PRIMARY KEY(solutionId)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;
 
