@@ -20,48 +20,6 @@ class Oj_model extends CI_Model
 		$data=$query->row_array(0);
 		return $data['row'];
 	}
-	
-/**
- * 获取指定的table，指定的column，where条件list，通用的获取函数，返回一个整数
- */
-	public function get_list_where($table="problem",$column_array=array('problemId','title','source','accepted','submit'), 
-	$order_by="problemId",$is_desc=FALSE,$where_str="defunct = 0",$limit_from=0,$limit_row=10)
-	{
-		$sql="SELECT ".implode(" , ",$column_array)." FROM ".$tablem." WHERE ";
-		$sql=$sql.$where_str;
-		if($is_desc == FALSE){
-			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." ";
-		}
-		else{
-			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." DESC";
-		}
-		if((is_numeric($limit_from) && is_numeric($limit_row)) && ($limit_from >= 0)){
-			$sql=$sql."LIMIT ".$limit_from." , ".$limit_row." ";
-		}
-		$query=$this->db->query($sql);
-		return $query->result_array();
-	}
-	
-/**
- * 获取指定的table，指定的column，的list，通用的获取函数，返回一个整数
- */
-	public function get_list($table="problem",$column_array=array('problemId','title','source','accepted','submit'),
-	$order_by="problemId",$is_desc=FALSE,$limit_from=NULL,$limit_row=NULL)
-	{
-		$sql="SELECT ".implode(" , ",$column_array)." FROM ".$tablem." ";
-
-		if($is_desc == FALSE){
-			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." ";
-		}
-		else{
-			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." DESC ";
-		}
-		if((is_numeric($limit_from) && is_numeric($limit_row)) && ($limit_from >= 0)){
-			$sql=$sql."LIMIT ".$limit_from." , ".$limit_row." ";
-		}
-		$query=$this->db->query($sql);
-		return $query->result_array();
-	}
 
 /**
  *get_problem_list()给定参数的问题列表
@@ -141,6 +99,16 @@ class Oj_model extends CI_Model
 		$this->db->insert('problem',$problem_array);
 		$problemId=$this->db->insert_id();
 		return $problemId;
+	}
+	
+/**
+ * update_problem 根据数组$probelm_array给定的参数，where_str参数
+ */
+	
+	public function update_problem($problem_array=array('title'=>"hello"),$where_str="problemId < 10000")
+	{
+		$this->db->update_string('problem',$problem_array,$where_str);
+		$this->query($sql);
 	}
 	
 /**
@@ -304,6 +272,25 @@ class Oj_model extends CI_Model
 		return $userId;
 	}
 	
+/**
+ * 根据所给的列数组更改user信息
+ * 请先对where的相关数据进行转义
+ */
+	public function update_user($column_array=array('nick'=>"helloc",'school'=>"scut"),$where_str="userId = 1")
+	{
+		$sql=$this->db->update_string('user',$column_array,$where_str);
+		$query=$this->db->query($sql);
+	}
+	
+/**
+ *根据所给的列信息和where字符串更爱user_state信息
+ * 请先对where的相关数据进行转义
+ */
+	public function update_user_state($column_array=array('solved'=>0,'accepted'=>0),$where_str="userId = 1")
+	{
+		$sql=$this->db->update_string('user_state',$column_array,$where_str);
+		$query=$this->db->query($sql);
+	}
 	
 /**
  *删除指定id的user，由于破坏力太强大，现在只提供id删除
@@ -343,7 +330,25 @@ class Oj_model extends CI_Model
 		$query=$this->db->query($sql);
 		return $query->row_array(0);
 	}
-
+	
+	
+/**
+ * delete_contest
+ */
+	public function delete_contest($where_str)
+	{
+		$sql="DELETE FROM contest WHERE ".$where_str." ";
+		$this->db->query($sql);
+	}
+	
+/**
+ * update_contest
+ */
+	public function update_contest($contest_array=array('private'=>1),$where_str)
+	{
+		$sql=$this->db->update_string('contest',$contest_array,$where_str);
+		$this->db->query($sql);
+	}
 	
 /**
  * 获取指定条件的contest数组
@@ -430,6 +435,25 @@ class Oj_model extends CI_Model
 		return $query->result_array();
 	}
 	
+/**
+ * update_contest_privilege
+ */
+	public function update_contest_privilege($column_array=array('priType'=>"read"),$where_str)
+	{
+		$sql=$this->db->update_string('contest_privilege',$column_array,$where_str);
+		$this->db->query($sql);
+	}
+	
+/**
+ * delete_contest_privilege
+ */
+ 
+	public function delete_contest_privilege($contestId,$userId)
+	{
+		$sql="DELETE FROM contest_privilege WHERE contestId = ".$this->db->escape($contestId)." AND userId = ".$this->db->escape($userId)." ";
+		$this->db->query($sql);
+	}
+	
 
 	
 /**
@@ -437,7 +461,7 @@ class Oj_model extends CI_Model
  * solution_array给出solution的列名和值code_array给出solution_code的
  * 返回刚刚插入的solutionId
  */
- 
+
 	public function add_solution($solution_array=array('problemId'=>10000,'userId'=>1,'runTime'=>0,'memory'=>0,
 	'result'=>0,'programLan'=>"cpp",'contestId'=>1,'unitId'=>1,'valid'=>0),$code_array=array('code'=>"it is a test"))
 	{
@@ -448,6 +472,28 @@ class Oj_model extends CI_Model
 		$this->db->insert('solution_code',$code_array);
 		$this->db->trans_complete();	
 		return $solutionId;
+	}
+	
+/**
+ * delete_solution 这里只需要给出solution的where条件函数会同时删除solution_code
+ */
+ 
+	public function delete_solution($where_str)
+	{
+		$sql="DELETE FROM solution_code WHERE solutionId IN (SELECT solutionId FROM solution WHERE ".$where_str." ";
+		$this->db->query($sql);
+		$sql="DELETE FROM solution WHERE ".$where_str." ";
+		$this->db->query($sql);
+	}
+	
+/**
+ * 获取solution_list列表
+ */
+ 
+	public function get_solution_list_where($column=array('problemId','userId','result'),$where_str="result =1"){
+		$sql="SELECT ".implode(" ,",$column)." FROM  solution WHERE ".$where_str." ";
+		$query=$this->db->query($sql);
+		return $query->result_array();
 	}
 	
 	
@@ -481,10 +527,17 @@ class Oj_model extends CI_Model
 		$query=$this->db->query($sql);
 	}
 	
+	public function get_course_item($colum_array=array('userId','name')){
+		$sql="SELECT ".implode(" , " ,$column_array)." FROM course";
+		$query=$this->db->query($sql);
+		return $query->row_array(0);
+	}
 	
 	public function add_login_log($column_array=array()){
 		$this->db->insert('login_log',$column_array);
 	}
+	
+
 	
 		
 }
