@@ -10,24 +10,46 @@ div.wrapper>.side-split{
 		h4{
 			font-weight: bold;
 		}
-		width: 700px;
 		background-color: @side-color;
 		.problem-info{
 			span{
 				display: inline-block;
 				font-size: 14px;
 				line-height: 20px;
-				padding: 10px 20px; 
-				margin-bottom: 5px;
+				padding: 0 20px; 
+				margin-bottom: 15px;
 			}
 			padding:0 0 20px 0;
 		}
 		.button-side{
+			text-align: center;
 			margin-top: 20px;
 			button{
 				margin-left: 20px;
 				padding: 4px 20px;
 			}
+		}
+		.problem-brief{
+			text-align: left;
+			margin: 0 auto;
+			margin-top:-10px;
+			margin-bottom: 15px;
+			tr{
+				height: 35px;
+			}
+			td{
+				width: 220px;
+				padding-left: 10px;
+				border:1px solid @strong;
+			}
+		}
+
+		.detail-title{
+			margin: 0 20px;
+			padding: 15px 0;
+			color: @strong;
+			font-size: 24px;
+			border-top: 1px solid #DDD;
 		}
 	}
 
@@ -56,4 +78,8 @@ div.wrapper>.side-split{
 
 
 	}
+}
+
+.center{
+	text-align: center;
 }

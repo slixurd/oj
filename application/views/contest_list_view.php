@@ -4,7 +4,7 @@
 		<div class="sub-header">
 			<div class="search">
 				<form class="search-wrapper" action="<?php echo site_url("contest/index"); ?>" method="post">
-					<button class="search-button" type="submit">S</button>
+					<button class="search-button" type="submit"><img src="<?php echo base_url("assets") ?>/img/search.png"></button>
 					<span id="search-method">
 						<span>ID</span><img src="<?php echo base_url("assets") ?>/img/list_button.png">
 						<ul>
@@ -28,7 +28,7 @@
 					<th class="span1">私有</th>
 				</tr>
 			</thead>
-			<tbody>			
+			<tbody class="pointer">			
 				<?php foreach($contest_list as $contest): ?>
 				<tr>
 					<td><?php echo $contest['contestId'] ?></td>

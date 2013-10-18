@@ -29,6 +29,11 @@ body{
 	margin: 0 auto;
 }
 
+.noback{
+	width: 960px;
+	margin: 0 auto;
+}
+
 .header{
 	width: 100%;
 	background-color: @header-color;
@@ -374,10 +379,19 @@ hr{
 
 
 //表格相关公共模块
-tbody tr:hover{
-	//color:#F6A22E;
-	background-color: #f4f4f4;
+.table tbody tr:hover{
+	color:#30d3a6;
+	font-weight: bold;
+
+	//background-color: #f4f4f4;
 }
+
+.pointer{
+	*{
+		cursor: pointer;
+	}
+}
+
 thead th{
 	font-size: 18px;
 	color:#30D3A6;
@@ -415,4 +429,19 @@ a{
 	background:transparent;
 	resize: none;
 
+}
+
+//提示页面
+.noback{
+	.nbc{
+		margin:50px 0 0 190px;
+		height: 300px;
+		.inform{
+			padding-top: 135px;
+			padding-left: 250px;
+		}
+		img{
+			float: left;
+		}
+	}
 }

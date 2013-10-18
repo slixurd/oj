@@ -45,8 +45,47 @@
 				$("#contest-list tbody tr").on("click",function(){
 					window.location.href = base + '<?php echo site_url("contest/get_contest") ?>/'+$(this).find("td:first-child").text();
 				});
+			//页面高度
+				//54 for header's outerHeight,58for footer's .the 40 is margin of wrapper.
+				if(54+58+40+$(".wrapper").height()+$(".footer").height()<document.body.clientHeight){
+					$(".wrapper").css({height:document.body.clientHeight-54-$(".wrapper").height()-58-40+parseFloat($(".wrapper").css("height"))+"px"});
+				}
+
 			});
 		</script>
+		<!--[if gte IE 6]>
+
+		<script type="text/javascript">
+			//===================================
+			//==========placeholer-fix===========
+			//===================================
+			var fillPlaceholder = function(element) {
+			    var placeholder = '';
+			    if (element && !("placeholder" in document.createElement("input")) && (placeholder = element.getAttribute("placeholder"))) {
+			        element.onfocus = function() {
+			            if (this.value === placeholder) {
+			                this.value = "";
+			            }
+			            this.style.color = '';
+			        };
+			        element.onblur = function() {
+			            if (this.value === "") {
+			                this.value = placeholder;
+			                this.style.color = 'graytext';    
+			            }
+			        };
+			        
+			        //样式初始化
+			        if (element.value === "") {
+			            element.value = placeholder;
+			            element.style.color = 'graytext';    
+			        }
+			    }
+			};
+			fillPlaceholder(document.getElementById("log-name"));
+			fillPlaceholder(document.getElementById("log-pass"));	
+		</script>
+		<![endif]-->
 </head>
 <body>
 <div class="header">
@@ -58,8 +97,8 @@
 					<button id="login" href="" style="margin-right:15px;">登录</button>
 					<div class="login-popup">
 						<div>
-							<input  name="username" placeholder="请输入登录账户" />
-							<input  name="pa" type="password" placeholder="请输入密码"/>
+							<input id="log-name" name="username" placeholder="请输入登录账户" />
+							<input id="log-pass" name="pa" type="password" placeholder="请输入密码"/>
 							<button id="login-submit" type="submit">确认</button>
 							<div>
 								<span class="remember-pass"><input type="checkbox" name="remember"/>记住密码</span>
@@ -79,7 +118,10 @@
 				}
 			?>
 		</div>
+
 		<ul class="main-nav">
+			<span style="float:left;margin-top: 8px;"><img src="<?php echo base_url("assets") ?>/img/logo.png"></span>
+
 			<li <?php if(preg_match("/\/$|index\.php\/?$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "class='active'"; ?> ><a href="<?php echo site_url("/"); ?>">主页</a></li>
 			
 			<li <?php if(preg_match("/contest|problem/",$_SERVER["REQUEST_URI"])) echo "class='active'" ?> >

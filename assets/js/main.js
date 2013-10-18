@@ -21,15 +21,21 @@ $(document).ready(function(){
 
 
 //==========================================//
-//	登录模块
+//	登录注册模块
 //==========================================//
-
+	var isLogOpen = false;
 	var usernameUnique = true;
 	var emailUnique = true;
 	$('#login').on("click",function(){
 		$(".login-popup").fadeToggle("fast");
+		isLogOpen = !isLogOpen;
 	});
-
+	$(".wrapper").on("click",function(){
+		if(isLogOpen){
+			$(".login-popup").fadeToggle("fast");
+			isLogOpen = !isLogOpen;
+		}
+	});
 	function isEmail(val) {
 		var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/;
 		return reg.test(val);
@@ -46,7 +52,9 @@ $(document).ready(function(){
 			return true;
 		})();
 		if(pass!=passConf){
-			//check.preventDefault();
+			check.preventDefault();
+			$("#paconf-status").text("*密码前后不一致");
+			$("input#paconf-reg").css({'border-color':"#FA9290"});
 			//return false;
 		}
 		if(!checkit){
@@ -55,8 +63,9 @@ $(document).ready(function(){
 			}
 				//$("#email").attr('data-original-title',"邮箱不能为空").tooltip("show");
 				//check.preventDefault();		
-			if(pass.length==0||pass.length>32||pass.length<6){
-
+			if(pass.length>32){
+				$("#paconf-status").text("密码过长");
+				check.preventDefault();
 				//$("#password").attr('data-original-title','密码不能为空').tooltip("show");
 			}
 
@@ -66,6 +75,7 @@ $(document).ready(function(){
 
 //检测用户名是否已经使用
 	$("input#username-reg").on("focusout",function(){
+		if($("input#username-reg").val().length>=4)
 		$.post('/scutoj/index.php/user/check_unique_username',{"username":$("input#username-reg").val()}).done(function(data) {
 			var json = eval('(' + data + ')'); 
 			if(json.username == 1){
@@ -75,6 +85,31 @@ $(document).ready(function(){
 				$("#username-status").text("此用户名可以使用");
 				usernameUnique = true;
 		});
+	});
+//检测密码是否匹配
+	$("input#paconf-reg").on("focusout",function(){
+		if($("input#paconf-reg").val().length >= 6 && $("input#pa-reg").val().length >= 6)
+		if($("input#paconf-reg").val()!=$("input#pa-reg").val()){
+			$("#paconf-status").text("密码前后不一致");
+			$("input#paconf-reg").css({'border-color':"#FA9290"});
+		}
+		else 
+		{
+			$("input#paconf-reg").css({'border-color':"#ddd"});
+			$("#paconf-status").text("密码匹配成功");
+		}
+	});
+	$("input#pa-reg").on("focusout",function(){
+		if($("input#paconf-reg").val().length >= 6 && $("input#pa-reg").val().length >= 6)
+		if($("input#paconf-reg").val()!=$("input#pa-reg").val()){
+			$("#paconf-status").text("密码前后不一致");
+			$("input#paconf-reg").css({'border-color':"#FA9290"});
+		}
+		else 
+		{
+			$("input#paconf-reg").css({'border-color':"#ddd"});
+			$("#paconf-status").text("密码匹配成功");
+		}
 	});
 //检测邮箱是否使用
 	$("input#email-reg").on("focusout",function(){
@@ -98,5 +133,7 @@ $(document).ready(function(){
 	});
 
 
+
 	
 });
+

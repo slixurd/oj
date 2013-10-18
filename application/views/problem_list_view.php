@@ -4,7 +4,7 @@
 		<div class="sub-header">
 			<div class="search">
 				<form class="search-wrapper" action="<?php echo site_url("problem/index"); ?>" method="post">
-					<button class="search-button" type="submit">S</button>
+					<button class="search-button" type="submit"><img src="<?php echo base_url("assets") ?>/img/search.png"></button>
 					<span id="search-method">
 						<span>ID</span><img src="<?php echo base_url("assets") ?>/img/list_button.png">
 						<ul>
@@ -28,7 +28,7 @@
 					<th class="span1">状态</th>
 				</tr>
 			</thead>
-			<tbody>			
+			<tbody class="pointer">			
 				<?php if(isset($is_empty)) 
 					echo "<tr><td colspan='5' class='empty-answer'>搜索结果为空</td></tr>"
 				?>	
