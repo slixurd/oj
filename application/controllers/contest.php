@@ -85,26 +85,33 @@ class Contest extends CI_Controller {
 	public function get_contest($id){
 		Global $data;
 		if(!is_numeric($id)){
-			show_404();//用户可能进行非法操作
-			exit();
+			//用户可能进行非法操作
+			$this->error->show_error("没有对应竞赛的ID",array("找不到对应的竞赛ID"));
+			return;
 		}
 		$data['permission']="no";
 		$user=$data['user'];
 		$data['contest_item']=$this->oj_model->get_contest_item($id);
 		$data['contest_problem_list']=$this->oj_model->get_contest_problem_list($id);
 		if(empty($data['contest_item'])){
-			show_404();//没有索取的竞赛
+			$this->error->show_error("没有对应竞赛的ID",array("找不到对应的竞赛ID"));
+			return;
 		}else{
 			if($data['contest_item']['private']==0){
 				$data['permission']="yes";
 			}	
 			else if($data['is_login']===FALSE){//用户没有登录
 				$data['permission']="no";
+				$this->error->show_error("你还没有登录",array("此竞赛需要权限，请先登录","点击右上角登录"));
+				return;
 			}else{//用户登录
 				$data['permission']="no";
 				$data['problem_privilege']=$this->oj_model->get_contest_privilege($id,$user['userId']);
 				if(!empty($data['problem_privilege'])){//用户有权限
 					$data['permission']="yes";
+				}else{
+					$this->error->show_error("你还没有此竞赛权限",array("此竞赛需要相应权限"));
+					return;
 				}
 			}
 			$this->load->view('common/header',$data);

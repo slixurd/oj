@@ -129,6 +129,11 @@ class Problem extends CI_Controller {
 	public function get_problem($id)
 	{
 		Global $data;
+		if(isset($_GET['contest_id'])){
+			$data['contestId'] = $_GET['contest_id'];
+		}else if(isset($_GET['unit_id'])){
+			$data['unit_id']=$_GET['unit_id'];
+		}
 		$problem=array(' * ');
 		$data['problem']=$this->oj_model->get_problem_item($id,$problem);
 		if(! empty($data['problem'])){
@@ -137,8 +142,7 @@ class Problem extends CI_Controller {
 			$this->load->view('common/footer',$data);
 		}
 		else{
-			
-			show_404();
+			$this->error->show_error("没有找到此问题",array("悲剧了，没有找到对应的问题呀"));
 		}
 	}
 	
