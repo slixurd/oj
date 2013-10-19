@@ -68,6 +68,9 @@ $(document).ready(function(){
 				check.preventDefault();
 				//$("#password").attr('data-original-title','密码不能为空').tooltip("show");
 			}
+			if(!usernameUnique || !emailUnique){
+				check.preventDefault();
+			}
 
 		}
 	});
@@ -76,40 +79,41 @@ $(document).ready(function(){
 //检测用户名是否已经使用
 	$("input#username-reg").on("focusout",function(){
 		if($("input#username-reg").val().length>=4)
-		$.post('/scutoj/index.php/user/check_unique_username',{"username":$("input#username-reg").val()}).done(function(data) {
-			var json = eval('(' + data + ')'); 
-			if(json.username == 1){
-				$("#username-status").text("此用户名已被占用");
+			$.post('/scutoj/index.php/user/check_unique_username',{"username":$("input#username-reg").val()}).done(function(data) {
+				var json = eval('(' + data + ')'); 
+				if(json.username == 1){
+					$("#username-status").text("此用户名已被占用");
+					usernameUnique = false;
+				}else if(json.username == 0)
+					$("#username-status").text("此用户名可以使用");
+					usernameUnique = true;
+			});
+		else if($("input#username-reg").val().length > 0 && $("input#username-reg").val().length < 4){
+				$("#username-status").text("用户名含有非法字符或者长度不足4");
 				usernameUnique = false;
-			}else if(json.username == 0)
-				$("#username-status").text("此用户名可以使用");
-				usernameUnique = true;
-		});
+		}
 	});
 //检测密码是否匹配
-	$("input#paconf-reg").on("focusout",function(){
+	function checkPass(){
 		if($("input#paconf-reg").val().length >= 6 && $("input#pa-reg").val().length >= 6)
-		if($("input#paconf-reg").val()!=$("input#pa-reg").val()){
-			$("#paconf-status").text("密码前后不一致");
-			$("input#paconf-reg").css({'border-color':"#FA9290"});
+			if($("input#paconf-reg").val()!=$("input#pa-reg").val()){
+				$("#paconf-status").text("*密码前后不一致");
+				$("input#paconf-reg").css({'border-color':"#FA9290"});
+			}
+			else {
+				$("input#paconf-reg").css({'border-color':"#ddd"});
+				$("#paconf-status").text("密码匹配成功");
+			}
+		else if( $("input#pa-reg").val().length < 6　&&　$("input#pa-reg").val().length > 0){
+				$("#paconf-status").text("密码长度不足");
+				$("input#paconf-reg").css({'border-color':"#FA9290"});
 		}
-		else 
-		{
-			$("input#paconf-reg").css({'border-color':"#ddd"});
-			$("#paconf-status").text("密码匹配成功");
-		}
+	}
+	$("input#paconf-reg").on("focusout",function(){
+		checkPass();
 	});
 	$("input#pa-reg").on("focusout",function(){
-		if($("input#paconf-reg").val().length >= 6 && $("input#pa-reg").val().length >= 6)
-		if($("input#paconf-reg").val()!=$("input#pa-reg").val()){
-			$("#paconf-status").text("密码前后不一致");
-			$("input#paconf-reg").css({'border-color':"#FA9290"});
-		}
-		else 
-		{
-			$("input#paconf-reg").css({'border-color':"#ddd"});
-			$("#paconf-status").text("密码匹配成功");
-		}
+		checkPass();
 	});
 //检测邮箱是否使用
 	$("input#email-reg").on("focusout",function(){
