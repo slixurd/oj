@@ -17,7 +17,11 @@ class Problem_submit extends CI_Controller {
 			$this->load->view('student/problem_submit_view',$data);
 			$this->load->view('common/footer',$data);
 		}else{
-			redirect(site_url("problem"));//下面可以提示用户登录
+			$data['error_inform_title'] = '尚未登录不能答题';
+			$data['error_inform']= array("先右上角登陆吧","test","测试");
+			$this->load->view('common/header',$data);
+			$this->load->view('notice/common_error_view');
+			$this->load->view('common/footer');
 		}
   }
   
