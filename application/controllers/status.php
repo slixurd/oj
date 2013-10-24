@@ -7,40 +7,46 @@ class Status extends CI_Controller {
 	}
 	
 	public function index($page=1){
-		if($data['is_login']===FALSE){
-			//请先登录
-		}
 		Global $data;
-		$by_id=FALSE;
 		$data['page_title']='提交状态';
+		if($data['is_login']===FALSE){
+			$this->error->show_error("你还没有登录",array("此页面需要登录，请先登录","点击右上角登录"),$data);
+			return;
+		}
 		$total=0;
 		$data['status_list']=array();
 		$s_str="";
+		$is_search=FALSE;
 		
 		if(isset($_POST['s_id'])){
 			//判断是否是id搜索
 			$s_id=$_POST['s_id'];
 			$by_id=TRUE;
 			$s_str="userId = ".$this->db->escape($data['user']['userId'])." AND problemId = ".$this->db->escape($s_id)." ";
-		}else{
-			$s_str="userId = ".$this->db->escape($data['user']['userId'])." ";
 		}
-		$total = $this->oj_model->get_row("solution","solutionId",$s_str);
-		
-		if(isset($_POST['s_id'])){
-				$limit_from=0;
-				$limit_row=$total;
+	
+		if(isset($_POST['s_title'])){
+				$s_title=$_POST['s_title'];
 				$is_search=TRUE;
-			}else{
-				$is_search=FALSE;
-				$limit_from=($page-1)*10;
-				$limit_row=10;
+				$s_str="userId = ".$this->db->escape($data['user']['userId'])." AND title = ".$this->db->escape("%".$s_title."%")." ";
 			}//判断是否是搜索模式是的话下面就不分页
-			
+		if(!$is_search){
+			$s_str="userId = ".$this->db->escape($data['user']['userId'])." ";
+			$total = $this->oj_model->get_row("solution","solutionId",$s_str);
+			$limit_from=($page-1)*10;
+			$limit_row=10;
+		}else{
+			$total = $this->oj_model->get_row("solution","solutionId",$s_str);
+			$limit_from=0;
+			$limit_row=$total;
+		}
 			
 		if($page>=1 && is_numeric($page) && (($page-1)*10<=$total)){
 			$column_array=array('*');
 			$data['status_list']=$this->oj_model->get_list_where("solution",$column_array,"solutionId",TRUE,$s_str,$limit_from,$limit_row);
+			$this->load->view('common/header',$data);
+			$this->load->view('status_view',$data);
+			$this->load->view('common/footer',$data);
 			
 			$this->load->library('pagination');
 			$config['first_link'] = TRUE;
@@ -74,7 +80,7 @@ class Status extends CI_Controller {
 			$this->load->view('status_view',$data);
 			$this->load->view('common/footer',$data);
 		}else{
-			show_404();//找不到地址
+			$this->error->show_error("url错误",array("没有找到你要的页面","可能是你的url不对啊，请检查"),$data);
 		}
 	}
 	

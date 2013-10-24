@@ -142,7 +142,7 @@ class Problem extends CI_Controller {
 			$this->load->view('common/footer',$data);
 		}
 		else{
-			$this->error->show_error("没有找到此问题",array("悲剧了，没有找到对应的问题呀"));
+			$this->error->show_error("没有找到此问题",array("悲剧了，没有找到对应的问题呀"),$data);
 		}
 	}
 	

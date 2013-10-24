@@ -20,6 +20,41 @@ class Oj_model extends CI_Model
 		$data=$query->row_array(0);
 		return $data['row'];
 	}
+	
+/**
+ * get_list_where获取list的通用函数
+ */
+	public function get_list_where($table,$column_array=array(), 
+	$order_by="",$is_desc=FALSE,$where_str="",$limit_from=NULL,$limit_row=NULL)
+	{
+		$sql="SELECT ".implode(" , ",$column_array)." FROM ".$table." WHERE ";
+		$sql=$sql.$where_str;
+		if($is_desc == FALSE){
+			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." ";
+		}
+		else{
+			$sql=$sql."ORDER BY ".$this->db->escape($order_by)." DESC ";
+		}
+		if((is_numeric($limit_from) && is_numeric($limit_row)) && ($limit_from >= 0)){
+			$sql=$sql."LIMIT ".$limit_from." , ".$limit_row." ";
+		}
+		$query=$this->db->query($sql);
+		return $query->result_array();
+	}
+
+/**
+ * get_item_where获取list的通用函数
+ */
+ 
+	public function get_item_where($table,$column_array=array(),$where_str="")
+	{
+		$sql="SELECT ".implode(" , ",$column_array)." FROM ".$table." WHERE ";
+		$sql=$sql.$where_str;
+		$query=$this->db->query($sql);
+		return $query->row_array(0);
+	}
+	
+	
 
 /**
  *get_problem_list()给定参数的问题列表

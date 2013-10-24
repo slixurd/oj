@@ -2,8 +2,9 @@
 
 class Error {
 	
-	public function show_error($error_title,$error_inform=array()){
+	public function show_error($error_title,$error_inform=array(),$data){
 		$CI =& get_instance();
+		$data['page_title']="错误提示";
 		$data['error_inform_title'] = $error_title;
 		$data['error_inform']= $error_inform;
 		$CI->load->view('common/header',$data);

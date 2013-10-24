@@ -1,8 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 class User extends CI_Controller {
-	
-	var $data;
 
 	/**
 	 * Index Page for this controller.
@@ -21,7 +19,7 @@ class User extends CI_Controller {
 			$this->load->view('common/footer',$data);
 		}else{
 			//退回刚才的页面或者提示
-			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"));
+			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"),$data);
 		}
 	}
   
@@ -31,7 +29,7 @@ class User extends CI_Controller {
 		Global $data;
 		$data['page_title']='注册';
 		if($data['is_login']){
-			$this->error->show_error("已登录不能注册",array("请先退出帐号","点击右上角注册"));
+			$this->error->show_error("已登录不能注册",array("请先退出帐号","点击右上登出"),$data);
 		}else {
 			$this->load->view('common/header',$data);
 			$this->load->view('register_view',$data);
@@ -59,7 +57,7 @@ class User extends CI_Controller {
 		$data['result']=0;//data['result']：0/注册成功，1/用户注册格式不能通过审核，2/注册成功但不能正常登录请自行登录，3/用户邮箱或者用户名已经存在
 		//4/表单不能正常提交通过验证或者用户密码确认不符合
 		if($data['is_login']){
-			$this->error->show_error("已登录不能注册",array("请先退出帐号","点击右上角注册"));
+			$this->error->show_error("已登录不能注册",array("请先退出帐号","点击右上角注册"),$data);
 		}
 		else if($this->form_validation->run() === TRUE && $this->input->post('pa',TRUE) == $this->input->post('paconf',TRUE)){
 			$user=array(
@@ -82,7 +80,7 @@ class User extends CI_Controller {
 				strlen($user['email'])<6  || $pass_rt['pass_len']>20 ||
 				  $email_rt ==0  || strlen($user['email'])>50){//用户注册信息不能通过审核
 					$data['result']=1;//注册信息格式不能通过审核
-					$this->error->show_error("注册信息有错误",array("传递过来的用户信息不能通过审核","请重新注册"));
+					$this->error->show_error("注册信息有错误",array("传递过来的用户信息不能通过审核","请重新注册"),$data);
 				}
 				else
 					$this->oj_model->add_user($user);
@@ -94,17 +92,17 @@ class User extends CI_Controller {
 					$this->load->view('common/footer',$data);
 				}else{
 					$data['result']=2;//注册成功但不能正常创建seseeion并且登录
-					$this->error->show_error("注册成功",array("你已经注册成功了，无法自动登录","请重新登录"));
+					$this->error->show_error("注册成功",array("你已经注册成功了，无法自动登录","请重新登录"),$data);
 				}
 			}else{
 				$data['result']=3;//用户名或者邮箱已经存在
-				$this->error->show_error("用户名或者邮箱已经存在",array("请用别的用户名或者邮箱注册"));
+				$this->error->show_error("用户名或者邮箱已经存在",array("请用别的用户名或者邮箱注册"),$data);
 			}
 			
 		}
 		else{
 			$data['result']=4;//表单不能提交或者密码确认不符合
-			$this->error->show_error("注册信息提交失败",array("请确认密码符合后重新注册"));
+			$this->error->show_error("注册信息提交失败",array("请确认密码符合后重新注册"),$data);
 		}
 	}
 
