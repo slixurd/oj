@@ -2,7 +2,7 @@
 @import 'table';
 @import 'problem_detail';
 @import 'register';
-
+@import 'bootstrap';
 
 //通用变量声明
 //1.所有蓝底字的颜色酱
@@ -44,9 +44,25 @@ body{
 	a,a:hover,a:visit{
 		color: @blue-bg-font;
 	}
-	.main-nav{
-		
+	.i-c{
+		position: relative;
+		width: 700px;
+		display: inline-block;
+	}
+		.i-b{
+			position: absolute;
+			background-color: @strong;
+			height: 4px;
+			top: 0;
+			width: 130px;
+			border: 0;
+			line-height: 4px;
+		}
+		.main-nav{
+
 		>li{
+			width: 130px;
+			float: left;
 			> a{
 				width: 130px;
 				display: block;
@@ -70,11 +86,11 @@ body{
 		}
 		li.active{
 			background-color: #F9F9F9;
-			border-top:4px solid @strong;
+			border-top:4px solid #F9F9F9;
 		}
 		li:hover{
-			border-top:4px solid @strong;
-			background-color: #F9F9F9;
+			border-top:4px solid @header-color;
+			//background-color: #F9F9F9;
 			.sub-nav{
 				display: block;
 				li{
@@ -106,7 +122,9 @@ body{
 
 	#log-reg{
 		padding: 15px;		
-		float: right;
+		display: inline-block;
+		position: relative;
+		vertical-align: top;
 		> div{
 			position: relative;
 			display: inline-block;
@@ -118,7 +136,7 @@ body{
 		button{
 			background-color: @strong;
 			color: white;
-			padding: 4px 20px;
+			padding: 2px 20px;
 		}
 		.login-popup{
 			display: none;

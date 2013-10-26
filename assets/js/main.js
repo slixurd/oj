@@ -36,6 +36,16 @@ $(document).ready(function(){
 			isLogOpen = !isLogOpen;
 		}
 	});
+
+	$(".login-popup input").on("click",function(){
+		$(".login-popup input").tooltip("hide");
+	});
+	$(".login-popup").on("click",'.tooltip',function(){
+		$(".login-popup input").tooltip("hide");
+	});
+
+
+
 	function isEmail(val) {
 		var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,4}$/;
 		return reg.test(val);
@@ -137,7 +147,43 @@ $(document).ready(function(){
 	});
 
 
+ 			$(function(){$('.i-b').navUnderlineBuild($('.main-nav'));});
+	      $(".i-b").css({left:($(".main-nav .active").index()-1)*130+66,width: $(".main-nav .active").width()});
+	      console.log();
+
+(function($, undefined) {
+	$.fn.extend({
+		navUnderlineBuild : function($nav_parent) {
+
+		  if (typeof $nav_parent !== 'object' || typeof $nav_parent.length === 'undefined')
+		  	return;
+
+		  var $nav_underline = $(this),
+          	$nav = $nav_parent.find('> li'),
+          	index = $nav_parent.find('.active').index()-1;
+		  //处理下划线移动
+	      var underlineMove = function(i){
+	        var tmp_width = $nav.eq(i).width(),
+	            position = $nav.eq(i).position(),
+	            move_time = 500;
+	        $nav_underline.animate({left:position.left, width: tmp_width}, move_time);
+	      }
+	      //无法获取此处的宽度,$(".main-nav > span").width()
+	      //导航点击监听
+	      $('.main-nav').delegate('li','mouseover', function(){
+	        if($nav_underline.is(":animated")){ $nav_underline.stop(); }
+	        underlineMove($nav.index($(this)));
+	        return false;
+	      }).mouseleave(function(){
+	        if($nav_underline.is(":animated")){ $nav_underline.stop(); }
+	        underlineMove(index);
+	      });
+	    }
+	});
+})(jQuery);	
+
 
 	
 });
+
 
