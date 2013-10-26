@@ -17,7 +17,7 @@ class Problem_submit extends CI_Controller {
 			$this->load->view('student/problem_submit_view',$data);
 			$this->load->view('common/footer',$data);
 		}else{
-			$this->error->show_error('尚未登录不能答题',array("先右上角登陆吧","test","测试"));
+			$this->error->show_error('尚未登录不能答题',array("先右上角登陆吧","test","测试"),$data);
 			return;//防止多次下面分支view
 		}
   }
@@ -27,7 +27,7 @@ class Problem_submit extends CI_Controller {
 	  $date_str="%Y-%m-%d %H:%i:%s";
 	  $now=strtotime("now");
 	  if(!$data['is_login']){
-			$this->error->show_error('尚未登录不能答题',array("先右上角登陆吧","test","测试"));
+			$this->error->show_error('尚未登录不能答题',array("先右上角登陆吧","test","测试"),$dta);
 			return;//防止多次下面分支view
 	  }else if(isset($_POST['problemId']) && isset($_POST['code']) && isset($_POST['language']) && is_numeric($problemId)){//判断用户是否传递了最基本的元素
 		$problemId=$_POST['problemId'];
@@ -35,7 +35,7 @@ class Problem_submit extends CI_Controller {
 		$code=$_POST['code'];
 		if(($this->oj_model->get_row("problem","problemId","defunct = 0 AND ".$this->db->escape($problemId)."")<=0)){//判断问题是否存在
 			//如果用户输入了一个不存在问题跳转到的页面
-			$this->error->show_error("提交的问题不存在",array("请确认提交问题的ID"));
+			$this->error->show_error("提交的问题不存在",array("请确认提交问题的ID"),$data);
 			return;
 		}
 		$code_len=strlen($code);
@@ -46,7 +46,7 @@ class Problem_submit extends CI_Controller {
 		}
 		if($code_len>65536){
 			//提示代码太长
-			$this->error->show_error("代码太长了",array("源代码长度太大了","代码太长了，我数不过来呀"));
+			$this->error->show_error("代码太长了",array("源代码长度太大了","代码太长了，我数不过来呀"),$data);
 			return;
 		}
 		if(isset($_POST['contest_id']) && is_numeric($_POST['contest_id'])){//如果是竞赛的话
@@ -54,7 +54,7 @@ class Problem_submit extends CI_Controller {
 			if($this->oj_model->get_row("contest_problem" ,  " contestId = ".$this->db->escape($contestId)." AND 
 			problemId = ".$this->oj_model->escape($problemId)." ")<=0){
 				//竞赛没有对应的问题
-				$this->error->show_error("竞赛没有对应的题目",array("竞赛中找不到你提交的题目呀","是我弄错了，还是你在卖萌"));
+				$this->error->show_error("竞赛没有对应的题目",array("竞赛中找不到你提交的题目呀","是我弄错了，还是你在卖萌"),$data);
 				return;
 			}
 			$data['contest']=$this->oj_model->get_contest_item($contestId,array('private'));
@@ -69,7 +69,7 @@ class Problem_submit extends CI_Controller {
 				$this->oj_model->add_solution(array('problemId'=>$problemId,'userId'=>$data['user']['userId'],'programLan'=>$programLan,
 				'inDate'=>mdate($now),'contestId'=>$contestId,'codeLenth'=>$code_len));
 			}else{
-				$this->error->show_error("没有竞赛权限",array("你没有此次竞赛的权限"));
+				$this->error->show_error("没有竞赛权限",array("你没有此次竞赛的权限"),$data);
 				return;
 			}
 			
@@ -81,13 +81,13 @@ class Problem_submit extends CI_Controller {
 			$courseId = $_POST['course_id'];
 			if($this->oj_model->get_row("course_unit","unitId","unitId = ".$this->db->escape($unitId)." 
 			AND courseId = ".$this->db->escape($courseId)."")<=0){
-				$this->error->show_error("课程没有对应的单元",array("课程里找不到你要提交的单元ID","是我弄错了，还是你在卖萌"));
+				$this->error->show_error("课程没有对应的单元",array("课程里找不到你要提交的单元ID","是我弄错了，还是你在卖萌"),$data);
 				return;
 			}
 			if($this->oj_model->get_row("unit_problem" ,  " unitId = ".$this->db->escape($unitId)." AND 
 			problemId = ".$this->oj_model->escape($problemId)." ")<=0){
 				//课程没有对应的问题
-				$this->error->show_error("课程单元没有对应的问题",array("课程单元里找不到你要提交的问题ID","是我弄错了，还是你在卖萌"));
+				$this->error->show_error("课程单元没有对应的问题",array("课程单元里找不到你要提交的问题ID","是我弄错了，还是你在卖萌"),$data);
 				return;
 			}
 			$data['course']=$this->oj_model->get_course_item($unitId,array('private'));
@@ -103,7 +103,7 @@ class Problem_submit extends CI_Controller {
 				'inDate'=>mdate($now),'unitd'=>$unitId,'codeLenth'=>$code_len));
 			}else{
 				//用户没有权限
-				$this->error->show_error("没有课程权限",array("你没有此次竞赛的权限"));
+				$this->error->show_error("没有课程权限",array("你没有此次竞赛的权限"),$data);
 				return;
 			}
 		}
