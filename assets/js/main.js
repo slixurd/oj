@@ -79,7 +79,7 @@ $(document).ready(function(){
 //检测用户名是否已经使用
 	$("input#username-reg").on("focusout",function(){
 		if($("input#username-reg").val().length>=4)
-			$.post('/scutoj/index.php/user/check_unique_username',{"username":$("input#username-reg").val()}).done(function(data) {
+			$.post('check_unique_username',{"username":$("input#username-reg").val()}).done(function(data) {
 				var json = eval('(' + data + ')'); 
 				if(json.username == 1){
 					$("#username-status").text("此用户名已被占用");
@@ -119,7 +119,7 @@ $(document).ready(function(){
 	$("input#email-reg").on("focusout",function(){
 		var email = $("input#email-reg").val();
 		if(isEmail(email) && email.length > 0){
-			$.post('/scutoj/index.php/user/check_unique_email',{"email":$("input#email-reg").val()}).done(function(data) {
+			$.post('check_unique_email',{"email":$("input#email-reg").val()}).done(function(data) {
 				var json = eval('(' + data + ')'); 
 				if(json.email == 1){
 					$("#email-status").text("此邮箱已被占用");

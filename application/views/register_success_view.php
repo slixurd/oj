@@ -11,6 +11,7 @@
 </div>
 
 <script>
+//BUG here.如果在需要权限的页面直接后退2页,可能因为没有刷新所以导致无法读取cookie,因此判断为没有登陆.
 function back()
 {
 	history.go(-2);

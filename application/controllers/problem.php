@@ -91,8 +91,6 @@ class Problem extends CI_Controller {
 			$this->load->library('pagination');
 			$config['first_link'] = TRUE;
 			$config['last_link'] = TRUE;
-			$config['uri_segment']=3;
-			$config['num_links'] = 7;
 			$config['use_page_numbers'] = TRUE;
 			$config['base_url'] = site_url("problem/index");
 			$config['total_rows'] = $total;
