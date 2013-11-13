@@ -133,4 +133,19 @@ class User_help {
 		return $rt;
 	}
 	
+	public function login_time($info){//获取给定用户名或者邮箱的5分钟内登录次数，如果不存在的话自动设置为1，redis类型为string
+		$CI =& get_instance();
+		$login_time = 0;
+		$login_key = "login_time_".$info;
+		if($CI->redis->exists($login_key)==0){
+			$CI->redis->set($login_key,1);
+			$CI->redis->expire($login_key,300);
+			return 1;
+		}else{
+			//$this->redis->hset('login_log',$info,1);
+			$login_time = $CI->redis->get($login_key);
+			$CI->redis->incrby($login_key,1);
+			return $login_time;
+		}
+	}
 }
