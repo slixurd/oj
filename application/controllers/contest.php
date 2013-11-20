@@ -25,8 +25,15 @@ class Contest extends CI_Controller {
 			$s_title=$_POST['s_title'];
 			$by_title=TRUE;
 			$total=$this->oj_model->get_row("contest","contestId","defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ");
-		}else
-		$total=$this->oj_model->get_row("contest","contestId","defunct = 0");//contest总行数
+		}else{
+			$contest_count_catche = "contest_count_catche";
+			if($this->redis->exitsts($contest_count_catche)){
+				$total = $this->redis->get($contest_count_catche);
+			}else{
+				$total=$this->oj_model->get_row("contest","contestId","defunct = 0");//contest总行数
+				$this->redis->set($contest_count_catche,$total);
+		}
+		}
 		if($total==0){
 			$data['is_empty']=TRUE;
 			$data['contest_list']=array();
@@ -39,9 +46,16 @@ class Contest extends CI_Controller {
 			}else if($by_title===TRUE){
 				$data['contest_list']=$this->oj_model->get_contest_list_where($column_array,'contestId',FALSE,
 				"defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ",($page-1)*10,10);
-			}else
-			$data['contest_list']=$this->oj_model->get_contest_list_where($column_array,
-			"contestId",TRUE,"defunct = 0",($page-1)*10,10);
+			}else{
+				$contest_page_catche =  "contest_page_catche";
+				if($this->redis->hexitsts($contest_page_catche,$page)){
+					$data['contest_list'] = unserialize($this->redis->hget($contest_page_catche,$page));
+				}else{
+					$data['contest_list']=$this->oj_model->get_contest_list_where($column_array,
+					"contestId",TRUE,"defunct = 0",($page-1)*10,10);
+					$this->redis->hset($contest_page_catche,$page,serialize($data['contest_list']));
+			}
+			}
 			
 			$this->load->library('pagination');
 			$config['first_link'] = TRUE;

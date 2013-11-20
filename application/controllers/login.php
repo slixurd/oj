@@ -27,32 +27,24 @@ class Login extends CI_Controller {
 			}else if(strlen($info)>=4 && strlen($info)<=50 &&
 			strlen($pass)>=6 && strlen($pass)<=20 && $defunct==0){//如果用户提交数据长度不符合返回3
 				$userdata=NULL;
-				if(($userdata=$this->user_help->set_session($info,$pass))!=FALSE){
+				if($login_time>=20){
+						$this->oj_model->update_user(array('defunct'=>1),"name = ".$this->db->escape($info)." OR
+						email= ".$this->db->escape($info)." ");
+						$result = array('result'=>-1);//用户被冻结
+						echo json_encode($result); 
+				}else if(($userdata=$this->user_help->set_session($info,$pass))!=FALSE){
 					$data['user']=$userdata;
 					$data['is_login']=TRUE;
 					$result = array('result'=>1);
 					echo json_encode($result);//用户登录成功返回数组1
 				}else{
-					if($login_time>=20){
-						$this->oj_model->update_user(array('defunct'=>1),"name = ".$this->db->escape($info)." OR
-						email= ".$this->db->escape($info)." ");
-						$result = array('result'=>-1);//用户被冻结
-						echo json_encode($result); 
-					}else{
-						$result = array('result'=>0);//用户正常登录失败返回数组0
-						echo json_encode($result);
+					$result = array('result'=>0);//用户正常登录失败返回数组0
+					echo json_encode($result);
 					}
-				}
 			}else if($defunct==0){
 				$result = array('result'=>3);//长度不符合echo3
 				echo json_encode($result);
 			}
-		}
-		
-			
+		}		
 	}
-	
-	
-	
-	
 }

@@ -35,8 +35,17 @@ class Problem extends CI_Controller {
 			$s_title=$_POST['s_title'];
 			$by_title=TRUE;
 			$total=$this->oj_model->get_row("problem","problemId","defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ");
-		}else
-		$total=$this->oj_model->get_row();//直接获取行数
+		}else{
+			$problem_count_catche = "problem_count_catche";
+			if($this->redis->exitsts($problem_count_catche)){
+				$total = $this->redis->get($problem_count_catche);
+			}else{
+				$total=$this->oj_model->get_row();//直接获取行数
+				$this->redis->set($problem_count_catche,$total);
+		}
+		}
+		
+		
 		if($total==0){
 			$data['problem_list']=array();
 			$data['is_empty']=TRUE;//搜索结果为空
@@ -58,8 +67,15 @@ class Problem extends CI_Controller {
 			}else if($by_title===TRUE){
 				$data['problem_list']=$this->oj_model->get_problem_list_where($column_array,'problemId',FALSE,
 				"defunct =0 AND title LIKE ".$this->db->escape("%".$s_title."%")." ",$limit_from,$limit_row);
-			}else
-			$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE,$limit_from,$limit_row);
+			}else{
+				$problem_page_catche =  "problem_page_catche";
+				if($this->redis->hexitsts($problem_page_catche,$page)){
+					$data['problem_list'] = unserialize($this->redis->hget($problem_page_catche,$page));
+				}else{
+					$data['problem_list']=$this->oj_model->get_problem_list($column_array,'problemId',FALSE,$limit_from,$limit_row);
+					$this->redis->hset($problem_page_catche,$page,serialize($data['problem_list']));
+			}
+			}
 			
 			if(!$data['is_login']){
 			//用户还没有登录status全部设置为no
@@ -84,7 +100,7 @@ class Problem extends CI_Controller {
 					break;
 				}
 				$data['problem_list'][$i]['status']="No";
-			}
+				}
 			}
 		}
 		
@@ -134,6 +150,15 @@ class Problem extends CI_Controller {
 		}
 		$problem=array(' * ');
 		$data['problem']=$this->oj_model->get_problem_item($id,$problem);
+		$problem_catche = "problem_catche_".$id;
+		if($this->redis->exitsts($problem_catche)){
+			$data['problem'] = unserialize($this->redis->get($problem_catche));
+		}else{
+			$data['problem']=$this->oj_model->get_problem_item($id,$problem);
+			if(! empty($data['problem'])){
+				$this->redis->set($problem_catche,serialize($data['problem']));
+			}
+		}
 		if(! empty($data['problem'])){
 			$this->load->view('common/header',$data);
 			$this->load->view('problem_item_view',$data);
