@@ -159,7 +159,7 @@ $(document).ready(function(){
 		  	return;
 
 		  var $nav_underline = $(this),
-          	$nav = $nav_parent.find('> li'),
+          	$nav = $nav_parent.find('> .slide'),
           	index = $nav_parent.find('.active').index()-1;
 		  //处理下划线移动
 	      var underlineMove = function(i){
@@ -170,7 +170,7 @@ $(document).ready(function(){
 	      }
 	      //无法获取此处的宽度,$(".main-nav > span").width()
 	      //导航点击监听
-	      $('.main-nav').delegate('li','mouseover', function(){
+	      $('.main-nav').delegate('.slide','mouseover', function(){
 	        if($nav_underline.is(":animated")){ $nav_underline.stop(); }
 	        underlineMove($nav.index($(this)));
 	        return false;
