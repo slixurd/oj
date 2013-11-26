@@ -22,12 +22,12 @@
 			<div>
 				<span>*用户名</span>
 				<input id="username-reg"  name="username" required="required"/>
-				<span class="reg-status" id="username-status">可以由英文,数字,汉字组成,最少4位</span>
+				<span class="reg-status" id="username-status">可以由英文,数字,汉字组成,4~15位</span>
 			</div>
 			<div>
 				<span>*密码</span>
 				<input id="pa-reg" name="pa" type="password" required="required"/>
-				<span class="reg-status" id="pa-status">6~20位字符组成</span>
+				<span class="reg-status" id="pa-status">6~20位英文,数字组成</span>
 			</div>
 			<div>
 				<span>*确认密码</span>

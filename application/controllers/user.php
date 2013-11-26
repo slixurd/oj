@@ -81,9 +81,11 @@ class User extends CI_Controller {
 				  $email_rt ==0  || strlen($user['email'])>50){//用户注册信息不能通过审核
 					$data['result']=1;//注册信息格式不能通过审核
 					$this->error->show_error("注册信息有错误",array("传递过来的用户信息不能通过审核","请重新注册"),$data);
+					return;
 				}
 				else
 					$this->oj_model->add_user($user);
+
 				if(($data['user']=$this->user_help->set_session($user['name'],$this->input->post('pa',TRUE)))!=FALSE){
 					$data['is_login']=TRUE;
 					$data['user'] = $this->user_help->get_session();

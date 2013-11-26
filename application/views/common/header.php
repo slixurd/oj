@@ -44,7 +44,7 @@
 				});
 			//表格的超链接
 				$("#contest-list tbody tr").on("click",function(){
-					window.location.href = base + '<?php echo site_url("contest/get_contest") ?>/'+$(this).find("td:first-child").text();
+					window.location.href = '<?php echo site_url("contest/get_contest") ?>/'+$(this).find("td:first-child").text();
 				});
 			//页面高度
 				//54 for header's outerHeight,58for footer's .the 40 is margin of wrapper.
