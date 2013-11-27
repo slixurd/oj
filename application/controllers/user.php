@@ -95,16 +95,19 @@ class User extends CI_Controller {
 				}else{
 					$data['result']=2;//注册成功但不能正常创建seseeion并且登录
 					$this->error->show_error("注册成功",array("你已经注册成功了，无法自动登录","请重新登录"),$data);
+					return;
 				}
 			}else{
 				$data['result']=3;//用户名或者邮箱已经存在
 				$this->error->show_error("用户名或者邮箱已经存在",array("请用别的用户名或者邮箱注册"),$data);
+				return;
 			}
 			
 		}
 		else{
 			$data['result']=4;//表单不能提交或者密码确认不符合
 			$this->error->show_error("注册信息提交失败",array("请确认密码符合后重新注册"),$data);
+			return;
 		}
 	}
 
