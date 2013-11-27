@@ -145,6 +145,7 @@ class User_help {
 			//$this->redis->hset('login_log',$info,1);
 			$login_time = $CI->redis->get($login_key);
 			$CI->redis->incrby($login_key,1);
+			$CI->redis->expire($login_key,300);
 			return $login_time;
 		}
 	}

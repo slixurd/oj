@@ -25,7 +25,7 @@ class Login extends CI_Controller {
 				$result = array('result'=>2);//用户已经登录了返回数组2
 				echo json_encode($result);
 			}else if(strlen($info)>=4 && strlen($info)<=50 &&
-			strlen($pass)>=6 && strlen($pass)<=20 && $defunct==0){//如果用户提交数据长度不符合返回3
+			strlen($pass)>=6 && strlen($pass)<=20){//如果用户提交数据长度不符合返回3
 				$userdata=NULL;
 				if($login_time>=20){
 						$this->oj_model->update_user(array('defunct'=>1),"name = ".$this->db->escape($info)." OR
@@ -41,10 +41,10 @@ class Login extends CI_Controller {
 					$result = array('result'=>0);//用户正常登录失败返回数组0
 					echo json_encode($result);
 					}
-			}else if($defunct==0){
+			}else{
 				$result = array('result'=>3);//长度不符合echo3
 				echo json_encode($result);
 			}
-		}		
+		}	
 	}
 }
