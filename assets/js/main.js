@@ -111,7 +111,7 @@ $(document).ready(function(){
 	});
 //检测密码是否匹配
 	$("input#paconf-reg").on("focusout",function(){
-		if($("input#paconf-reg").val().length >= 6)
+		if($("input#paconf-reg").val().length >= 6&& $("input#pa-reg").val().length <= 20)
 			if($("input#paconf-reg").val()!=$("input#pa-reg").val()){
 				$("#paconf-status").text("*密码前后不一致");
 				$("input#paconf-reg").css({'border-color':"#FA9290"});
@@ -125,10 +125,13 @@ $(document).ready(function(){
 		else if( $("input#paconf-reg").val().length < 6　&&　$("input#paconf-reg").val().length > 0){
 				$("#paconf-status").text("密码长度不足");
 				$("input#paconf-reg").css({'border-color':"#FA9290"});
+		}else if($("input#paconf-reg").val().length > 20){
+				$("#paconf-status").text("密码过长");
+				$("input#paconf-reg").css({'border-color':"#FA9290"});
 		}
 	});
 	$("input#pa-reg").on("focusout",function(){
-		if($("input#paconf-reg").val().length >= 6 && $("input#pa-reg").val().length >= 6)
+		if($("input#paconf-reg").val().length >= 6 && $("input#pa-reg").val().length >= 6&& $("input#pa-reg").val().length <= 20)
 			if($("input#paconf-reg").val()!=$("input#pa-reg").val()){
 				$("#pa-status").text("*密码前后不一致");
 				$("input#pa-reg").css({'border-color':"#FA9290"});
@@ -142,6 +145,9 @@ $(document).ready(function(){
 			}
 		else if( $("input#pa-reg").val().length < 6　&&　$("input#pa-reg").val().length > 0){
 				$("#pa-status").text("密码长度不足");
+				$("input#pa-reg").css({'border-color':"#FA9290"});
+		}else if($("input#pa-reg").val().length > 20){
+				$("#pa-status").text("密码过长");
 				$("input#pa-reg").css({'border-color':"#FA9290"});
 		}
 	});

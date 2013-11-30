@@ -97,19 +97,19 @@
 			<span style="float:left;margin-top: 8px;display:inline-block;width:66px;"><img src="<?php echo base_url("assets") ?>/img/logo.png"></span>
 			<li class='<?php if(preg_match("/\/$|index\.php\/?$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "active"; ?> slide' ><a href="<?php echo site_url("/"); ?>">主页</a></li>
 			
-			<li class='<?php if(preg_match("/contest|problem/",$_SERVER["REQUEST_URI"])) echo "active" ?> slide' >
-				<a href="<?php echo site_url("problem/index"); ?>">
+			<li class='<?php if(preg_match("/contest|problem/",uri_string())) echo "active" ?> slide' >
+				<a href="<?php echo site_url("problem"); ?>">
 					<span>题集</span>
 					<img src="<?php echo base_url("assets") ?>/img/list_button.png">
 				</a>
 				<ul class="sub-nav">
-					<li><a href="<?php echo site_url("problem/index"); ?>">题目</a></li>
-					<li><a href="<?php echo site_url("contest/index"); ?>">比赛</a></li>
+					<li><a href="<?php echo site_url("problem"); ?>">题目</a></li>
+					<li><a href="<?php echo site_url("contest"); ?>">比赛</a></li>
 					<li><a href="">全部</a></li>
 				</ul>
 			</li>
 			
-			<li class='<?php if(preg_match("/contest|problem/",$_SERVER["REQUEST_URI"])) echo "active" ?> slide'>
+			<li class='<?php if(preg_match("/class/",uri_string())) echo "active" ?> slide'>
 				<a href="">
 					<span>课程</span>
 					<img src="<?php echo base_url("assets") ?>/img/list_button.png">
@@ -120,7 +120,7 @@
 					<li><a href="">全部</a></li>
 				</ul>
 			</li>
-			<li class='<?php if(preg_match("/contest|problem/",$_SERVER["REQUEST_URI"])) echo "active" ?> slide'><a href="">帮助</a></li>
+			<li class='<?php if(preg_match("/help/",uri_string())) echo "active" ?> slide'><a href="">帮助</a></li>
 		</ul>
 		<hr class="i-b">
 		</div>
