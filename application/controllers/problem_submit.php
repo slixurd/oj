@@ -23,6 +23,9 @@ class Problem_submit extends CI_Controller {
   }
   
   public function submit(){
+	  //<=1:c&c++ , 2 : pascal , 3 : java , 4 : ruby , 5 : bash , 6 : python 
+	  //7 : php , 8 : perl , 9 : c# , 10 : objective c , 11 : free basic 
+	  //这里是不同语言所对应的编号
 	  Global $data;
 	  $date_str="%Y-%m-%d %H:%i:%s";
 	  $now=strtotime("now");
@@ -125,7 +128,7 @@ class Problem_submit extends CI_Controller {
 		}
 		else{
 			$this->oj_model->add_solution(array('problemId'=>$problemId,'userId'=>$data['user']['userId'],'programLan'=>$programLan,
-				'inDate'=>mdate($now),'codeLenth'=>$code_len));//普通问题
+				'inDate'=>mdate($now),'codeLen'=>$code_len));//普通问题
 				if($this->redis->exitsts($problem_catche)){
 					$this->redis->del($problem_catche);
 				}

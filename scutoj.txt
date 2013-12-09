@@ -81,12 +81,12 @@ runTime INT(11) NOT NULL,
 memory INT(11) NOT NULL,
 inDate DATETIME ,
 result SMALLINT(6) NOT NULL,
-programLan VARCHAR(20) NOT NULL,
+programLan INT(11) NOT NULL,
 contestId INT(11),
 unitId INT(11),
 valid TINYINT(0),
 judgeTime DATETIME ,
-codeLenth INT(11),
+codeLen INT(11),
 PRIMARY KEY(solutionId)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;
 
@@ -97,14 +97,14 @@ PRIMARY KEY(solutionId)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE compile_info(
-problemId INT(11) NOT NULL,
+solutionId INT(11) NOT NULL,
 error TEXT,
 PRIMARY KEY(problemId)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE runtime_info(
-problemId INT(11) NOT NULL,
+solutionId INT(11) NOT NULL,
 error TEXT,
 PRIMARY KEY(problemId)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -169,6 +169,12 @@ courseId INT(11) NOT NULL,
 userId INT(11) NOT NULL,
 type VARCHAR(10) NOT NULL
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `custom_input` (
+  `solutionId` int(11) NOT NULL DEFAULT '0',
+  `inputText` text,
+  PRIMARY KEY (`solutionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS  `ci_sessions` (
   session_id varchar(40) DEFAULT '0' NOT NULL,
