@@ -21,6 +21,7 @@ class Status extends CI_Controller {
 		if(isset($_POST['s_id'])){
 			//判断是否是id搜索
 			$s_id=$_POST['s_id'];
+			$is_search=TRUE;
 			$by_id=TRUE;
 			$s_str="userId = ".$this->db->escape($data['user']['userId'])." AND problemId = ".$this->db->escape($s_id)." ";
 		}
@@ -28,8 +29,10 @@ class Status extends CI_Controller {
 		if(isset($_POST['s_title'])){
 				$s_title=$_POST['s_title'];
 				$is_search=TRUE;
-				$s_str="userId = ".$this->db->escape($data['user']['userId'])." AND title = ".$this->db->escape("%".$s_title."%")." ";
-			}//判断是否是搜索模式是的话下面就不分页
+				$s_str="userId = ".$this->db->escape($data['user']['userId'])." AND title LIKE ".$this->db->escape("%".$s_title."%")." ";
+		}
+		//判断是否是搜索模式是的话下面就不分页
+
 		if(!$is_search){
 			$s_str="userId = ".$this->db->escape($data['user']['userId'])." ";
 			$total = $this->oj_model->get_row("solution","solutionId",$s_str);
@@ -44,9 +47,6 @@ class Status extends CI_Controller {
 		if($page>=1 && is_numeric($page) && (($page-1)*10<=$total)){
 			$column_array=array('*');
 			$data['status_list']=$this->oj_model->get_list_where("solution",$column_array,"solutionId",TRUE,$s_str,$limit_from,$limit_row);
-			$this->load->view('common/header',$data);
-			$this->load->view('status_view',$data);
-			$this->load->view('common/footer',$data);
 			
 			$this->load->library('pagination');
 			$config['first_link'] = TRUE;
@@ -65,15 +65,15 @@ class Status extends CI_Controller {
 			$config['num_tag_open'] = '<li>';
 			$config['num_tag_close'] = '</li>';
 			$config['cur_tag_open'] = '<li class="active"><a>';
-			$config['cur_tag_close'] = '</a></li>';		
+			$config['cur_tag_close'] = '</a></li>';	
 			$config['next_tag_open'] = '<li>';
 			$config['next_tag_close'] = '</li>';
 			$config['prev_tag_open'] = '<li>';
 			$config['prev_tag_close'] = '</li>';
 			$config['first_tag_open'] = '<li>';
-			$config['first_tag_close'] = '</li>';			
+			$config['first_tag_close'] = '</li>';
 			$config['last_tag_open'] = '<li>';
-			$config['last_tag_close'] = '</li>';	
+			$config['last_tag_close'] = '</li>';
 			$this->pagination->initialize($config);
 			$data['pagination_block'] = $this->pagination->create_links();
 			$this->load->view('common/header',$data);

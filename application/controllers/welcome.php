@@ -20,10 +20,10 @@ class Welcome extends CI_Controller {
 	 
 	public function __construct()
 	{
-	    parent::__construct();
-	    $this->load->model('oj_model');
-	    $this->load->library('user_help');
-	    $this->load->helper('url');
+		parent::__construct();
+		$this->load->model('oj_model');
+		$this->load->library('user_help');
+		$this->load->helper('url');
 	}
 
 

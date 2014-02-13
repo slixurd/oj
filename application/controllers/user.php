@@ -5,15 +5,15 @@ class User extends CI_Controller {
 	/**
 	 * Index Page for this controller.
 	 */
-	  public function __construct()
-  {
-    parent::__construct();
-  }
-  
+	public function __construct()
+	{
+			parent::__construct();
+	}
+ 
 	public function index()
 	{
 		Global $data;
-         if($data['is_login']){
+		if($data['is_login']){
 			$this->load->view('common/header',$data);
 			$this->load->view('user_info_view',$data);
 			$this->load->view('common/footer',$data);
@@ -22,8 +22,8 @@ class User extends CI_Controller {
 			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"),$data);
 		}
 	}
-  
-  //如果用户已经登录不予注册导入register_noavailable页面
+
+	//如果用户已经登录不予注册导入register_noavailable页面
 	public function register()
 	{
 		Global $data;
@@ -59,16 +59,15 @@ class User extends CI_Controller {
 		if($data['is_login']){
 			$this->error->show_error("已登录不能注册",array("请先退出帐号","点击右上角注册"),$data);
 		}
-		else if($this->form_validation->run() === TRUE && $this->input->post('pa',TRUE) == $this->input->post('paconf',TRUE)){
+		else if($this->input->post('username',TRUE) == TRUE && $this->input->post('email',TRUE) == TRUE && $this->input->post('pa',TRUE) === $this->input->post('paconf',TRUE)){
 			$user=array(
-				'name'=>$this->input->post('username',TRUE),
-				'password'=>$this->input->post('pa',TRUE),
-				'email'=>$this->input->post('email',TRUE),
-				'defunct'=>0
+				'name' => $this->input->post('username',TRUE),
+				'password' => $this->encrypt->sha1($salt.$user['password']),
+				'email'=> $this->input->post('email',TRUE),
+				'salt' => $salt,
+				'regTime' => mdate($date_str),
+				'defunct'=> 0
 			);
-			$user['password']=$this->encrypt->sha1($salt.$user['password']);
-			$user['salt']=$salt;
-			$user['regTime']=mdate($date_str);
 			$u_name=$this->oj_model->unique_user($user['name']);
 			$u_email=$this->oj_model->unique_email($user['email']);
 			if($u_email==0 && $u_name==0){//如果检测密码用户名邮箱不成功的话将不会直接定向到失败页面而是echo相应的数组
@@ -103,12 +102,11 @@ class User extends CI_Controller {
 				return;
 			}
 			
-		}
-		else{
-			$data['result']=4;//表单不能提交或者密码确认不符合
-			$this->error->show_error("注册信息提交失败",array("请确认密码符合后重新注册"),$data);
-			return;
-		}
+    }else{       
+    		$data['result']=4;//表单不能提交或者密码确认不符合
+				$this->error->show_error("注册信息提交失败",array("请确认密码符合后重新注册"),$data);
+				return;     
+		}   
 	}
 
 	public function check_unique_email(){
