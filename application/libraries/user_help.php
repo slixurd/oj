@@ -48,7 +48,7 @@ class User_help {
 		$user=NULL;
 		$CI->load->helper('date');
 		$date_str="%Y-%m-%d %H:%i:%s";
-		if(($user=$CI->oj_model->get_user_item($info,array('userId','name','email','salt','password')))===FALSE){
+		if(($user=$CI->oj_model->get_user_item($info,array('userId','name','email','salt','password','programLan')))===FALSE){
 			//用户名不正确
 			$ip=$CI->session->userdata('ip_address');
 			$CI->oj_model->add_login_log(array('info'=>$info,'password'=>$CI->encrypt->sha1($user['salt'].$pass),'ip'=>$ip,
@@ -59,7 +59,7 @@ class User_help {
 				$ip=$CI->session->userdata('ip_address');
 				$CI->oj_model->add_login_log(array('info'=>$info,'password'=>$user['password'],'ip'=>$ip,
 				'time'=>mdate($date_str),'result'=>1));
-				$user=array('userId'=>$user['userId'],'name'=>$user['name']);
+				$user=array('userId'=>$user['userId'],'name'=>$user['name'],'programLan'=>$user['programLan']);
 				$CI->session->set_userdata($user);
 				//成功登录
 				return $CI->session->all_userdata();

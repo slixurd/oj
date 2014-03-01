@@ -37,7 +37,7 @@ class Problem_submit extends CI_Controller {
 	  $date_str="%Y-%m-%d %H:%i:%s";
 	  $now=strtotime("now");
 	  if(!$data['is_login']){
-			$this->error->show_error('尚未登录不能答题',array("先右上角登陆吧"),$dta);
+			$this->error->show_error('尚未登录不能答题',array("先右上角登陆吧"),$data);
 			return;//防止多次下面分支view
 	  }else if(isset($_POST['problemId']) && isset($_POST['code']) && isset($_POST['language'])){//判断用户是否传递了最基本的元素
 		$problemId=$_POST['problemId'];
@@ -46,9 +46,11 @@ class Problem_submit extends CI_Controller {
 		$problem_catche = "problem_catche_".$problemId;
 		$problem_item=$this->oj_model->get_problem_item($problemId);//按号查相关问题
 		
+		$code_len = strlen($code);
+		
 		if($code_len<4){
 			//提示代码太短
-			$this->error->show_error("代码太短了",array("哎呀，难道是个天才算法么","代码太短了，我无法接受啊"));
+			$this->error->show_error("代码太短了",array("哎呀，难道是个天才算法么","代码太短了，我无法接受啊"),$data);
 			return;
 		}
 		if($code_len>65536){
@@ -88,7 +90,7 @@ class Problem_submit extends CI_Controller {
 			}
 			if($privilege === TRUE){
 				$this->oj_model->add_solution(array('problemId'=>$problemId,'userId'=>$data['user']['userId'],'programLan'=>$programLan,
-				'inDate'=>mdate($now),'contestId'=>$contestId,'codeLenth'=>$code_len));
+				'inDate'=>mdate($now),'contestId'=>$contestId,'codeLen'=>$code_len),array('code'=>$code));
 				if($this->redis->exitsts($problem_catche)){
 					$this->redis->del($problem_catche);
 				}
@@ -123,7 +125,7 @@ class Problem_submit extends CI_Controller {
 			}
 			if($privilege === TRUE){
 				$this->oj_model->add_solution(array('problemId'=>$problemId,'userId'=>$data['user']['userId'],'programLan'=>$programLan,
-				'inDate'=>mdate($now),'unitd'=>$unitId,'codeLenth'=>$code_len));
+				'inDate'=>mdate($now),'unitd'=>$unitId,'codeLen'=>$code_len),array('code'=>$code));
 				if($this->redis->exitsts($problem_catche)){
 					$this->redis->del($problem_catche);
 				}
@@ -135,7 +137,7 @@ class Problem_submit extends CI_Controller {
 		}
 		else{
 			$this->oj_model->add_solution(array('problemId'=>$problemId,'userId'=>$data['user']['userId'],'programLan'=>$programLan,
-				'inDate'=>mdate($now),'codeLenth'=>$code_len));//普通问题
+				'inDate'=>mdate($now),'codeLen'=>$code_len),array('code'=>$code));//普通问题
 				if($this->redis->exitsts($problem_catche)){
 					$this->redis->del($problem_catche);
 				}
