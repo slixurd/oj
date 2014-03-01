@@ -62,7 +62,7 @@ class User extends CI_Controller {
 		else if($this->input->post('username',TRUE) == TRUE && $this->input->post('email',TRUE) == TRUE && $this->input->post('pa',TRUE) === $this->input->post('paconf',TRUE)){
 			$user=array(
 				'name' => $this->input->post('username',TRUE),
-				'password' => $this->encrypt->sha1($salt.$user['password']),
+				'password' => $this->encrypt->sha1($salt.$this->input->post('pa',TRUE)),
 				'email'=> $this->input->post('email',TRUE),
 				'salt' => $salt,
 				'regTime' => mdate($date_str),
