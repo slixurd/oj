@@ -4,9 +4,9 @@
 			<h3>提交回答</h3>
 		</div>
 
-		<h4>Problem ID: <span>10000</span></h4>
+		<h4>Problem ID: <span><?php echo $problemId; ?></span></h4>
 		<div class="submit-code">
-			<form>
+			<form action="<?php echo site_url('problem_submit/submit') ;?>" method="post">
 				<div>
 					<span>语言</span>
 
@@ -25,7 +25,8 @@
 				</div>
 				<div>
 					<span>代码</span>
-					<textarea class="textarea"></textarea>			
+					<textarea name='code' class="textarea"></textarea>		
+					<input value='<?php echo $problemId ?>' name='problemId' style="display:none"/>	
 				</div>
 
 				<div class="util-block">

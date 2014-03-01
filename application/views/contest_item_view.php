@@ -1,20 +1,47 @@
-<?php if($permission=="yes"): ?>
-<?php echo "contest name:".$contest_item['title']."</br>" ?>
-<?php echo "startTime:".$contest_item['startTime']."</br>" ?>
-<?php echo "startTime:".$contest_item['endTime']."</br>" ?>
-<?php echo "private:".$contest_item['private']."</br>" ?>
-</br></br>
+<div class="wrapper">
+    <div class="container">
+        <div class="sub-header">
+            <?php if($permission=="yes"): ?>
+            <h3 style="float:right;margin-right:10px;font-size:18px;"><?php if($contest_item['private']) echo "私有"; else echo "公开"; ?></h3>
+            <h3><?php echo $contest_item['title']; ?></h3>
+        </div>
+        <div class='ctxl'>
+                <div class='s'>开始时间 - <?php echo $contest_item['startTime'] ?></div>
+                <div class='e'>结束时间 - <?php echo $contest_item['endTime'] ?></div>
+        </div>
+        
+        
+        <table id="problem-list" class="table">
+            <thead>
+                <tr>
+                    <th class='span1'>ID</th>
+                    <th class="span5">题目名称</th>
+                    <th class="span2">AC总数</th>
+                    <th class="span2">提交总数</th>
+                    <th class="span1">来源</th>
+                </tr>
+            </thead>
+            <tbody class="pointer">         
+                <?php if(isset($is_empty)) 
+                    echo "<tr><td colspan='4' class='empty-answer'>搜索结果为空</td></tr>"
+                ?>  
+                <?php foreach($contest_problem_list as $contest_problem): ?>
+                <tr>
+                    <td><?php echo $contest_problem['problemId']; ?></td>
+                    <td><?php echo $contest_problem['title']; ?></td>
+                    <td><?php echo $contest_problem['accepted']; ?></td>
+                    <td><?php echo $contest_problem['submit']; ?></td>
+                    <td><?php echo $contest_problem['source']; ?></td>
+                </tr>
+                <?php endforeach; ?>
+                <?php else : ?>
+                    <tr><td colspan='4' class='empty-answer'>无权限查看题目</td></tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<?php foreach($contest_problem_list as $contest_problem): ?>
-<?php echo "problemId:".$contest_problem['problemId']." " ?>
-<?php echo "contest_problem_title:".$contest_problem['contest_problem_title']." " ?>
-<?php echo "peoblemTitle:".$contest_problem['title']." " ?>
-<?php echo "num:".$contest_problem['num']." " ?>
-<?php echo "source:".$contest_problem['source']." " ?>
-<?php echo "AC:".$contest_problem['accepted']." " ?>
-<?php echo "Submit:".$contest_problem['submit']." " ?>
-</br></br>
-<?php endforeach; ?>
-<?php else : ?>
-<h1>you have no permision for the contest</h1>
-<?php endif; ?>
+
+
+

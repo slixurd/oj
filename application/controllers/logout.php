@@ -5,11 +5,11 @@ class Logout extends CI_Controller {
 	/**
 	 * Index Page for this controller.
 	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
+	  public function __construct()
+  {
+    parent::__construct();
+  }
+  
 	public function index(){
 		$this->load->library('user_help');
 		if(!$this->user_help->is_session()){

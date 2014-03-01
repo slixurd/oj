@@ -4,11 +4,11 @@ class Contest extends CI_Controller {
 
 	 
 	public function __construct()
-	{
-		parent::__construct();
-	}
+  {
+    parent::__construct();
+  }
 
-	public function index($s_type=0,$s_content=NULL,$page=1){
+	public function index($page=1){
 		Global $data;
 		$by_id=FALSE;//是否按照id来查找
 		$by_title=FALSE;//是佛按照title来查找，这里可以扩展成混合查找
@@ -72,15 +72,15 @@ class Contest extends CI_Controller {
 			$config['num_tag_open'] = '<li>';
 			$config['num_tag_close'] = '</li>';
 			$config['cur_tag_open'] = '<li class="active"><a>';
-			$config['cur_tag_close'] = '</a></li>';     
+			$config['cur_tag_close'] = '</a></li>';		
 			$config['next_tag_open'] = '<li>';
 			$config['next_tag_close'] = '</li>';
 			$config['prev_tag_open'] = '<li>';
 			$config['prev_tag_close'] = '</li>';
 			$config['first_tag_open'] = '<li>';
-			$config['first_tag_close'] = '</li>';           
+			$config['first_tag_close'] = '</li>';			
 			$config['last_tag_open'] = '<li>';
-			$config['last_tag_close'] = '</li>';    
+			$config['last_tag_close'] = '</li>';	
 			$this->pagination->initialize($config);
 
 
@@ -113,7 +113,7 @@ class Contest extends CI_Controller {
 		}else{
 			if($data['contest_item']['private']==0){
 				$data['permission']="yes";
-			}   
+			}	
 			else if($data['is_login']===FALSE){//用户没有登录
 				$data['permission']="no";
 				$this->error->show_error("你还没有登录",array("此竞赛需要权限，请先登录","点击右上角登录"),$data);

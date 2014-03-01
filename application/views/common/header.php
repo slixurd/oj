@@ -95,7 +95,7 @@
 		<div class="i-c">
 		<ul class="main-nav clearfix">
 			<span style="float:left;margin-top: 8px;display:inline-block;width:66px;"><img src="<?php echo base_url("assets") ?>/img/logo.png"></span>
-			<li class='<?php if(preg_match("/\/$|index\.php\/?$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "active"; ?> slide' ><a href="<?php echo site_url("/"); ?>">主页</a></li>
+			<li class='<?php if(preg_match("/\/$|index$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "active"; ?> slide' ><a href="<?php echo site_url("/"); ?>">主页</a></li>
 			
 			<li class='<?php if(preg_match("/contest|problem/",uri_string())) echo "active" ?> slide' >
 				<a href="<?php echo site_url("problem"); ?>">

@@ -42,22 +42,23 @@ class Problem extends CI_Controller {
 			}else{
 				$total=$this->oj_model->get_row();//直接获取行数
 				$this->redis->set($problem_count_catche,$total);
-			}
 		}
+		}
+		
 		
 		if($total==0){
 			$data['problem_list']=array();
 			$data['is_empty']=TRUE;//搜索结果为空
 		}
 		if(isset($_POST['s_id']) || isset($_POST['s_title'])){
-			$limit_from=0;
-			$limit_row=$total;
-			$is_search=TRUE;
-		}else{
-			$is_search=FALSE;
-			$limit_from=($page-1)*10;
-			$limit_row=10;
-		}//判断是否是搜索模式是的话下面就不分页
+				$limit_from=0;
+				$limit_row=$total;
+				$is_search=TRUE;
+			}else{
+				$is_search=FALSE;
+				$limit_from=($page-1)*10;
+				$limit_row=10;
+			}//判断是否是搜索模式是的话下面就不分页
 		if($page>=1 && is_numeric($page) && (($page-1)*10<=$total)){
 			$column_array=array('problemId','title','source','accepted','submit');
 			if($by_id===TRUE){
