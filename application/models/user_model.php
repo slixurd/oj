@@ -11,9 +11,20 @@ class User_model extends CI_Model
 	*get_user_item_id 按照id获取指定用户基本信息不包含用户state(submmit，accept这类)信息
 	* 返回一维数组，如果没有则返回空数组
 	*/
-	public function get_user_item_id($id,$column_array=array('userId','name','email','password'))
+	public function get_user_item_id($id,$column_array=array('userId','name','email','password','type','programLan','regTime',
+	'nick','school','defunct'))
 	{
 		$sql="SELECT ".implode(" , ",$column_array)." FROM user WHERE userId = ".$this->db->escape($id)."";
+		$query=$this->db->query($sql);
+		return $query->row_array(0);
+	}
+	
+	/**
+	*get_user_state_item获取user_state信息函数通过id,包括submit,ac数，最近登录时间
+	*/
+
+	public function get_user_state_item($id,$column_array=array('accessTime','submit','solved')){
+		$sql="SELECT ".implode(" , ",$column_array)." FROM user_state WHERE userId = ".$this->db->escape($id)."";
 		$query=$this->db->query($sql);
 		return $query->row_array(0);
 	}
@@ -78,6 +89,50 @@ class User_model extends CI_Model
 		}
 	}
 	
+	/*
+	 * update_access_time更新用户登录时间
+	 */
+	 
+	 public function update_access_time($id)
+	 {
+		$this->load->helper('date');
+		$date_str="%Y-%m-%d %H:%i:%s";
+		$update_array = array('accessTime'=>mdate($date_str));
+		$sql = $this->db->update_string('user_state',$update_array,"userId = ".$this->db->escape($id));
+		$this->db->query($sql);
+	 }
+	
+	/*
+	 * 获取用户的题目列表，会返回用户有解决的和没有解决的问题列表
+	 * 返回4是解决的问题，其他值为没有解决
+	 */
+	
+	public function get_user_solution_list($id)
+	{
+		$sql1 = "select userId,result,problemId from solution where userId = ".$this->db->escape($id).
+		" and result = 4 group by problemId";
+		$sql2 = "select userId,result,problemId from solution where userId = ".$this->db->escape($id).
+		" group by problemId having result != 4";
+		$query1 = $this->db->query($sql1);
+		$query2 = $this->db->query($sql2);
+		$result1 = $query1->result_array();
+		$result2 = $query2->result_array();
+		return array_merge($result1,$result2);
+	}
+	
+	/*
+	 *获取用户登录记录，包括有成功的和没有成功的
+	 */
+	 
+	public function get_login_log_list($name,$email)
+	{
+		$name = $this->db->escape($name);
+		$email = $this->db->escape($email);
+		$sql = "select * from login_log where info = ".$name." or info = ".$email;
+		$query = $this->db->query($sql);
+		return $query->result_array();
+	}
+	
 	
 	/**
 	 * salt函数用户产生一个随机字符串，min指定最小长度，max指定最大长度
@@ -118,5 +173,9 @@ class User_model extends CI_Model
 		$rt=array('pass_preg'=>$preg,'pass_len'=>$len);
 		return $rt;
 	}
+	
+	
+	
+	
 	
 }

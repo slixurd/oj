@@ -59,8 +59,10 @@ class User_help {
 				$ip=$CI->session->userdata('ip_address');
 				$CI->oj_model->add_login_log(array('info'=>$info,'password'=>$user['password'],'ip'=>$ip,
 				'time'=>mdate($date_str),'result'=>1));
-				$user=array('userId'=>$user['userId'],'name'=>$user['name'],'programLan'=>$user['programLan']);
+				$user=array('userId'=>$user['userId'],'name'=>$user['name'],'programLan'=>$user['programLan'],'email'=>$user['email']);
 				$CI->session->set_userdata($user);
+				$CI->load->model("user_model");
+				$CI->user_model->update_access_time($user['userId']);
 				//成功登录
 				return $CI->session->all_userdata();
 			}else{
