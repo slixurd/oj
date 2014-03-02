@@ -13,13 +13,14 @@ class User extends CI_Controller {
 	public function index()
 	{
 		Global $data;
-         if($data['is_login']){
+		if($data['is_login']){
 			$this->load->view('common/header',$data);
 			$this->load->view('user_info_view',$data);
 			$this->load->view('common/footer',$data);
 		}else{
 			//退回刚才的页面或者提示
 			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"),$data);
+			return;
 		}
 	}
   
@@ -30,6 +31,7 @@ class User extends CI_Controller {
 		$data['page_title']='注册';
 		if($data['is_login']){
 			$this->error->show_error("已登录不能注册",array("请先退出帐号","点击右上登出"),$data);
+			return;
 		}else {
 			$this->load->view('common/header',$data);
 			$this->load->view('register_view',$data);
@@ -123,6 +125,26 @@ class User extends CI_Controller {
 		echo json_encode($unique);
 	}
 	
-	
+	public function info(){
+
+		Global $data;
+		if(!$data['is_login']){
+			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"),$data);
+			return;
+		}
+
+		$data['ce_num']=0;
+		$data['ac_num']=0;
+		$data['submit_num']=0;
+		$data['school']=0;
+		$data['email']=0;
+		$data['plan']='暂无';
+		$this->load->view('common/header',$data);
+		$this->load->view('student/info');
+		$this->load->view('common/footer');
+
+
+
+	}
 	
 }
