@@ -45,7 +45,7 @@
 			</div>
 			<div>
 				<span></span>
-				<button id="submit-reg" type="submit" class="common-button">提交注册</button>
+				<button style="margin-top:15px;"  id="submit-reg" type="submit" class="common-button">提交注册</button>
 			</div>
 		</form>
 

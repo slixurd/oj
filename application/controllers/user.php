@@ -13,15 +13,29 @@ class User extends CI_Controller {
 	public function index()
 	{
 		Global $data;
-		if($data['is_login']){
-			$this->load->view('common/header',$data);
-			$this->load->view('user_info_view',$data);
-			$this->load->view('common/footer',$data);
-		}else{
-			//退回刚才的页面或者提示
+		if(!$data['is_login']){
 			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"),$data);
 			return;
 		}
+		$user = $data['user'];
+		$this->load->model('user_model','umodel');
+		$u = $this->umodel->get_user_item_id($user['userId']);
+		if(empty($u)){
+			$this->error->show_error("用户信息错误",array("请重新登陆","点击右上角登录"),$data);
+			return;
+		}
+		$u_static = $this->umodel->get_user_state_item($user['userId']);
+		$data['u_plist'] = $this->umodel->get_user_solution_list($user['userId']);
+		$data['ce_num']=0;
+		$data['ac_num']=$u_static['solved'];
+		$data['submit_num']=$u_static['submit'];
+		$data['school']=0;
+		$data['email']=0;
+		$data['plan']='暂无';
+
+		$this->load->view('common/header',$data);
+		$this->load->view('student/info');
+		$this->load->view('common/footer');
 	}
   
   //如果用户已经登录不予注册导入register_noavailable页面
@@ -125,26 +139,74 @@ class User extends CI_Controller {
 		echo json_encode($unique);
 	}
 	
-	public function info(){
-
+	public function modify(){
 		Global $data;
 		if(!$data['is_login']){
 			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"),$data);
 			return;
 		}
+		$user = $data['user'];
+		$this->load->model('user_model','umodel');
+		$u = $this->umodel->get_user_item_id($user['userId']);
+		if(empty($u)){
+			$this->error->show_error("用户信息错误",array("请重新登陆","点击右上角登录"),$data);
+			return;
+		}
 
-		$data['ce_num']=0;
-		$data['ac_num']=0;
-		$data['submit_num']=0;
-		$data['school']=0;
-		$data['email']=0;
-		$data['plan']='暂无';
 		$this->load->view('common/header',$data);
-		$this->load->view('student/info');
-		$this->load->view('common/footer');
-
-
-
+		$this->load->view('modify');
+		$this->load->view('common/footer');		
 	}
-	
+
+	public function modify_result(){
+		Global $data;
+		if(!$data['is_login']){
+			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"),$data);
+			return;
+		}
+		$user = $data['user'];
+		$this->load->model('user_model','umodel');
+		if(($this->input->post('pa')!=$this->input->post('paconf'))||$this->input->post('origin')===FALSE){
+			$this->error->show_error("用户信息错误",array("请重新填写"),$data);
+			return;
+		}
+
+		$vpass = $this->umodel->check_pass($this->input->post('pa',TRUE));
+		$valid = $this->umodel->check_user_password_id($user['userId'],$this->input->post('origin',TRUE));
+		if($valid === FALSE ||$vpass['pass_preg'] == 0){
+			$this->error->show_error("用户密码错误或新密码不符合要求",array("请重新填写"),$data);
+			return;			
+		}
+
+		if($this->umodel->update_user_password($user['userId'],$this->input->post('pa',TRUE),$this->input->post('origin',TRUE)) == FALSE){
+			$this->error->show_error("用户密码错误或新密码不符合要求",array("请重新填写"),$data);
+			return;					
+		}
+
+		$this->logout();
+		$this->load->view('common/header',$data);
+		$this->load->view('modify_result');
+		$this->load->view('common/footer');		
+	}
+
+	public function logout()
+	{
+		$this->session->sess_destroy();
+	}
+
+	public function history(){
+		Global $data;
+		if(!$data['is_login']){
+			$this->error->show_error("没有权限",array("用户信息页面需要登录","点击右上角登录"),$data);
+			return;
+		}
+		$user = $data['user'];
+
+		$this->load->model('user_model','umodel');
+		$data['log_list'] = $this->umodel->get_login_log_list($user['name']);
+		$this->load->view('common/header',$data);
+		$this->load->view('student/history');
+		$this->load->view('common/footer');		
+	}
+
 }

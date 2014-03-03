@@ -10,7 +10,7 @@
 				</tr>
 				<tr>
 					<td>
-					<span><a href="#">历史登陆情况</a></span>
+					<span><a href="<?php echo site_url('user/history'); ?>">历史登陆情况</a></span>
 					</td>
 				</tr>
 				<tr>
@@ -50,7 +50,6 @@
 				</tr>                
 				<tr>
 					<td>
-					<span>Statistic:</span>
 					<span id="pie-chart"></span>
 					</td>
 				</tr>
@@ -61,20 +60,16 @@
 			<h3>题目列表</h3>
 		</div>
 		<div class='all-p-list'>
-			<div><i class='ac'></i><a href="#" data-toggle="tooltip" data-original-title="sssss"  data-trigger="hover">1001</a></div>
-			<div><i class='we'></i><a href="#" data-toggle="tooltip"  data-placement="bottom" data-trigger="hover">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
-			<div><i class='we'></i><a href="#">1001</a></div>
+			<?php foreach ($u_plist as $item) { ?>
+				<div>
+					<i class='<?php if($item['result']==4) echo "ac"; else echo "we"; ?>'></i>
+					<a href="<?php echo site_url('problem/get_problem').'/'.$item['problemId']; ?>" data-toggle="tooltip" 
+						data-original-title="<?php echo $item['title'] ?>"  data-trigger="hover">
+						<?php echo $item['problemId'] ?>
+					</a>
+				</div>
+			<?php } ?>
+
 		</div>
 	</div>
 	<div class='clearfix'></div>
@@ -95,7 +90,7 @@
 			plotShadow: false
 		},
 		title: {
-			text: ''
+			text: '答题情况'
 		},
 		tooltip: {
 			pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -114,13 +109,10 @@
 		},
 		series: [{
 			type: 'pie',
-			name: 'Browser share',
+			name: '百分比',
 			data: [
-				['Firefox',   45.0],
-				['IE',       26.8],
-				['Safari',    8.5],
-				['Opera',     6.2],
-				['Others',    0.7]
+				['AC',   <?php echo $ac_num/$submit_num; ?>],
+				['WE',   <?php echo ($submit_num-$ac_num)/$submit_num; ?>]
 			]
 		}]
 	});

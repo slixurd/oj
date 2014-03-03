@@ -11,15 +11,12 @@
 					<span>语言</span>
 
 					<div class="table-sel">
-						<span class="sel-title">C++</span>
+						<span class="sel-title"><?php if($user['programLan']==NULL) echo 'C++'; else echo $lan[$user['programLan']]; ?></span>
 						<i class="ic_ud_sel"></i>
 						<select name="language">
-							<option value="cpp" select="selected">C++</option>
-							<option value='c'>C</option>
-							<option value='java'>Java</option>
-							<option value='fp'>FP</option>
-							<option value='python'>Python</option>
-							<option value='lisp'>Lisp</option>
+							<?php foreach ($lan as $index => $l) { ?>
+								<option value='<?php echo $index; ?>' <?php if(($user['programLan']==NULL && $index == 1)|| $user['programLan']===$index ) echo 'select="selected"'?>><?php echo $l; ?></option>
+							<?php } ?>
 						</select>
 					</div>
 				</div>

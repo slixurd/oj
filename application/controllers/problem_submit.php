@@ -15,6 +15,8 @@ class Problem_submit extends CI_Controller {
 			$this->error->show_error('进入方式错误',array("请不要随意修改URL"),$data);
 			return;//防止多次下面分支view	  	
 	  }
+
+	  $data['lan'] = array('C','C++','Pascal','Java','Ruby','Bash','Python','PHP','Perl','C#','Obj-C','Free Basic');
 	  if($data['is_login']){
 			$data['problem']=$this->oj_model->get_problem_item($problemId,array('problemId'));
 			if(empty($data['problem'])){
@@ -22,7 +24,6 @@ class Problem_submit extends CI_Controller {
 				return;//防止多次下面分支view				
 			}
 	  		$data['problemId'] = $problemId;
-
 			$this->load->view('common/header',$data);
 			$this->load->view('student/problem_submit_view',$data);
 			$this->load->view('common/footer',$data);

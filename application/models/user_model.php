@@ -124,10 +124,14 @@ class User_model extends CI_Model
 	
 	public function get_user_solution_list($id)
 	{
-		$sql1 = "select userId,result,problemId from solution where userId = ".$this->db->escape($id).
-		" and result = 4 group by problemId";
-		$sql2 = "select userId,result,problemId from solution where userId = ".$this->db->escape($id).
-		" group by problemId having result != 4";
+		$sql1 = "SELECT title,result,problem.problemId 
+				FROM solution left join problem ON solution.problemId=problem.problemId 
+				WHERE userId = ".$this->db->escape($id).
+				" and result = 4 GROUP BY problemId";
+		$sql2 = "SELECT title,result,problem.problemId 
+				FROM solution left join problem ON solution.problemId=problem.problemId 
+				WHERE userId = ".$this->db->escape($id).
+				" GROUP BY problemId HAVING result != 4";
 		$query1 = $this->db->query($sql1);
 		$query2 = $this->db->query($sql2);
 		$result1 = $query1->result_array();
@@ -139,11 +143,10 @@ class User_model extends CI_Model
 	 *获取用户登录记录，包括有成功的和没有成功的
 	 */
 	 
-	public function get_login_log_list($name,$email)
+	public function get_login_log_list($name)
 	{
 		$name = $this->db->escape($name);
-		$email = $this->db->escape($email);
-		$sql = "select * from login_log where info = ".$name." or info = ".$email;
+		$sql = "SELECT ip,time,result FROM login_log WHERE info = ".$name;
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
