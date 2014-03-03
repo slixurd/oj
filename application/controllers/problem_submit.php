@@ -36,6 +36,7 @@ class Problem_submit extends CI_Controller {
 	  Global $data;
 	  $date_str="%Y-%m-%d %H:%i:%s";
 	  $now=strtotime("now");
+	  //echo $now;
 	  if(!$data['is_login']){
 			$this->error->show_error('尚未登录不能答题',array("先右上角登陆吧"),$data);
 			return;//防止多次下面分支view
@@ -90,7 +91,7 @@ class Problem_submit extends CI_Controller {
 			}
 			if($privilege === TRUE){
 				$this->oj_model->add_solution(array('problemId'=>$problemId,'userId'=>$data['user']['userId'],'programLan'=>$programLan,
-				'inDate'=>mdate($now),'contestId'=>$contestId,'codeLen'=>$code_len),array('code'=>$code));
+				'inDate'=>mdate($date_str),'contestId'=>$contestId,'codeLen'=>$code_len),array('code'=>$code));
 				if($this->redis->exitsts($problem_catche)){
 					$this->redis->del($problem_catche);
 				}
@@ -125,7 +126,7 @@ class Problem_submit extends CI_Controller {
 			}
 			if($privilege === TRUE){
 				$this->oj_model->add_solution(array('problemId'=>$problemId,'userId'=>$data['user']['userId'],'programLan'=>$programLan,
-				'inDate'=>mdate($now),'unitd'=>$unitId,'codeLen'=>$code_len),array('code'=>$code));
+				'inDate'=>mdate($date_str),'unitd'=>$unitId,'codeLen'=>$code_len),array('code'=>$code));
 				if($this->redis->exitsts($problem_catche)){
 					$this->redis->del($problem_catche);
 				}
@@ -137,7 +138,7 @@ class Problem_submit extends CI_Controller {
 		}
 		else{
 			$this->oj_model->add_solution(array('problemId'=>$problemId,'userId'=>$data['user']['userId'],'programLan'=>$programLan,
-				'inDate'=>mdate($now),'codeLen'=>$code_len),array('code'=>$code));//普通问题
+				'inDate'=>mdate($date_str),'codeLen'=>$code_len),array('code'=>$code));//普通问题
 				if($this->redis->exitsts($problem_catche)){
 					$this->redis->del($problem_catche);
 				}

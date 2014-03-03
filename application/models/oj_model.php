@@ -423,13 +423,10 @@ class Oj_model extends CI_Model
  * 函数返回二维数组
  */
  
-	public function get_contest_problem_list($contestId=1000,$contest_problem_array=array('contestId','problemId','title','num'),
+	public function get_contest_problem_list($contestId=1000,$contest_problem_array=array('contestId','problemId','num'),
 	$problem_array=array('problemId','title','source','accepted','submit'),$order_by="contest_problem.num",$is_desc=FALSE,
 	$limit_from=0,$limit_row=10)
 	{
-		for($i=0;$i<count($contest_problem_array);$i++)
-		if($contest_problem_array[$i]=="title")
-		$contest_problem_array[$i]=$contest_problem_array[$i]." as contest_problem_title ";
 		$sql="SELCET ";
 		for($i=0;$i<count($contest_problem_array);$i++){
 			$contest_problem_array[$i]="contest_problem.".$contest_problem_array[$i];

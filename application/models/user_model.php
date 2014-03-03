@@ -20,13 +20,28 @@ class User_model extends CI_Model
 	}
 	
 	/**
-	*get_user_state_item获取user_state信息函数通过id,包括submit,ac数，最近登录时间
+	*get_user_state_item获取user_state信息函数通过id,包括submit,ac数，最近登录时间，返回result数值参考如下
 	*/
 
 	public function get_user_state_item($id,$column_array=array('accessTime','submit','solved')){
 		$sql="SELECT ".implode(" , ",$column_array)." FROM user_state WHERE userId = ".$this->db->escape($id)."";
 		$query=$this->db->query($sql);
 		return $query->row_array(0);
+	}
+	
+	/*
+	 * get_user_all_state获取用户所有的解题统计状况
+	 * 返回所有的用户解题统计结果，但是没有出现的结果将不会返回
+	 * OJ_WT0 0； OJ_WT1 1； OJ_CI 2； OJ_RI 3； OJ_AC 4； OJ_PE 5； OJ_WA 6；
+	 * OJ_TL 7； OJ_ML 8； OJ_OL 9； OJ_RE 10；OJ_CE 11；OJ_CO 12；OJ_TR 13
+	 */
+	
+	public function get_user_all_state($id)
+	{
+		$id = $this->db->escape($id);
+		$sql = "select userId,result,count(result) as count from solution where userId = ".$id." group by result";
+		$query = $this->db->query($sql);
+		return $query->result_array();
 	}
 	
 	/**

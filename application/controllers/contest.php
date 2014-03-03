@@ -98,6 +98,8 @@ class Contest extends CI_Controller {
 	
 	public function get_contest($id){
 		Global $data;
+		$this->load->model('contest_model');
+		$this->load->model('user_model');
 		if(!is_numeric($id)){
 			//用户可能进行非法操作
 			$this->error->show_error("没有对应竞赛的ID",array("找不到对应的竞赛ID"),$data);
@@ -106,7 +108,9 @@ class Contest extends CI_Controller {
 		$data['permission']="no";
 		$user=$data['user'];
 		$data['contest_item']=$this->oj_model->get_contest_item($id);
-		$data['contest_problem_list']=$this->oj_model->get_contest_problem_list($id);
+		$data['contest_problem_list']=$this->contest_model->get_contest_problem_list($id);
+		$user_type = $this->user_model->get_user_item_id($user['userId'],array('type'));
+		$user['type'] = $user_type;
 		if(empty($data['contest_item'])){
 			$this->error->show_error("没有对应竞赛的ID",array("找不到对应的竞赛ID"),$data);
 			return;
@@ -120,8 +124,9 @@ class Contest extends CI_Controller {
 				return;
 			}else{//用户登录
 				$data['permission']="no";
-				$data['problem_privilege']=$this->oj_model->get_contest_privilege($id,$user['userId']);
-				if(!empty($data['problem_privilege'])){//用户有权限
+				$data['problem_privilege']=$this->contest_model->get_contest_privilege($id,$user['userId']);
+				if((!empty($data['problem_privilege']))||($user['type'] == "administrator") ){
+					//用户有权限,这里由于用户的读权限是最低权限所以没有多判断，有其他权限肯定是可以读的
 					$data['permission']="yes";
 				}else{
 					$this->error->show_error("你还没有此竞赛权限",array("此竞赛需要相应权限"),$data);

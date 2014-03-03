@@ -2,188 +2,271 @@ CREATE DATABASE scutoj;
 
 USE scutoj;
 
-CREATE TABLE user(
-userId INT(11) NOT NULL AUTO_INCREMENT,
-name VARCHAR(20) NOT NULL UNIQUE,
-email VARCHAR(100) NOT NULL UNIQUE,
-password VARCHAR(50) NOT NULL,
-salt VARCHAR(40) NOT NULL,
-type VARCHAR(10),
-programLan VARCHAR(10),
-language VARCHAR(20),
-regTime DATETIME,
-nick VARCHAR(50),
-school VARCHAR(50),
-defunct TINYINT(0) NOT NULL DEFAULT 0 ,
-PRIMARY KEY(userId),
-KEY(name),
-KEY(email)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;
+DROP TABLE IF EXISTS `ci_sessions`;
+CREATE TABLE `ci_sessions` (
+  `session_id` varchar(40) NOT NULL DEFAULT '0',
+  `ip_address` varchar(45) NOT NULL DEFAULT '0',
+  `user_agent` varchar(120) NOT NULL,
+  `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_data` text NOT NULL,
+  PRIMARY KEY (`session_id`),
+  KEY `last_activity_idx` (`last_activity`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE user_state(
-userId INT(11) NOT NULL,
-accessTime DATETIME ,
-submit INT(11) DEFAULT 0,
-solved INT(11) DEFAULT 0,
-PRIMARY KEY(userId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `compile_info`;
+CREATE TABLE `compile_info` (
+  `solutionId` int(11) NOT NULL,
+  `error` text,
+  PRIMARY KEY (`solutionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE login_log(
-info VARCHAR(50) NOT NULL,
-password VARCHAR(32) NOT NULL,
-ip VARCHAR(20),
-time DATETIME,
-result TINYINT(2)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `contest`;
+CREATE TABLE `contest` (
+  `contestId` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) DEFAULT '',
+  `startTime` datetime DEFAULT NULL,
+  `endTime` datetime DEFAULT NULL,
+  `defunct` tinyint(4) NOT NULL DEFAULT '0',
+  `description` text,
+  `private` tinyint(4) NOT NULL DEFAULT '0',
+  `language` int(11) DEFAULT NULL,
+  PRIMARY KEY (`contestId`)
+) ENGINE=InnoDB AUTO_INCREMENT=11000 DEFAULT CHARSET=utf8;
 
-CREATE TABLE news(
-newsId INT(11) NOT NULL,
-userId INT(11) NOT NULL,
-title VARCHAR(200) NOT NULL,
-cotent TEXT NOT NULL,
-startTime DATETIME NOT NULL,
-endTime DATETIME NOT NULL,
-source VARCHAR(50),
-defunct TINYINT(0) NOT NULL DEFAULT 0,
-PRIMARY KEY(newsId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;
+DROP TABLE IF EXISTS `contest_problem`;
+CREATE TABLE `contest_problem` (
+  `problemId` int(11) NOT NULL,
+  `contestId` int(11) NOT NULL,
+  `num` int(11) NOT NULL,
+  PRIMARY KEY (`contestId`,`problemId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE problem(
-problemId INT(11) NOT NULL AUTO_INCREMENT,
-title VARCHAR(200) NOT NULL,
-description TEXT ,
-input TEXT,
-output TEXT,
-sampleInput TEXT,
-sampleOutput TEXT,
-hint TEXT,
-source VARCHAR(200),
-inDate DATETIME ,
-timeLimit INT(11) NOT NULL,
-memoryLimit INT(11) NOT NULL,
-defunct TINYINT(0) NOT NULL DEFAULT 0,
-accepted INT(11) NOT NULL DEFAULT 0,
-submit INT(11) NOT NULL DEFAULT 0,
-PRIMARY KEY(problemId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;
-
-CREATE TABLE problem_privilege(
-problemId INT(11) NOT NULL,
-userId INT(11) NOT NULL,
-priType VARCHAR(10) NOT NULL
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE solution(
-solutionId INT(11) NOT NULL AUTO_INCREMENT,
-problemId INT(11) NOT NULL,
-userId INT(11) NOT NULL,
-runTime INT(11) NOT NULL,
-memory INT(11) NOT NULL,
-inDate DATETIME ,
-result SMALLINT(6) NOT NULL,
-programLan INT(11) NOT NULL,
-contestId INT(11),
-unitId INT(11),
-valid TINYINT(0),
-judgeTime DATETIME ,
-codeLen INT(11),
-PRIMARY KEY(solutionId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;
-
-CREATE TABLE solution_code(
-solutionId INT(11) NOT NULL,
-code TEXT,
-PRIMARY KEY(solutionId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE compile_info(
-solutionId INT(11) NOT NULL,
-error TEXT,
-PRIMARY KEY(problemId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `course`;
+CREATE TABLE `course` (
+  `courseId` int(11) NOT NULL AUTO_INCREMENT,
+  `userId` int(11) NOT NULL,
+  `name` varchar(40) NOT NULL,
+  `begainTime` datetime NOT NULL,
+  `endTime` datetime NOT NULL,
+  `defunct` tinyint(3) NOT NULL DEFAULT '0',
+  `private` tinyint(3) NOT NULL,
+  `language` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`courseId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-CREATE TABLE runtime_info(
-solutionId INT(11) NOT NULL,
-error TEXT,
-PRIMARY KEY(problemId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `course_unit`;
+CREATE TABLE `course_unit` (
+  `unitId` int(11) NOT NULL,
+  `courseId` int(11) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  PRIMARY KEY (`unitId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE sim(
-solutionId INT(11) NOT NULL,
-simSolutionId INT(11) NOT NULL,
-sim TINYINT(3) NOT NULL
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE contest(
-contestId INT(11) NOT NULL AUTO_INCREMENT,
-title VARCHAR(200) DEFAULT '',
-startTime DATETIME ,
-endTime DATETIME,
-defunct TINYINT(0) NOT NULL DEFAULT 0,
-description TEXT,
-private TINYINT(0) NOT NULL DEFAULT 0,
-language VARCHAR(20) NOT NULL ,
-PRIMARY KEY(contestId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;
-
-CREATE TABLE contest_problem(
-problemId INT(11) NOT NULL,
-contestId INT(11) NOT NULL,
-title VARCHAR(200) NOT NULL,
-num INT(11) NOT NULL
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE contest_privilege(
-contestId INT(11) NOT NULL,
-userId INT(11) NOT NULL,
-priType VARCHAR(10) NOT NULL
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE course(
-courseId INT(11) NOT NULL AUTO_INCREMENT,
-userId INT(11) NOT NULL,
-name VARCHAR(40) NOT NULL,
-begainTime DATETIME NOT NULL,
-endTime DATETIME NOT NULL,
-defunct TINYINT(3) NOT NULL DEFAULT 0,
-private TINYINT(3) NOT NULL,
-language VARCHAR(30),
-PRIMARY KEY(courseId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT = 10000;
-
-CREATE TABLE course_unit(
-unitId INT(11) NOT NULL,
-courseId INT(11) NOT NULL,
-title VARCHAR(200) NOT NULL,
-PRIMARY KEY(unitId)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE unit_problem(
-unitId INT(11) NOT NULL,
-problemId INT(11) NOT NULL
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-CREATE TABLE course_privilege(
-courseId INT(11) NOT NULL,
-userId INT(11) NOT NULL,
-type VARCHAR(10) NOT NULL
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+DROP TABLE IF EXISTS `custom_input`;
 CREATE TABLE `custom_input` (
   `solutionId` int(11) NOT NULL DEFAULT '0',
   `inputText` text,
   PRIMARY KEY (`solutionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS  `ci_sessions` (
-  session_id varchar(40) DEFAULT '0' NOT NULL,
-  ip_address varchar(45) DEFAULT '0' NOT NULL,
-  user_agent varchar(120) NOT NULL,
-  last_activity int(10) unsigned DEFAULT 0 NOT NULL,
-  user_data text DEFAULT '' NOT NULL,
-  PRIMARY KEY (session_id),
-  KEY `last_activity_idx` (`last_activity`)
-);
 
+DROP TABLE IF EXISTS `login_log`;
+CREATE TABLE `login_log` (
+  `info` varchar(50) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `ip` varchar(20) DEFAULT NULL,
+  `time` datetime DEFAULT NULL,
+  `result` tinyint(2) DEFAULT NULL,
+  KEY `info_idx` (`info`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `news`;
+CREATE TABLE `news` (
+  `newsId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `cotent` text NOT NULL,
+  `startTime` datetime NOT NULL,
+  `endTime` datetime NOT NULL,
+  `source` varchar(50) DEFAULT NULL,
+  `defunct` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`newsId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `privileg_common`;
+CREATE TABLE `privileg_common` (
+  `userId` int(11) NOT NULL,
+  `commonId` int(11) NOT NULL,
+  `common` varchar(15) NOT NULL,
+  `privilege` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`userId`,`commonId`,`common`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+DROP TABLE IF EXISTS `problem`;
+CREATE TABLE `problem` (
+  `problemId` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(200) NOT NULL,
+  `description` text,
+  `input` text,
+  `output` text,
+  `sampleInput` text,
+  `sampleOutput` text,
+  `hint` text,
+  `source` varchar(200) DEFAULT NULL,
+  `inDate` datetime DEFAULT NULL,
+  `timeLimit` int(11) NOT NULL,
+  `memoryLimit` int(11) NOT NULL,
+  `defunct` tinyint(4) NOT NULL DEFAULT '0',
+  `accepted` int(11) NOT NULL DEFAULT '0',
+  `submit` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`problemId`)
+) ENGINE=InnoDB AUTO_INCREMENT=11023 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `runtime_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+CREATE TABLE `runtime_info` (
+  `solutiondId` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`solutiondId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `sim`;
+CREATE TABLE `sim` (
+  `solutionId` int(11) NOT NULL,
+  `simSolutionId` int(11) NOT NULL,
+  `sim` tinyint(3) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+-
+-- Table structure for table `solution`
+--
+--
+-- Dumping data for table `sim`
+--
+
+LOCK TABLES `sim` WRITE;
+/*!40000 ALTER TABLE `sim` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sim` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `solution`
+--
+
+DROP TABLE IF EXISTS `solution`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `solution` (
+  `solutionId` int(11) NOT NULL AUTO_INCREMENT,
+  `problemId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `runTime` int(11) NOT NULL,
+  `memory` int(11) NOT NULL,
+  `inDate` datetime DEFAULT NULL,
+  `result` smallint(6) NOT NULL,
+  `programLan` int(11) DEFAULT NULL,
+  `contestId` int(11) DEFAULT NULL,
+  `unitId` int(11) DEFAULT NULL,
+  `valid` tinyint(4) DEFAULT NULL,
+  `judgeTime` datetime DEFAULT NULL,
+  `codeLen` int(11) DEFAULT NULL,
+  PRIMARY KEY (`solutionId`),
+  KEY `userId_id` (`userId`)
+) ENGINE=InnoDB AUTO_INCREMENT=11024 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `solution`
+--
+
+LOCK TABLES `solution` WRITE;
+/*!40000 ALTER TABLE `solution` DISABLE KEYS */;
+/*!40000 ALTER TABLE `solution` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `solution_code`
+--
+
+DROP TABLE IF EXISTS `solution_code`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `solution_code` (
+  `solutionId` int(11) NOT NULL,
+  `code` text,
+  PRIMARY KEY (`solutionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `solution_code`
+--
+
+LOCK TABLES `solution_code` WRITE;
+/*!40000 ALTER TABLE `solution_code` DISABLE KEYS */;
+/*!40000 ALTER TABLE `solution_code` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `unit_problem`
+--
+
+DROP TABLE IF EXISTS `unit_problem`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `unit_problem` (
+  `unitId` int(11) NOT NULL,
+  `problemId` int(11) NOT NULL,
+  PRIMARY KEY (`unitId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `unit_problem`
+--
+
+LOCK TABLES `unit_problem` WRITE;
+/*!40000 ALTER TABLE `unit_problem` DISABLE KEYS */;
+/*!40000 ALTER TABLE `unit_problem` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `userId` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `salt` varchar(40) NOT NULL,
+  `type` varchar(10) DEFAULT NULL,
+  `programLan` tinyint(4) DEFAULT '0',
+  `language` varchar(20) DEFAULT NULL,
+  `regTime` datetime DEFAULT NULL,
+  `nick` varchar(50) DEFAULT NULL,
+  `school` varchar(50) DEFAULT NULL,
+  `defunct` tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`userId`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=11006 DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `user_state`;
+CREATE TABLE `user_state` (
+  `userId` int(11) NOT NULL,
+  `accessTime` datetime DEFAULT NULL,
+  `submit` int(11) DEFAULT '0',
+  `solved` int(11) DEFAULT '0',
+  PRIMARY KEY (`userId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
