@@ -203,7 +203,7 @@ class User extends CI_Controller {
 		$user = $data['user'];
 
 		$this->load->model('user_model','umodel');
-		$data['log_list'] = $this->umodel->get_login_log_list($user['name']);
+		$data['log_list'] = $this->umodel->get_login_log_list($user['name'],$user['email']);
 		$this->load->view('common/header',$data);
 		$this->load->view('student/history');
 		$this->load->view('common/footer');		

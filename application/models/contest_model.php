@@ -15,7 +15,7 @@ class Contest_model extends CI_Model
 	{
 		$userId = $this->db->escape($userId);
 		$contestId = $this->db->escape($contestId);
-		$sql = "select * from common_privilege where common = contest and userId = ".$userId." and commonId = ".$contestId;
+		$sql = "select * from privilege_common where common = 'contest' and userId = ".$userId." and commonId = ".$contestId;
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -29,7 +29,6 @@ class Contest_model extends CI_Model
 	$problem_array=array('problemId','title','source','accepted','submit'),$order_by="contest_problem.num",$is_desc=FALSE,
 	$limit_from=0,$limit_row=10)
 	{
-		$sql="SELCET ";
 		for($i=0;$i<count($contest_problem_array);$i++){
 			$contest_problem_array[$i]="contest_problem.".$contest_problem_array[$i];
 		}
@@ -37,7 +36,8 @@ class Contest_model extends CI_Model
 			$problem_array[$i]="problem.".$problem_array[$i];
 		}
 		$sql="SELECT ".implode(" , ",$contest_problem_array)." , ".implode(" , ",$problem_array).
-		" FROM contest_problem INNER JOIN problem ON contest_problem.problemId = problem.problemId WHERE contest_problem.contestId = ".$this->db->escape($contestId)." ";
+		" FROM contest_problem INNER JOIN problem ON contest_problem.problemId = problem.problemId WHERE 
+		contest_problem.contestId = ".$this->db->escape($contestId)." ";
 		$sql=$sql." ORDER BY ".$order_by." ";
 		if($is_desc===TRUE)
 		$sql=$sql." DESC ";

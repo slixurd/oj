@@ -15,7 +15,7 @@
 						<i class="ic_ud_sel"></i>
 						<select name="language">
 							<?php foreach ($lan as $index => $l) { ?>
-								<option value='<?php echo $index; ?>' <?php if(($user['programLan']==NULL && $index == 1)|| $user['programLan']===$index ) echo 'select="selected"'?>><?php echo $l; ?></option>
+								<option value='<?php echo $index; ?>' <?php if(($user['programLan']==NULL && $index == 1)|| $user['programLan']===$index ) echo 'selected="selected"'?>><?php echo $l; ?></option>
 							<?php } ?>
 						</select>
 					</div>

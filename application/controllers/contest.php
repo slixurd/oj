@@ -109,8 +109,6 @@ class Contest extends CI_Controller {
 		$user=$data['user'];
 		$data['contest_item']=$this->oj_model->get_contest_item($id);
 		$data['contest_problem_list']=$this->contest_model->get_contest_problem_list($id);
-		$user_type = $this->user_model->get_user_item_id($user['userId'],array('type'));
-		$user['type'] = $user_type;
 		if(empty($data['contest_item'])){
 			$this->error->show_error("没有对应竞赛的ID",array("找不到对应的竞赛ID"),$data);
 			return;
@@ -123,6 +121,8 @@ class Contest extends CI_Controller {
 				$this->error->show_error("你还没有登录",array("此竞赛需要权限，请先登录","点击右上角登录"),$data);
 				return;
 			}else{//用户登录
+				$user_type = $this->user_model->get_user_item_id($user['userId'],array('type'));
+				$user['type'] = $user_type;
 				$data['permission']="no";
 				$data['problem_privilege']=$this->contest_model->get_contest_privilege($id,$user['userId']);
 				if((!empty($data['problem_privilege']))||($user['type'] == "administrator") ){

@@ -130,8 +130,9 @@ class User_model extends CI_Model
 				" and result = 4 GROUP BY problemId";
 		$sql2 = "SELECT title,result,problem.problemId 
 				FROM solution left join problem ON solution.problemId=problem.problemId 
-				WHERE userId = ".$this->db->escape($id).
-				" GROUP BY problemId HAVING result != 4";
+				WHERE userId = ".$this->db->escape($id)." and solution.problemId not in (SELECT problemId 
+				FROM solution WHERE userId = ".$this->db->escape($id).
+				" and result = 4 GROUP BY problemId) group by solution.problemId";
 		$query1 = $this->db->query($sql1);
 		$query2 = $this->db->query($sql2);
 		$result1 = $query1->result_array();
@@ -143,10 +144,11 @@ class User_model extends CI_Model
 	 *获取用户登录记录，包括有成功的和没有成功的
 	 */
 	 
-	public function get_login_log_list($name)
+	public function get_login_log_list($name,$email)
 	{
 		$name = $this->db->escape($name);
-		$sql = "SELECT ip,time,result FROM login_log WHERE info = ".$name;
+		$email = $this->db->escape($email);
+		$sql = "SELECT ip,time,result FROM login_log WHERE info = ".$name." OR info = ".$email;
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}

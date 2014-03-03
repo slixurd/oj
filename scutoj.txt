@@ -2,7 +2,6 @@ CREATE DATABASE scutoj;
 
 USE scutoj;
 
-DROP TABLE IF EXISTS `ci_sessions`;
 CREATE TABLE `ci_sessions` (
   `session_id` varchar(40) NOT NULL DEFAULT '0',
   `ip_address` varchar(45) NOT NULL DEFAULT '0',
@@ -13,14 +12,14 @@ CREATE TABLE `ci_sessions` (
   KEY `last_activity_idx` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-DROP TABLE IF EXISTS `compile_info`;
+
 CREATE TABLE `compile_info` (
   `solutionId` int(11) NOT NULL,
   `error` text,
   PRIMARY KEY (`solutionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `contest`;
+
 CREATE TABLE `contest` (
   `contestId` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) DEFAULT '',
@@ -29,11 +28,9 @@ CREATE TABLE `contest` (
   `defunct` tinyint(4) NOT NULL DEFAULT '0',
   `description` text,
   `private` tinyint(4) NOT NULL DEFAULT '0',
-  `language` int(11) DEFAULT NULL,
+  `programLan` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`contestId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11000 DEFAULT CHARSET=utf8;
-
-DROP TABLE IF EXISTS `contest_problem`;
 CREATE TABLE `contest_problem` (
   `problemId` int(11) NOT NULL,
   `contestId` int(11) NOT NULL,
@@ -41,7 +38,6 @@ CREATE TABLE `contest_problem` (
   PRIMARY KEY (`contestId`,`problemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `course`;
 CREATE TABLE `course` (
   `courseId` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
@@ -50,12 +46,10 @@ CREATE TABLE `course` (
   `endTime` datetime NOT NULL,
   `defunct` tinyint(3) NOT NULL DEFAULT '0',
   `private` tinyint(3) NOT NULL,
-  `language` varchar(30) DEFAULT NULL,
+  `programLan` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`courseId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-DROP TABLE IF EXISTS `course_unit`;
 CREATE TABLE `course_unit` (
   `unitId` int(11) NOT NULL,
   `courseId` int(11) NOT NULL,
@@ -63,8 +57,6 @@ CREATE TABLE `course_unit` (
   PRIMARY KEY (`unitId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-DROP TABLE IF EXISTS `custom_input`;
 CREATE TABLE `custom_input` (
   `solutionId` int(11) NOT NULL DEFAULT '0',
   `inputText` text,
@@ -72,7 +64,6 @@ CREATE TABLE `custom_input` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `login_log`;
 CREATE TABLE `login_log` (
   `info` varchar(50) NOT NULL,
   `password` varchar(32) NOT NULL,
@@ -83,7 +74,6 @@ CREATE TABLE `login_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `news`;
 CREATE TABLE `news` (
   `newsId` int(11) NOT NULL,
   `userId` int(11) NOT NULL,
@@ -97,19 +87,15 @@ CREATE TABLE `news` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-DROP TABLE IF EXISTS `privileg_common`;
-CREATE TABLE `privileg_common` (
+CREATE TABLE `privilege_common` (
   `userId` int(11) NOT NULL,
   `commonId` int(11) NOT NULL,
   `common` varchar(15) NOT NULL,
-  `privilege` varchar(30) DEFAULT NULL,
+  `privilege` tinyint(4) NOT NULL,
   PRIMARY KEY (`userId`,`commonId`,`common`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
-
-DROP TABLE IF EXISTS `problem`;
 CREATE TABLE `problem` (
   `problemId` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(200) NOT NULL,
@@ -129,40 +115,20 @@ CREATE TABLE `problem` (
   PRIMARY KEY (`problemId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11023 DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `runtime_info`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
+
 CREATE TABLE `runtime_info` (
   `solutiondId` int(11) NOT NULL DEFAULT '0',
+  `error` text,
   PRIMARY KEY (`solutiondId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-
-DROP TABLE IF EXISTS `sim`;
 CREATE TABLE `sim` (
   `solutionId` int(11) NOT NULL,
   `simSolutionId` int(11) NOT NULL,
   `sim` tinyint(3) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
--
--- Table structure for table `solution`
---
---
--- Dumping data for table `sim`
---
 
-LOCK TABLES `sim` WRITE;
-/*!40000 ALTER TABLE `sim` DISABLE KEYS */;
-/*!40000 ALTER TABLE `sim` ENABLE KEYS */;
-UNLOCK TABLES;
 
---
--- Table structure for table `solution`
---
-
-DROP TABLE IF EXISTS `solution`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `solution` (
   `solutionId` int(11) NOT NULL AUTO_INCREMENT,
   `problemId` int(11) NOT NULL,
@@ -180,68 +146,18 @@ CREATE TABLE `solution` (
   PRIMARY KEY (`solutionId`),
   KEY `userId_id` (`userId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11024 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `solution`
---
-
-LOCK TABLES `solution` WRITE;
-/*!40000 ALTER TABLE `solution` DISABLE KEYS */;
-/*!40000 ALTER TABLE `solution` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `solution_code`
---
-
-DROP TABLE IF EXISTS `solution_code`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `solution_code` (
   `solutionId` int(11) NOT NULL,
   `code` text,
   PRIMARY KEY (`solutionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `solution_code`
---
-
-LOCK TABLES `solution_code` WRITE;
-/*!40000 ALTER TABLE `solution_code` DISABLE KEYS */;
-/*!40000 ALTER TABLE `solution_code` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `unit_problem`
---
-
-DROP TABLE IF EXISTS `unit_problem`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `unit_problem` (
   `unitId` int(11) NOT NULL,
   `problemId` int(11) NOT NULL,
   PRIMARY KEY (`unitId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `unit_problem`
---
-
-LOCK TABLES `unit_problem` WRITE;
-/*!40000 ALTER TABLE `unit_problem` DISABLE KEYS */;
-/*!40000 ALTER TABLE `unit_problem` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `userId` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL,
@@ -260,8 +176,6 @@ CREATE TABLE `user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11006 DEFAULT CHARSET=utf8;
 
-
-DROP TABLE IF EXISTS `user_state`;
 CREATE TABLE `user_state` (
   `userId` int(11) NOT NULL,
   `accessTime` datetime DEFAULT NULL,
@@ -269,4 +183,3 @@ CREATE TABLE `user_state` (
   `solved` int(11) DEFAULT '0',
   PRIMARY KEY (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
