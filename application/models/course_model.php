@@ -18,7 +18,7 @@ class Course_model extends CI_Model
 	{
 		$limit_from = $this->db->escape($limit_from);
 		$limit_row = $this->db->escape($limit_row);
-		$sql = "SELECT courseId , course.userId , course.name as courseName ,begainTime ,endTime,private, course.programLan ,
+		$sql = "SELECT courseId , course.userId , course.name as courseName ,startTime ,endTime,private, course.programLan ,
 			user.name FROM course LEFT JOIN user ON course.userId = user.userId LIMIT ".$limit_from." , ".$limit_row;
 		$query = $this->db->query($sql);
 		return $query->result_array();
@@ -45,7 +45,7 @@ class Course_model extends CI_Model
 	public function get_course_item($courseId)
 	{
 		$courseId = $this->db->escape($courseId);
-		$sql = "SELECT courseId , course.userId , course.name as courseName ,begainTime ,endTime,private, course.programLan, 
+		$sql = "SELECT courseId , course.userId , course.name as courseName ,startTime ,endTime,private, course.programLan, 
 			user.name FROM course LEFT JOIN user ON course.userId = user.userId WHERE courseId = ".$courseId;
 		$query = $this->db->query($sql);
 		return $query->row_array(0);
@@ -63,6 +63,47 @@ class Course_model extends CI_Model
 		$sql = "SELECT * FROM privilege_common WHERE common = 'course' AND userId = ".$userId." AND commonId = ".$courseId;
 		$query = $this->db->query($sql);
 		return $query->result_array();
+	}
+	
+	
+	/*
+	 * add_course函数插入课程和课程权限,$private 0为私有，1为公开，一般设为私有就好
+	 * 返回插入的课程id
+	 */
+	 
+	public function add_course($userId,$name,$startTime,$endTime,$private,$programLan)
+	{
+		$defunct = 0;
+		$column_array = array('userId'=>$userId,'name'=>$userId,'startTime'=>$startTime,'endTime'=>$endTime,'private'=>$private,
+		'defunct'=>$defunct,'programLan'=>$programLan);
+		$userId = $column_array['userId'];
+		$this->db->insert('course',$column_array);
+		$courseId = $this->db->insert_id();
+		$privilege_array = array('userId'=>$userId,'commonId'=>$courseId,'common'=>"course",'privilege'=>"teacher");
+		$this->db->insert('privilege_common',$privilege_array);
+		return $courseId;
+	}
+	
+	/*
+	 * add_course_unit添加课程单元,请注意检查用户权限
+	 * 返回unitId
+	 */
+	 
+	public function add_course_unit($courseId,$title)
+	{
+		$column_array = array('courseId'=>$courseId,'title'=>$title);
+		$this->db->insert('course_unit',$column_array);
+		return $this->db->insert_id();
+	}
+	
+	/*
+	 * 添加单元问题
+	 */
+	 
+	public function add_unit_problem($unitId,$problemId)
+	{
+		$column_array = array('unitId'=>$unitId,'problemId'=>$problemId);
+		$this->db->insert('unit_problem',$column_array);
 	}
 	
 }

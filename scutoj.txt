@@ -31,6 +31,7 @@ CREATE TABLE `contest` (
   `programLan` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`contestId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11000 DEFAULT CHARSET=utf8;
+
 CREATE TABLE `contest_problem` (
   `problemId` int(11) NOT NULL,
   `contestId` int(11) NOT NULL,
@@ -42,7 +43,7 @@ CREATE TABLE `course` (
   `courseId` int(11) NOT NULL AUTO_INCREMENT,
   `userId` int(11) NOT NULL,
   `name` varchar(40) NOT NULL,
-  `begainTime` datetime NOT NULL,
+  `startTime` datetime NOT NULL,
   `endTime` datetime NOT NULL,
   `defunct` tinyint(3) NOT NULL DEFAULT '0',
   `private` tinyint(3) NOT NULL,
@@ -51,11 +52,11 @@ CREATE TABLE `course` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `course_unit` (
-  `unitId` int(11) NOT NULL,
+  `unitId` int(11) NOT NULL AUTO_INCREMENT,
   `courseId` int(11) NOT NULL,
   `title` varchar(200) NOT NULL,
-  PRIMARY KEY (`unitId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`unitId`,`courseId`)
+) ENGINE=InnoDB  AUTO_INCREMENT=11000 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `custom_input` (
   `solutionId` int(11) NOT NULL DEFAULT '0',
@@ -91,7 +92,7 @@ CREATE TABLE `privilege_common` (
   `userId` int(11) NOT NULL,
   `commonId` int(11) NOT NULL,
   `common` varchar(15) NOT NULL,
-  `privilege` tinyint(4) NOT NULL,
+  `privilege` varchar(30) NOT NULL,
   PRIMARY KEY (`userId`,`commonId`,`common`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -152,10 +153,11 @@ CREATE TABLE `solution_code` (
   `code` text,
   PRIMARY KEY (`solutionId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE `unit_problem` (
   `unitId` int(11) NOT NULL,
   `problemId` int(11) NOT NULL,
-  PRIMARY KEY (`unitId`)
+  PRIMARY KEY (`unitId`,`problemId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `user` (
