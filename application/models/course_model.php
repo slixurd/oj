@@ -5,6 +5,12 @@ class Course_model extends CI_Model
 	public function __construct()
 	{
 		$this->load->database();
+		Global $pri ;
+		$pri['read'] = "read";
+		$pri['submit'] = "edit";
+		$pri['add'] = "add";
+		$pri['edit'] = "edit";
+		//用之前请先声明Global $pri
 	}
 	
 	
@@ -33,7 +39,7 @@ class Course_model extends CI_Model
 	public function get_course_unit_list($courseId)
 	{
 		$courseId = $this->db->escape($courseId);
-		$sql = "SELECT unitId , courseId , title FROM course_unit";
+		$sql = "SELECT unitId , courseId , title ,startTime , endTime FROM course_unit";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -104,6 +110,20 @@ class Course_model extends CI_Model
 	{
 		$column_array = array('unitId'=>$unitId,'problemId'=>$problemId);
 		$this->db->insert('unit_problem',$column_array);
+	}
+	
+	/*
+	 * 获取单元课程列表
+	 */
+	 
+	public function get_unit_problem_list($unitId)
+	{
+		$unitId = $this->db->escape($unitId);
+		$sql = "SELECT unitId , unit_problem.problemId , problem.title , problem.accepted , problem.submit 
+				FROM unit_problem LEFT JOIN problem ON unit_problem.problemId = problem.problemId 
+				WHERE unit_problem.unitId =  ".$unitId;
+		$query = $this->db->query($sql);
+		return $query->result_array();
 	}
 	
 }
