@@ -10,6 +10,7 @@ class Course_model extends CI_Model
 		$pri['submit'] = "edit";
 		$pri['add'] = "add";
 		$pri['edit'] = "edit";
+		$pri['del'] = "del";
 		//用之前请先声明Global $pri
 	}
 	
@@ -79,14 +80,18 @@ class Course_model extends CI_Model
 	 
 	public function add_course($userId,$name,$startTime,$endTime,$private,$programLan)
 	{
+		Global $pri;
 		$defunct = 0;
 		$column_array = array('userId'=>$userId,'name'=>$userId,'startTime'=>$startTime,'endTime'=>$endTime,'private'=>$private,
 		'defunct'=>$defunct,'programLan'=>$programLan);
 		$userId = $column_array['userId'];
 		$this->db->insert('course',$column_array);
 		$courseId = $this->db->insert_id();
-		$privilege_array = array('userId'=>$userId,'commonId'=>$courseId,'common'=>"course",'privilege'=>"teacher");
-		$this->db->insert('privilege_common',$privilege_array);
+		$privilege_array = array('userId'=>$userId,'commonId'=>$courseId,'common'=>"course");
+		foreach($pri as $pri_type){
+			$privilege_array['privilege'] = $pri_type;
+			$this->db->insert('privilege_common',$privilege_array);
+		}
 		return $courseId;
 	}
 	

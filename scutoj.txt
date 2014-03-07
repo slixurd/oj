@@ -93,7 +93,7 @@ CREATE TABLE `privilege_common` (
   `commonId` int(11) NOT NULL,
   `common` varchar(15) NOT NULL,
   `privilege` varchar(30) NOT NULL,
-  PRIMARY KEY (`userId`,`commonId`,`common`)
+  KEY `pri_idx` (`userId`,`commonId`,`common`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
