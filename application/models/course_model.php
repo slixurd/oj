@@ -13,7 +13,19 @@ class Course_model extends CI_Model
 		$pri['del'] = "del";
 		//用之前请先声明Global $pri
 	}
-	
+	/*
+	 * 获取课程数量方便分页
+	 * 返回一个整数
+	 */
+
+	public function get_course_count()
+	{
+		$sql = "SELECT COUNT(courseId) as num
+				FROM course LEFT JOIN user ON course.userId = user.userId";
+		$query = $this->db->query($sql);
+		$q = $query->row_array();
+		return $q['num'];
+	}	
 	
 	/*
 	 * 获取课程列表
@@ -25,8 +37,10 @@ class Course_model extends CI_Model
 	{
 		$limit_from = $this->db->escape($limit_from);
 		$limit_row = $this->db->escape($limit_row);
-		$sql = "SELECT courseId , course.userId , course.name as courseName ,startTime ,endTime,private, course.programLan ,
-			user.name FROM course LEFT JOIN user ON course.userId = user.userId LIMIT ".$limit_from." , ".$limit_row;
+		$sql = "SELECT courseId , course.userId , course.name as courseName ,
+					startTime ,endTime,private, course.programLan ,	user.name 
+				FROM course LEFT JOIN user ON course.userId = user.userId 
+				LIMIT ".$limit_from." , ".$limit_row;
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -40,7 +54,8 @@ class Course_model extends CI_Model
 	public function get_course_unit_list($courseId)
 	{
 		$courseId = $this->db->escape($courseId);
-		$sql = "SELECT unitId , courseId , title ,startTime , endTime FROM course_unit";
+		$sql = "SELECT unitId , courseId , title ,startTime , endTime FROM course_unit
+				WHERE courseId = ".$courseId;
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -52,8 +67,10 @@ class Course_model extends CI_Model
 	public function get_course_item($courseId)
 	{
 		$courseId = $this->db->escape($courseId);
-		$sql = "SELECT courseId , course.userId , course.name as courseName ,startTime ,endTime,private, course.programLan, 
-			user.name FROM course LEFT JOIN user ON course.userId = user.userId WHERE courseId = ".$courseId;
+		$sql = "SELECT courseId , course.userId , course.name as courseName ,
+					startTime ,endTime,private, course.programLan, user.name 
+				FROM course LEFT JOIN user ON course.userId = user.userId 
+				WHERE courseId = ".$courseId;
 		$query = $this->db->query($sql);
 		return $query->row_array(0);
 	}
@@ -63,13 +80,18 @@ class Course_model extends CI_Model
 	 * 返回值为二维数组返回用户对改题目持有的所有权限
 	 */
 	 
-	public function get_course_privilege($courseId,$userId)
+	public function get_course_privilege($courseId,$userId,$kind)
 	{
 		$userId = $this->db->escape($userId);
 		$coursetId = $this->db->escape($courseId);
-		$sql = "SELECT * FROM privilege_common WHERE common = 'course' AND userId = ".$userId." AND commonId = ".$courseId;
+		$sql = "SELECT * FROM privilege_common 
+				WHERE common = 'course' AND userId = ".$userId." AND commonId = ".$courseId;
 		$query = $this->db->query($sql);
-		return $query->result_array();
+		foreach ($query->result_array() as $pri) {
+			if($kind == $pri['privilege'])
+				return TRUE;
+		}
+		return FALSE;
 	}
 	
 	

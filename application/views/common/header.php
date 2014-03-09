@@ -38,13 +38,17 @@
 
 				var base="<?php echo site_url("") ?>";
 
-			//表格的超链接
+			//题目列表的超链接
 				$("#problem-list tbody tr").on("click",function(){
 					window.location.href = '<?php echo site_url("problem/get_problem") ?>/'+$(this).find("td:first-child").text();
 				});
-			//表格的超链接
+			//比赛的超链接
 				$("#contest-list tbody tr").on("click",function(){
 					window.location.href = '<?php echo site_url("contest/get_contest") ?>/'+$(this).find("td:first-child").text();
+				});
+			//课程的超链接
+				$("#course-list tbody tr").on("click",function(){
+					window.location.href = '<?php echo site_url("course/detail") ?>/'+$(this).find("td:first-child").text();
 				});
 			//页面高度
 				//54 for header's outerHeight,58for footer's .the 40 is margin of wrapper.
