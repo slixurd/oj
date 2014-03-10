@@ -6,7 +6,7 @@
 
 		<h4>Problem ID: <span><?php echo $problemId; ?></span></h4>
 		<div class="submit-code">
-			<form action="<?php echo site_url('problem_submit/submit') ;?>" method="post">
+			<form action="<?php echo site_url('problem_submit/submit');if($loc!=0) echo '/'.$loc.'/'.$loc_id;?>" method="post">
 				<div>
 					<span>语言</span>
 

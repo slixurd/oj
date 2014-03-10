@@ -50,7 +50,8 @@
 					<span><?php echo $problem['source'] ?></span>
 				</div>	
 				<div class="button-side">
-					<button class="common-button" onclick="window.location.href = '<?php echo site_url("problem_submit/index")."/".$problem['problemId'] ?>'">提交</button>
+					<button class="common-button" onclick="window.location.href = '<?php echo site_url("problem_submit/index")."/".$problem['problemId'];
+						if($loc!=0) echo "/".$loc."/".$loc_id; ?>'">提交</button>
 					<button class="common-button">状态</button>
 				</div>		
 			</div>

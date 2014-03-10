@@ -11,7 +11,7 @@
         </div>
         
         
-        <table id="problem-list" class="table">
+        <table class="table">
             <thead>
                 <tr>
                     <th class='span1'>ID</th>
@@ -26,7 +26,7 @@
                     echo "<tr><td colspan='4' class='empty-answer'>搜索结果为空</td></tr>"
                 ?>  
                 <?php foreach($contest_problem_list as $contest_problem): ?>
-                <tr>
+                <tr onclick="document.location='<?php echo site_url('problem/get_problem').'/'.$contest_problem['problemId'].'/1/'.$cid; ?>' ">
                     <td><?php echo $contest_problem['problemId']; ?></td>
                     <td><?php echo $contest_problem['title']; ?></td>
                     <td><?php echo $contest_problem['accepted']; ?></td>

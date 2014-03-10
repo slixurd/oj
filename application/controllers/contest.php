@@ -98,6 +98,7 @@ class Contest extends CI_Controller {
 	
 	public function get_contest($id){
 		Global $data;
+		$data['page_title'] = "竞赛";
 		$this->load->model('contest_model');
 		$this->load->model('user_model');
 		if(!is_numeric($id)){
@@ -133,6 +134,7 @@ class Contest extends CI_Controller {
 					return;
 				}
 			}
+			$data['cid'] = $id;
 			$this->load->view('common/header',$data);
 			$this->load->view('contest_item_view',$data);
 			$this->load->view('common/footer',$data);

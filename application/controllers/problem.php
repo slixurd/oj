@@ -4,15 +4,15 @@ class Problem extends CI_Controller {
 
 	 
 	public function __construct()
-  {
-    parent::__construct();
-  }
+	{
+		parent::__construct();
+	}
 
-/**
- * 这里的表单直接用的post传递过来就可以了
- * s_title,s_id
- */
-  
+	/**
+	 * 这里的表单直接用的post传递过来就可以了
+	 * s_title,s_id
+	 */
+
 	public function index($page=1)
 	{
 		Global $data;
@@ -139,14 +139,30 @@ class Problem extends CI_Controller {
 		}
 		
 	}
-	
-	public function get_problem($id)
+
+	/*
+	 * index的3个参数分别代表:
+	 * id:题目编号
+	 * loc:来自-0.默认习题集;1.contest;2.course(实际只传入unit的id)
+	 */
+	public function get_problem($id,$loc=0,$loc_id=0)
 	{
 		Global $data;
-		if(isset($_GET['contest_id'])){
-			$data['contestId'] = $_GET['contest_id'];
-		}else if(isset($_GET['unit_id'])){
-			$data['unit_id']=$_GET['unit_id'];
+		//当其为contest或者course的时候,loc_id必须存在
+		if($loc!=0 && $loc_id==0){
+			$this->error->show_error("没有找到此问题",array("悲剧了，没有找到对应的问题呀"),$data);
+			return;
+		}
+		$data['loc']=0;
+		$data['page_title'] = "题目";
+		if($loc==="1"){
+			$data['page_title'] = "竞赛";
+			$data['loc']=1;
+			$data['loc_id'] = $loc_id;
+		}else if($loc==="2"){
+			$data['loc']=2;
+			$data['loc_id'] = $loc_id;
+			$data['page_title'] = "课程";
 		}
 		$problem=array(' * ');
 		$data['problem']=$this->oj_model->get_problem_item($id,$problem);

@@ -9,13 +9,14 @@ class Problem_submit extends CI_Controller {
     $this->load->helper('date');
   }
   
-  public function index($problemId=-1){
+  public function index($problemId=-1,$loc=0,$loc_id=0){
 	  Global $data;
-	  if($problemId==-1){
+	  if($problemId==-1||!is_numeric($loc_id)||!is_numeric($loc)){
 			$this->error->show_error('进入方式错误',array("请不要随意修改URL"),$data);
 			return;//防止多次下面分支view	  	
 	  }
-
+	  $data['loc']=$loc;
+	  $data['loc_id']=$loc_id;
 	  $data['lan'] = array('C','C++','Pascal','Java','Ruby','Bash','Python','PHP','Perl','C#','Obj-C','Free Basic');
 	  if($data['is_login']){
 			$data['problem']=$this->oj_model->get_problem_item($problemId,array('problemId'));

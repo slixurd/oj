@@ -49,7 +49,7 @@ body{
 	}
 	.i-c{
 		position: relative;
-		width: 700px;
+		width: 650px;
 		display: inline-block;
 	}
 		.i-b{
@@ -124,7 +124,9 @@ body{
 
 
 	#log-reg{
+		width: 220px;
 		padding: 15px;		
+		text-align: center;
 		display: inline-block;
 		position: relative;
 		vertical-align: top;
@@ -136,10 +138,22 @@ body{
 				color: @blue-bg-font;
 			}
 		}
-		button{
+		.uname,button{
 			background-color: @strong;
 			color: white;
-			padding: 2px 20px;
+			padding: 3px 20px;
+		}
+		.uname{
+			cursor: pointer;
+			display: inline-block;
+			float: right;
+			margin-right: 10px;
+			max-width: 120px;
+			.avoid-overflow();
+		}
+		.logout{
+			float: right;
+			padding: 3px 0;
 		}
 		.login-popup{
 			z-index: 100;

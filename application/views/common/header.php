@@ -99,9 +99,9 @@
 		<div class="i-c">
 		<ul class="main-nav clearfix">
 			<span style="float:left;margin-top: 8px;display:inline-block;width:66px;"><img src="<?php echo base_url("assets") ?>/img/logo.png"></span>
-			<li class='<?php if(preg_match("/\/$|index$|scutoj\/$/",$_SERVER["REQUEST_URI"])) echo "active"; ?> slide' ><a href="<?php echo site_url("/"); ?>">主页</a></li>
+			<li class='<?php if(isset($page_title)){if(preg_match("/首页|SCUTOJ/",$page_title)) echo "active";} ?> slide' ><a href="<?php echo site_url("/"); ?>">主页</a></li>
 			
-			<li class='<?php if(preg_match("/contest|problem/",uri_string())) echo "active" ?> slide' >
+			<li class='<?php if(isset($page_title)){if(preg_match("/竞赛|题目/",$page_title)) echo "active";} ?> slide' >
 				<a href="<?php echo site_url("problem"); ?>">
 					<span>题集</span>
 					<img src="<?php echo base_url("assets") ?>/img/list_button.png">
@@ -109,28 +109,20 @@
 				<ul class="sub-nav">
 					<li><a href="<?php echo site_url("problem"); ?>">题目</a></li>
 					<li><a href="<?php echo site_url("contest"); ?>">比赛</a></li>
-					<li><a href="">全部</a></li>
 				</ul>
 			</li>
 			
-			<li class='<?php if(preg_match("/class/",uri_string())) echo "active" ?> slide'>
-				<a href="">
+			<li class='<?php if(isset($page_title)){if(preg_match("/课程/",$page_title)) echo "active";} ?> slide'>
+				<a href="<?php echo site_url("course"); ?>">
 					<span>课程</span>
-					<img src="<?php echo base_url("assets") ?>/img/list_button.png">
 				</a>
-				<ul class="sub-nav">
-					<li><a href="">课程</a></li>
-					<li><a href="">比赛</a></li>
-					<li><a href="">全部</a></li>
-				</ul>
 			</li>
-			<li class='<?php if(preg_match("/help/",uri_string())) echo "active" ?> slide'><a href="">帮助</a></li>
+			<li class='<?php if(isset($page_title)){if(preg_match("/帮助/",$page_title)) echo "active";} ?> slide'><a href="">帮助</a></li>
 		</ul>
 		<hr class="i-b">
 		</div>
 		<div id="log-reg">
-			<?php if(!isset($is_login)||$is_login==FALSE) {
-				echo '
+			<?php if(!isset($is_login)||$is_login==FALSE){ ?>
 				<div>
 					<button id="login" href="" style="margin-right:15px;">登录</button>
 					<div class="login-popup">
@@ -146,15 +138,15 @@
 
 					</div>
 				</div>
-				<div><a href="'.site_url("user/register").'">注册</a></div>';
+				<div><a href="<?php site_url("user/register") ?>">注册</a></div>
 
-	//heredoc,需要置顶标注符
 
-				}else if(isset($is_login) && $is_login==TRUE){
-					echo $user["name"];
-					echo '<div><a href='.site_url("logout").'>登出</a></div>';
-				}
-			?>
+
+			<?php }else if(isset($is_login) && $is_login==TRUE){ ?>
+					<div class="logout"><a href='.site_url("logout").'>登出</a></div>
+					<a href="<?php echo site_url("user") ?>" class="uname"><?php echo $user["name"] ?></a>
+				
+			<?php } ; ?>
 		</div>
 	</div>
 </div>

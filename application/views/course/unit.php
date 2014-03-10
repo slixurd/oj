@@ -14,8 +14,8 @@
                 </tr>
             </thead>
             <tbody>         
-                <tr onclick="document.location='<?php echo site_url('problem/unit').'/'.$unit['courseId'].'/'.$unit['unitId']; ?>' ">
-                    <?php foreach($list as $item): ?>
+                <?php foreach($list as $item): ?>
+                <tr onclick="document.location='<?php echo site_url('problem/get_problem').'/'.$item['problemId'].'/2/'.$item['unitId']; ?>' ">
                     <td><?php echo $item['problemId'] ?></td>
                     <td><?php echo $item['title'] ?></td>
                     <td><?php echo $item['accepted'] ?></td>

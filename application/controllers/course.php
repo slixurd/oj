@@ -11,7 +11,7 @@ class Course extends CI_Controller {
 	public function index($page=1){
 		Global $data;
 
-		$data['page_title']='课程列表';
+		$data['page_title']='课程';
 		$this->load->model('course_model','course');
 		//取总课程数
 		$total = $this->course->get_course_count();
@@ -61,6 +61,7 @@ class Course extends CI_Controller {
 	
 	public function detail($id){
 		Global $data;
+		$data['page_title']='课程';
 		$this->load->model('course_model','course');
 		if(!is_numeric($id)){
 			//用户可能进行非法操作
@@ -81,6 +82,7 @@ class Course extends CI_Controller {
 
 	public function unit($cid,$uid){
 		Global $data;
+		$data['page_title']='课程';
 		$this->load->model('course_model','course');
 		if(!is_numeric($cid)||!is_numeric($uid)){
 			//用户可能进行非法操作
@@ -98,7 +100,6 @@ class Course extends CI_Controller {
 			return;	
 		}
 		$data["list"] = $this->course->get_unit_problem_list($uid);
-		//var_dump($data["list"]);
 
 		$this->load->view('common/header',$data);
 		$this->load->view('course/unit',$data);
