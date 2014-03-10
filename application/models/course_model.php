@@ -7,7 +7,7 @@ class Course_model extends CI_Model
 		$this->load->database();
 		Global $pri ;
 		$pri['read'] = "read";
-		$pri['submit'] = "edit";
+		$pri['submit'] = "submit";
 		$pri['add'] = "add";
 		$pri['edit'] = "edit";
 		$pri['del'] = "del";
@@ -25,7 +25,19 @@ class Course_model extends CI_Model
 		$query = $this->db->query($sql);
 		$q = $query->row_array();
 		return $q['num'];
-	}	
+	}
+	
+	/*
+	 * 获知课程是否私有，true私有，false公开
+	 */
+	 public function is_private($courseId){
+		$courseId = $this->db->escape($courseId);
+		$sql = "SELECT * FROM course WHERE courseId = ".$courseId." AND private = 1 ";
+		$query = $this->db->query($sql);
+		if(empty($query->result_array()))
+			return FALSE;
+		return TRUE;
+	 }	
 	
 	/*
 	 * 获取课程列表
@@ -87,8 +99,8 @@ class Course_model extends CI_Model
 		$sql = "SELECT * FROM privilege_common 
 				WHERE common = 'course' AND userId = ".$userId." AND commonId = ".$courseId;
 		$query = $this->db->query($sql);
-		foreach ($query->result_array() as $pri) {
-			if($kind == $pri['privilege'])
+		foreach ($query->result_array() as $pri_type) {
+			if($kind == $pri_type['privilege'])
 				return TRUE;
 		}
 		return FALSE;
@@ -151,6 +163,24 @@ class Course_model extends CI_Model
 				WHERE unit_problem.unitId =  ".$unitId;
 		$query = $this->db->query($sql);
 		return $query->result_array();
+	}
+	
+	/*
+	 * 获取单元id对应的课程id,返回-1代表没找到对应关系
+	 */
+	public function get_unit_course_id($unitId)
+	{
+		$unitId = $this->db->escape($unitId);
+		$sql = "SELECT course_unit.courseId FROM course_unit LEFT JOIN unit_problem
+				ON course_unit.unitId = unit_problem.unitId WHERE course_unit.unitId = ".$unitId;
+		$query = $this->db->query($sql);
+		if(empty($query->row_array(0))){
+			return -1;
+		}
+		else{
+			$course_array = $query->row_array(0);
+			return $course_array['courseId'];
+		}
 	}
 	
 }

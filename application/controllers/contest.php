@@ -125,9 +125,8 @@ class Contest extends CI_Controller {
 				$user_type = $this->user_model->get_user_item_id($user['userId'],array('type'));
 				$user['type'] = $user_type;
 				$data['permission']="no";
-				$data['problem_privilege']=$this->contest_model->get_contest_privilege($id,$user['userId']);
-				if((!empty($data['problem_privilege']))||($user['type'] == "administrator") ){
-					//用户有权限,这里由于用户的读权限是最低权限所以没有多判断，有其他权限肯定是可以读的
+				Global $pri;
+				if($this->contest_model->get_contest_privilege($id,$user['userId'],$pri['read'])){
 					$data['permission']="yes";
 				}else{
 					$this->error->show_error("你还没有此竞赛权限",array("此竞赛需要相应权限"),$data);

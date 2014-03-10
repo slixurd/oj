@@ -5,6 +5,54 @@ class Contest_model extends CI_Model
 	public function __construct()
 	{
 		$this->load->database();
+		Global $pri ;
+		$pri['read'] = "read";
+		$pri['submit'] = "submit";
+		$pri['add'] = "add";
+		$pri['edit'] = "edit";
+		$pri['del'] = "del";
+		//用之前请先声明Global $pri
+	}
+	
+	/*
+	 * 获知禁赛是否私有，true私有，false公开
+	 */
+	 public function is_private($contestId){
+		$contestId = $this->db->escape($contestId);
+		$sql = "SELECT * FROM contest WHERE contestId = ".$contestId." AND private = 1 ";
+		$query = $this->db->query($sql);
+		if(empty($query->result_array()))
+			return FALSE;
+		return TRUE;
+	 }
+	
+	/*
+	 * 获取竞赛问题是否存在
+	 */
+	public function is_contest_problem($contestId,$problemId){
+		$contestId = $this->db->escape($contestId);
+		$problemId = $this->db->escape($problemId);
+		$sql = "SELECT * FROM contest_problem WHERE contestId = ".$contestId." AND problemId = ".$problemId;
+		$query = $this->db->query($sql);
+		if(empty($query->result_array()))
+			return FALSE;
+		return TRUE;
+	}
+	
+	/*
+	 * 获取用户是否具有相关权限
+	 */
+	public function get_contest_privilege($contestId,$userId,$kind){
+		$userId = $this->db->escape($userId);
+		$coursetId = $this->db->escape($contestId);
+		$kind = $this->db->escape($kind);
+		$sql = "SELECT * FROM privilege_common 
+				WHERE common = 'contest' AND userId = ".$userId." AND commonId = ".$contestId.
+				" AND privilege = ".$kind;
+		$query = $this->db->query($sql);
+		if(empty($query->result_array()))
+				return FALSE;
+		return TRUE;
 	}
 	
 	/*
