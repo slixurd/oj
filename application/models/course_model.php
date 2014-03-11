@@ -34,8 +34,9 @@ class Course_model extends CI_Model
 		$courseId = $this->db->escape($courseId);
 		$sql = "SELECT * FROM course WHERE courseId = ".$courseId." AND private = 1 ";
 		$query = $this->db->query($sql);
-		if(empty($query->result_array()))
-			return FALSE;
+		$column_array = $query->row_array(0);
+		if($column_array['private']== 0)
+			return FALSE; 
 		return TRUE;
 	 }	
 	
@@ -174,13 +175,11 @@ class Course_model extends CI_Model
 		$sql = "SELECT course_unit.courseId FROM course_unit LEFT JOIN unit_problem
 				ON course_unit.unitId = unit_problem.unitId WHERE course_unit.unitId = ".$unitId;
 		$query = $this->db->query($sql);
-		if(empty($query->row_array(0))){
+		$course_array = $query->row_array(0);
+		if(!isset($course_array['courseId'])&&!is_numeric($course_array['courseId']))
 			return -1;
-		}
-		else{
-			$course_array = $query->row_array(0);
+		else
 			return $course_array['courseId'];
-		}
 	}
 	
 }
