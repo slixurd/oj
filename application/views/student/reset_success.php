@@ -3,8 +3,8 @@
 		<div class="nbc">
 			<img src="<?php echo base_url("assets") ?>/img/succeed.png">
 			<div class="inform">
-				<h3>啊哈哈.注册成功了!</h3>
-				<p>盯着我看3秒就会回到主页了</p>
+				<h3>重置密码成功!</h3>
+				<p>3秒后回到主页</p>
 			</div>
 		</div>
 	</div>

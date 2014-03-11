@@ -158,6 +158,7 @@ class User extends CI_Controller {
 		$this->load->view('common/footer');		
 	}
 
+
 	public function modify_result(){
 		Global $data;
 		if(!$data['is_login']){
@@ -207,6 +208,52 @@ class User extends CI_Controller {
 		$this->load->view('common/header',$data);
 		$this->load->view('student/history');
 		$this->load->view('common/footer');		
+	}
+
+	public function reset(){
+		Global $data;
+		$data['page_title'] = "找回密码";
+		if($data['is_login']){
+			$this->error->show_error("已经登陆",array("都登陆还忘记密码么?"),$data);
+			return;
+		}
+		$this->load->view('common/header',$data);
+		$this->load->view('student/reset');
+		$this->load->view('common/footer');				
+	}
+
+	public function reset_result(){
+		Global $data;
+		if($data['is_login']){
+			$this->error->show_error("已经登陆",array("都登陆还忘记密码么?"),$data);
+			return;
+		}
+		if ($this->input->post("name") == FALSE || $this->input->post("email") == FALSE ||$this->input->post("pass") == FALSE ) {
+			$this->error->show_error("数据不全",array("返回重新填写再提交"),$data);
+			return;
+		}
+		$name = $this->input->post("name",TRUE);
+		$email = $this->input->post("email",TRUE);
+		$pass = $this->input->post("pass",TRUE);
+		$this->load->model('user_model','umodel');
+
+		$is_right = $this->umodel->check_email($name,$email);
+		if($is_right === FALSE){
+			$this->error->show_error("用户名和邮箱不匹配",array("返回重新填写再提交"),$data);
+			return;
+		}
+
+		$vpass = $this->umodel->check_pass($pass);
+		if($vpass['pass_preg'] == 0){
+			$this->error->show_error("新密码不符合要求",array("请重新填写"),$data);
+			return;			
+		}
+
+		$this->umodel->force_cpass($name,$pass);
+
+		$this->load->view('common/header',$data);
+		$this->load->view('student/reset_success');
+		$this->load->view('common/footer');				
 	}
 
 }

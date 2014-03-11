@@ -131,19 +131,19 @@
 							<input id="log-pass" name="pa" type="password" placeholder="请输入密码" data-placement="top" data-toggle="tooltip" data-trigger="manual"/>
 							<button id="login-submit" type="submit">确认</button>
 							<div>
-								<span class="remember-pass"><input type="checkbox" name="remember"/>记住密码</span>
-								<span class="forget-pass"><a href="">忘记密码?</a></span>
+								<!-- span class="remember-pass"><input type="checkbox" name="remember"/>记住密码</span -->
+								<span class="forget-pass"><a href="<?php echo site_url("user/reset") ?>">忘记密码?</a></span>
 							</div>	
 						</div>
 
 					</div>
 				</div>
-				<div><a href="<?php site_url("user/register") ?>">注册</a></div>
+				<div><a href="<?php echo site_url("user/register") ?>">注册</a></div>
 
 
 
 			<?php }else if(isset($is_login) && $is_login==TRUE){ ?>
-					<div class="logout"><a href='.site_url("logout").'>登出</a></div>
+					<div class="logout"><a href='<?php echo site_url("logout") ?>'>登出</a></div>
 					<a href="<?php echo site_url("user") ?>" class="uname"><?php echo $user["name"] ?></a>
 				
 			<?php } ; ?>

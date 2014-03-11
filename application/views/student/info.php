@@ -5,7 +5,7 @@
 				<tr>
 					<td>
 					<span class='person-name'><?php echo $user['name']?></span>
-					<span><a class="mode-passwd" href="#"><img src="<?php echo base_url('assets') ?>/img/edit.jpg"> <small>修改密码</small></a></span>
+					<span><a class="mode-passwd" href="<?php echo site_url('user/modify'); ?>"><img src="<?php echo base_url('assets') ?>/img/edit.jpg"> <small>修改密码</small></a></span>
 					</td>
 				</tr>
 				<tr>

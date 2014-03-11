@@ -193,9 +193,36 @@ class User_model extends CI_Model
 		$rt=array('pass_preg'=>$preg,'pass_len'=>$len);
 		return $rt;
 	}
+
+	private function get_email($name){
+		$sql = "SELECT email FROM user
+				WHERE name = ".$this->db->escape($name);
+		$email = $this->db->query($sql);
+		$email = $email->row_array(0);
+		if(empty($email))
+			return FALSE;
+		return $email['email'];
+
+	}	
 	
+	public function check_email($name,$email){
+		$check = $this->get_email($name);
+		if($check === FALSE)
+			return FALSE;
+		if($this->db->escape($check) === $this->db->escape($email)){
+			return TRUE;
+		}else{
+			return FALSE;
+		}
+	}
 	
-	
-	
+	public function force_cpass($name,$new_pass)
+	{
+		$salt = $this->salt();
+		$update_array = array('password'=>$this->encrypt->sha1($salt.$new_pass),'salt'=>$salt);
+		$sql = $this->db->update_string('user',$update_array,"name = ".$this->db->escape($name));
+		$this->db->query($sql);
+		return true;
+	}
 	
 }
