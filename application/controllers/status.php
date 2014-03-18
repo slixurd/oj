@@ -8,57 +8,30 @@ class Status extends CI_Controller {
 	
 	public function index($page=1){
 		Global $data;
+		GLOBAL $lan;
+		Global $compile_status;
+	
 		$data['page_title']='提交状态';
 		if($data['is_login']===FALSE){
 			$this->error->show_error("你还没有登录",array("此页面需要登录，请先登录","点击右上角登录"),$data);
 			return;
 		}
-		$total=0;
-		$data['status_list']=array();
-		$s_str="";
-		$is_search=FALSE;
-		
-		if(isset($_POST['s_id'])){
-			//判断是否是id搜索
-			$s_id=$_POST['s_id'];
-			$by_id=TRUE;
-			$s_str="userId = ".$this->db->escape($data['user']['userId'])." AND problemId = ".$this->db->escape($s_id)." ";
-		}
-	
-		if(isset($_POST['s_title'])){
-				$s_title=$_POST['s_title'];
-				$is_search=TRUE;
-				$s_str="userId = ".$this->db->escape($data['user']['userId'])." AND title = ".$this->db->escape("%".$s_title."%")." ";
-			}//判断是否是搜索模式是的话下面就不分页
-		if(!$is_search){
-			$s_str="userId = ".$this->db->escape($data['user']['userId'])." ";
-			$total = $this->oj_model->get_row("solution","solutionId",$s_str);
-			$limit_from=($page-1)*10;
-			$limit_row=10;
-		}else{
-			$total = $this->oj_model->get_row("solution","solutionId",$s_str);
-			$limit_from=0;
-			$limit_row=$total;
-		}
-			
+		$this->load->model("status_model","status");
+		$total = $this->status->get_status_count();
+		$data['lan'] = $lan;
+		$data['status'] = $compile_status;
 		if($page>=1 && is_numeric($page) && (($page-1)*10<=$total)){
 			$column_array=array('*');
-			$data['status_list']=$this->oj_model->get_list_where("solution",$column_array,"solutionId",TRUE,$s_str,$limit_from,$limit_row);
-			$this->load->view('common/header',$data);
-			$this->load->view('status_view',$data);
-			$this->load->view('common/footer',$data);
-			
+			$data['status_list']=$this->status->get_status_list(($page-1)*10,10);
+
 			$this->load->library('pagination');
 			$config['first_link'] = TRUE;
 			$config['last_link'] = TRUE;
 			$config['uri_segment']=3;
 			$config['num_links'] = 7;
 			$config['use_page_numbers'] = TRUE;
-			$config['base_url'] = site_url("status");
+			$config['base_url'] = site_url("status/index");
 			$config['total_rows'] = $total;
-			if($is_search==TRUE){
-				$config['per_page'] =$total;
-			}else
 			$config['per_page'] =10;
 			$config['first_link'] = '首页';
 			$config['last_link'] = '末页';
@@ -76,8 +49,9 @@ class Status extends CI_Controller {
 			$config['last_tag_close'] = '</li>';	
 			$this->pagination->initialize($config);
 			$data['pagination_block'] = $this->pagination->create_links();
+
 			$this->load->view('common/header',$data);
-			$this->load->view('status_view',$data);
+			$this->load->view('status/all',$data);
 			$this->load->view('common/footer',$data);
 		}else{
 			$this->error->show_error("url错误",array("没有找到你要的页面","可能是你的url不对啊，请检查"),$data);
@@ -88,6 +62,38 @@ class Status extends CI_Controller {
 	}
 	
 	public function course_status(){
+	}
+
+	public function personal(){
+		Global $data;
+		$data['page_title']='提交状态';
+		if($data['is_login']===FALSE){
+			$this->error->show_error("你还没有登录",array("此页面需要登录，请先登录","点击右上角登录"),$data);
+			return;
+		}
+
+		$this->load->model("status_model","status");
+		$result = $this->status->get_most_recent($data['user']['userId']);
+		$this->load->view('common/header',$data);
+		$this->load->view('status/personal',$data);
+		$this->load->view('common/footer',$data);
+
+	}
+
+	public function update_result(){
+		Global $data;
+		Global $compile_status;
+		$data['page_title']='提交状态';
+		if($data['is_login']===FALSE){
+			$this->error->show_error("你还没有登录",array("此页面需要登录，请先登录","点击右上角登录"),$data);
+			return;
+		}
+
+		$this->load->model("status_model","status");
+		$result = $this->status->get_most_recent($data['user']['userId']);
+		$result = $this->status->get_solution_result($result['solutionId']);
+		$return_value = array('status' => $compile_status[$result],'code' => $result);
+		echo json_encode($return_value);
 	}
 	
 }

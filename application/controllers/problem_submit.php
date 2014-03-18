@@ -17,7 +17,8 @@ class Problem_submit extends CI_Controller {
 	  }
 	  $data['loc']=$loc;
 	  $data['loc_id']=$loc_id;
-	  $data['lan'] = array('C','C++','Pascal','Java','Ruby','Bash','Python','PHP','Perl','C#','Obj-C','Free Basic');
+	  GLOBAL $lan;
+	  $data['lan'] = $lan;
 	  if($data['is_login']){
 			$data['problem']=$this->oj_model->get_problem_item($problemId,array('problemId'));
 			if(empty($data['problem'])){

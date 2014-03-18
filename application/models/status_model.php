@@ -24,7 +24,7 @@ class Status_model extends CI_Model
 	public function get_status_list($limit_from,$limit_row){
 		$this->db->escape($limit_from);
 		$this->db->escape($limit_row);
-		$sql = "SELECT solutionId , solution.userId , problemId , result, memory ,runTime , solution.programLan , codeLen
+		$sql = "SELECT inDate,user.name,solutionId , solution.userId , problemId , result, memory ,runTime , solution.programLan , codeLen
 				FROM solution LEFT JOIN user ON user.userId = solution.userId 
 				ORDER BY inDate desc LIMIT ".$limit_from." , ".$limit_row;
 		$query = $this->db->query($sql);
@@ -48,7 +48,15 @@ class Status_model extends CI_Model
 	/*
 	 * 获取答案的答案通过solutionId，可以用户ajax,返回-2代表没有找到
 	 */
-	 
+	public function get_most_recent($userId){
+		$userId = $this->db->escape($userId);
+		$sql = "SELECT solutionId
+				FROM solution  WHERE userId = ".$userId." ORDER BY inDate desc limit 1";
+		$query = $this->db->query($sql);
+		$column_array = $query->row_array(0);
+		return $column_array;
+	}	 
+	
 	public function get_solution_result($solutionId){
 		$solutionId = $this->db->escape($solutionId);
 		$sql = "SELECT result , runTime , judgeTime FROM solution WHERE solutionId = ".$solutionId;

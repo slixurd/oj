@@ -6,10 +6,16 @@ class User_help {
  * 此类自动装载，函数在使用前请先声明Global $data
  */
 	public function __construct(){
-		 Global $data;
-		 $data['is_login']=FALSE;
-		 $data['user']=array();
-         if($this->is_session()){
+		Global $lan;
+		$lan = array('C','C++','Pascal','Java','Ruby','Bash','Python','PHP','Perl','C#','Obj-C','Free Basic');
+
+		Global $compile_status;
+		$compile_status = array('判题中','判题中','判题中','判题中','正确','格式错误','答案错误','超时','超内存','输出限制','运行时错误','编译错误','ERROR');
+
+		Global $data;
+		$data['is_login']=FALSE;
+		$data['user']=array();
+		if($this->is_session()){
 			$data['is_login']=TRUE;
 			$data['user']=$this->get_session();
 		}
@@ -18,7 +24,7 @@ class User_help {
 /**
  * 查看session是否存在，返回FALSE或者TRUE
  */
-    public function is_session(){
+	public function is_session(){
 		$CI =& get_instance();
 		$CI->load->model('oj_model');
 		$CI->load->library('session');
