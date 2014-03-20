@@ -24,7 +24,9 @@ class Problem_edit extends CI_Model
 	 
 	public function get_problem_list($limit_from=NULL,$limit_row=NULL)
 	{
-		$sql="SELECT problemId , title , inDate , defunct FROM problem ORDER BY problemId";
+		$limit_from = $this->db->escape($limit_from);
+		$limit_row = $this->db->escape($limit_row);
+		$sql="SELECT problemId , title , inDate , defunct FROM problem ORDER BY problemId LIMIT ".$limit_from." , ".$limit_row;
 		$query=$this->db->query($sql);
 		return $query->result_array();
 	} 
@@ -36,14 +38,15 @@ class Problem_edit extends CI_Model
 	public function get_count(){
 		$sql = "SELECT count(problemId) as count FROM problem";
 		$query=$this->db->query($sql);
-		return $query->row_array(0);
+		$count = $query->row_array(0);
+		return $count['count'];
 	}
 	
 	/*
 	 * 用problemId删除问题
 	 */
 	public function del_problem($problemId){
-		$problemId = $this->escape($problemId);
+		$problemId = $this->db->escape($problemId);
 		$sql = "DELETE FROM problem WHERE problemId = ".$problemId;
 		$this->db->query($sql);
 	}
