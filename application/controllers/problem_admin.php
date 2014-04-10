@@ -99,4 +99,45 @@ class Problem_admin extends CI_Controller {
 		echo json_encode($return);
 	}
 	
+	public function add_problem(){
+		Global $data;
+		if(!$data['is_login']){
+			$this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
+			return;
+		}
+		$this->load->model("user_model");
+		$this->load->model("back/problem_edit","problem_edit");
+		$type = $this->user_model->get_user_item_id($data['user']['userId'],array('type'));
+		$type = $type['type'];
+		if($type != "admin"){
+			$this->error->show_error("对不起， 添加普通问题需要管理员权限",array("需要更改问题，请联系管理员"),$data);
+			return;
+		}
+		$date_str="%Y-%m-%d %H:%i:%s";
+		$this->load->helper('date');
+		$now=strtotime("now");
+		$title = stripslashes($_POST['title']);
+		$description = stripslashes($_POST['description']);
+		$input = stripslashes($_POST['input']);
+		$output = stripslashes($_POST['output']);
+		$sampleInput = stripslashes($_POST['sampleInput']);
+		$sampleOutput = stripslashes($_POST['sampleOutput']);
+		$hint = stripslashes($_POST['hint']);
+		$source = stripslashes($_POST['source']);
+		$inDate = stripslashes($_POST['inDate']);
+		$timeLimit = stripslashes($_POST['timeLimit']);
+		$memoryLimit = stripslashes($_POST['memoryLimit']);
+		$problem_array = array('title'=>$title,'description'=>$description,'input'=>$input,
+		'output'=>$output,'sampleInput'=>$sampleInput,'sampleOutput'=>$sampleOutput,'hint'=>$hint,
+		'source'=>$source,'inDate'=>$inDate,'timeLimit'=>$timeLimit,'memoryLimit'=>$memoryLimit);
+		$problemId = $this->problem_edit->add_problem($problem_array);
+		$basedir = "/home/judge/data/".$problemId;
+		mkdir($basedir,0755);
+		$this->load->helper('file');
+		write_file($basedir."/test.in", $input);
+		write_file($basedir."/test.out", $output);
+		write_file($basedir."/sample.in", $sampleInput);
+		write_file($basedir."/sample.out", $sampleOutput);
+	}
+	
 }
