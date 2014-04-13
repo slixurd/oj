@@ -1,5 +1,12 @@
 @bg-color: #F4F4F4;
 @pd-color: silver; //placeholder颜色
+@baseMargin: 50px;
+//input,textarea,select 背景色
+@text-bg: #fafafa;
+//出错警告颜色
+@error-clr: #FA9290;
+//正确颜色
+@correct-clr: #79ff79;
 
 //下拉列表类
 .select-down(@height:25px,@width:90px,@padding-top: 2px,@padding-left: 8px) {
@@ -8,27 +15,28 @@
     margin: 0;
     padding: 0;
 
-    select.select-down-select {
-        .size(@height+@padding-top*2,@width+@padding-left);
-        opacity: 0;
-        z-index: 999;
-        position: absolute;
-        left: 0;
-        top: 0;
+	select.select-down-select {
+		.size(@height+@padding-top*2,@width+@padding-left);
+		line-height: @height+@padding-top*2;
+		opacity: 0;
+		z-index: 999;
+		position: absolute;
+		left: 0;
+		top: 0;
 
         option {
             padding-left: @padding-left;
         }
     }
 
-    span.select-down-span {
-        position: relative;
-        display: inline-block;
-        .size(@height - 2px,@width - 2px);
-        border: solid 1px #e9e9e9;
-        line-height: @height;
-        padding: @padding-top 0 @padding-top @padding-left;
-        background-color: white;
+	span.select-down-span {
+		position: relative;
+		display: inline-block;
+		.size(@height - 2px,@width - 2px);
+		border: solid 1px #e9e9e9;
+		line-height: @height;
+		padding: @padding-top 0 @padding-top @padding-left;
+		background-color: @text-bg;
 
         &.placeholder {
             color: @pd-color;
@@ -52,16 +60,17 @@
         font-size: 18px;
         cursor: pointer;
         float: left;
-        border-left: solid 1px @bg-color;
-        border-top: solid 1px @bg-color;
+        border-left: solid 1px #EEE;
+        border-top: solid 1px #EEE;
         border-bottom: none;
         background-color: @background;
         text-align: center;
         line-height: @height;
         .border-top-left-radius(4px);
         .border-top-right-radius(4px);
-        .box-shadow(0 -10px 10px 0 #EEE);
-
+        &:first-child{
+            border-left:none;
+        }
         &:hover,
         &.active {
             a {
@@ -83,10 +92,30 @@
         display: none;
         width: 100%;
 
-        &.active {
-            display: block;
-        }
-    }
+		&.active {
+			display: block;
+		}
+	}
+}
+
+//checkbox类
+.checkbox(@size: 17px) {
+	display: inline-block;
+	.square(@size); 
+	border: solid gray 1px;
+	background-color: white;
+	position: relative;
+
+	input[type="checkbox"] {
+		display: inline-block;
+		.size(100%,100%);
+		position: absolute;
+		top: 0;
+		left: 0;
+		cursor: pointer;
+		z-index: 999;
+		opacity: 0;
+	}
 }
 
 .text-left {

@@ -21,9 +21,9 @@
                 <thead>
                     <tr>
                         <th class="span1">问题ID</th>
-                        <th class="span3">名称</th>
-                        <th class="span2">时间</th>
-                        <th class="span2">状态</th>
+                        <th class="span6">名称</th>
+                        <th class="span6">时间</th>
+                        <th class="span3">状态</th>
                         <th class="span1">删除</th>
                         <th class="span1">编辑</th>
                         <th class="span2">测试数据</th>
@@ -34,7 +34,7 @@
                     <tr>
                         <td class="pid"><?php echo $item['problemId'] ?></td>
                         <td class="avoid-overflow" title="<?php echo $item['title'] ?>"><?php echo $item['title'] ?></td>
-                        <td style="font-size:14px;"><?php echo $item['inDate'] ?></td>
+                        <td><?php echo $item['inDate'] ?></td>
                         <td>
                             <div class="select-down"> 
                                 <span class="select-down-span status-span"><?php echo $item['defunct'] === "0"?"Available":"Reserved" ?><i class="down"></i></span>

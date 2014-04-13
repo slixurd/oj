@@ -43,6 +43,7 @@ function loadDate(year,month,select_date) {
 }
 
 $(function() {
+
 //载入时间控件
 
 	//首先载入年份与月份以及日期
@@ -52,10 +53,10 @@ $(function() {
 	for(var i = 1;i <= 12;i++) {
 		$('select.month').append('<option value='+i+'>'+i+'</option>');
 	}
-	var now = new Date();
-	loadDate(now.getFullYear(),now.getMonth()+1,$('select.date'));
 
 	//加载时间并自动选择当前时间
+	var now = new Date();
+	loadDate(now.getFullYear(),now.getMonth()+1,$('select.date'));
 	for(var i = 0;i <= 23;i++) {
 		$('select.hour').append('<option value='+i+'>'+i+'</option>');
 	}
@@ -73,7 +74,6 @@ $(function() {
 	$('span.select-down-span.hour').html(now.getHours()+' 时<i class="down"></i>');
 	$('span.select-down-span.minute').html(now.getMinutes()+' 分<i class="down"></i>');
 
-//实现列表option连接跳转
 
 
 //实现下拉列表动作
@@ -122,4 +122,31 @@ $(function() {
 			select_date.children('option[value='+date_old+']').attr("selected","true");
 		}
 	})
+
+//点击改变checkbox背景
+	$('input[type="checkbox"]').change(function() {
+		if($(this).prop('checked') == true || $(this).prop('checked') == "checked") {
+			$(this).parent().css('background', 'url("img/right.jpg") no-repeat 3px 5px');
+		}else {
+			$(this).parent().css('background', 'white');
+		}
+	});
+
+//表单重置时触发checkbox的change事件（以便去掉背景）
+	$('form').bind('reset', function() {
+		$(this).find('input:checked').prop('checked', false).trigger('change');
+	});
+
+//触发file的点击事件
+	$('a#excel').click(function() {
+		$('input[type="file"]#excel').trigger('click');
+	});
+
+//将选择的文件名呈现在input中
+	$('input[type="file"]#excel').change(function() {
+		var file = $(this).val();
+		var fileNames = file.split('\\');
+		var fileName = fileNames[fileNames.length - 1];
+		$('input[type="text"]#excel').val(fileName);
+	});
 })

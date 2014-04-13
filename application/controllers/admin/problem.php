@@ -127,11 +127,15 @@ class Problem extends CI_Controller {
         $output = stripslashes($_POST['output']);
         $sampleInput = stripslashes($_POST['sampleInput']);
         $sampleOutput = stripslashes($_POST['sampleOutput']);
+        $inputData = stripslashes($_POST['input-data']);
+        $outputData = stripslashes($_POST['output-data']);        
         $hint = stripslashes($_POST['hint']);
         $source = stripslashes($_POST['source']);
         $inDate = stripslashes($_POST['inDate']);
-        $timeLimit = stripslashes($_POST['timeLimit']);
-        $memoryLimit = stripslashes($_POST['memoryLimit']);
+        $timeLimit = stripslashes($_POST['time-limit']);
+        $memoryLimit = stripslashes($_POST['memory-limit']);
+
+        //这里漏了输入格式和输出格式，input和output应该是格式而不是最终匹配的测试数据，需要修改，增加inputData
         $problem_array = array('title'=>$title,'description'=>$description,'input'=>$input,
         'output'=>$output,'sampleInput'=>$sampleInput,'sampleOutput'=>$sampleOutput,'hint'=>$hint,
         'source'=>$source,'inDate'=>$inDate,'timeLimit'=>$timeLimit,'memoryLimit'=>$memoryLimit);
@@ -139,10 +143,28 @@ class Problem extends CI_Controller {
         $basedir = "/home/judge/data/".$problemId;
         mkdir($basedir,0755);
         $this->load->helper('file');
-        write_file($basedir."/test.in", $input);
-        write_file($basedir."/test.out", $output);
+        write_file($basedir."/test.in", $inputData);
+        write_file($basedir."/test.out", $outputData);
         write_file($basedir."/sample.in", $sampleInput);
         write_file($basedir."/sample.out", $sampleOutput);
     }
     
+    public function add(){
+        Global $data;
+        if(!$data['is_login']){
+            $this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
+            return;
+        }
+        $this->load->model("user_model");
+        $this->load->model("back/problem_edit","problem_edit");
+        $type = $this->user_model->get_user_item_id($data['user']['userId'],array('type'));
+        $type = $type['type'];
+        // if($type != "admin"){
+        //     $this->error->show_error("对不起， 添加普通问题需要管理员权限",array("需要更改问题，请联系管理员"),$data);
+        //     return;
+        // }
+        $this->load->view("common/admin_header",$data);
+        $this->load->view("admin/add_problem",$data);
+        $this->load->view("common/admin_footer",$data);        
+    }
 }
