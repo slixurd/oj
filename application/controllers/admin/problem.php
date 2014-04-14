@@ -127,19 +127,20 @@ class Problem extends CI_Controller {
         $output = stripslashes($_POST['output']);
         $sampleInput = stripslashes($_POST['sampleInput']);
         $sampleOutput = stripslashes($_POST['sampleOutput']);
-        $inputData = stripslashes($_POST['input-data']);
-        $outputData = stripslashes($_POST['output-data']);        
+        $inputData = stripslashes($_POST['input-test']);
+        $outputData = stripslashes($_POST['output-test']);        
         $hint = stripslashes($_POST['hint']);
-        $source = stripslashes($_POST['source']);
-        $inDate = stripslashes($_POST['inDate']);
+        $source = "scutoj";//stripslashes($_POST['source']);
+        $inDate = $now;
         $timeLimit = stripslashes($_POST['time-limit']);
         $memoryLimit = stripslashes($_POST['memory-limit']);
-
+		echo "test1";
         //这里漏了输入格式和输出格式，input和output应该是格式而不是最终匹配的测试数据，需要修改，增加inputData
         $problem_array = array('title'=>$title,'description'=>$description,'input'=>$input,
         'output'=>$output,'sampleInput'=>$sampleInput,'sampleOutput'=>$sampleOutput,'hint'=>$hint,
         'source'=>$source,'inDate'=>$inDate,'timeLimit'=>$timeLimit,'memoryLimit'=>$memoryLimit);
         $problemId = $this->problem_edit->add_problem($problem_array);
+        echo "test2";
         $basedir = "/home/judge/data/".$problemId;
         mkdir($basedir,0755);
         $this->load->helper('file');
