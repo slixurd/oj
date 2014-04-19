@@ -1,33 +1,23 @@
-<div class="wrapper">
-<div class="container clearfix">
-    <ul class="slide-bar pull-left">
-        <li><a href="#">题目列表</a></li>
-        <li class="active"><a href="#">添加题目</a></li>
-        <li><a href="#">课程列表</a></li>
-        <li><a href="#">添加课程</a></li>
-        <li><a href="#">竞赛列表</a></li>
-        <li><a href="#">添加竞赛</a></li>
-        <li><a href="#">排名</a></li>
-        <li><a href="#">状态</a></li>
-        <li><a href="#">账号生成器</a></li>
-        <li><a href="#">权限管理</a></li>
-        <li><a href="#">修改密码</a></li>
-        <li><a href="#">新手须知</a></li>
-    </ul>
 
     <div class="add-problem pull-right">
-    <form class="add-problem-form" action="#" method="post">
+    <form class="add-problem-form" action="<?php echo site_url('admin/problem/add_problem') ?>" method="post">
         <div>
             <h3>添加题目</h3>
             <div class="row">
-                <span>题目：</span>
+                <span class="tip">题目：</span>
                 <input type="text" name="title" />
             </div>
             <div class="row">
-                <span>时间限制：</span>
-                <input type="text" name="time-limit" placeholder="秒" />
-                <span class="text-center">内存限制：</span>
-                <input type="text" name="memory-limit" placeholder="MByte" />
+                <div class="append">
+                    <span class="tip">时间限制：</span>
+                    <input id="time-limit" type="text" name="time-limit" />
+                    <span class="add-on">ms</span>
+                </div>
+                <div class="append text-right">
+                    <span class="tip">内存限制：</span>
+                    <input id="memory-limit" type="text" name="memory-limit" />
+                    <span class="add-on">byte</span>
+                </div>
             </div>
         </div>
         <div>

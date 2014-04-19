@@ -1,19 +1,4 @@
-<div class="wrapper">
-    <div class="container clearfix">
-        <ul class="slide-bar pull-left">
-            <li class="active"><a href="#">题目列表</a></li>
-            <li><a href="#">添加题目</a></li>
-            <li><a href="#">课程列表</a></li>
-            <li><a href="#">添加课程</a></li>
-            <li><a href="#">竞赛列表</a></li>
-            <li><a href="#">添加竞赛</a></li>
-            <li><a href="#">排名</a></li>
-            <li><a href="#">状态</a></li>
-            <li><a href="#">账号生成器</a></li>
-            <li><a href="#">权限管理</a></li>
-            <li><a href="#">修改密码</a></li>
-            <li><a href="#">新手须知</a></li>
-        </ul>
+
 
         <div class="problem-list pull-right">
             <table class="table">
@@ -54,7 +39,6 @@
             <div class="pagination" style="text-align:center;">
               <ul>
                 <?php echo $pagination_block; ?>
-                <!--li class="active"><a href="">1</a></li -->
               </ul>
             </div>
         </div>
@@ -78,13 +62,17 @@
         }
     });
 
-    $(".pdel").on("click",function(){
+    $(".pdel").on("click",function(c){
+        c.preventDefault();
         var line = $(this).parent().parent();
         var pid = line.find(".pid").text();
-        var url = '<?php echo site_url('admin/problem/del/'); ?>'+'/'+pid;
-            $.get(url,function(data){
-                line.fadeOut();
-                console.log(data);
+        var url = '<?php echo site_url("admin/problem/del"); ?>'+'/'+pid;
+            $.getJSON(url,function(data){
+                if(data.status == true ){
+                    line.fadeOut();
+                }else{
+                    alert(data.reason);
+                }
             });
     })
 </script>

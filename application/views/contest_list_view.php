@@ -46,7 +46,6 @@
 	  	<div class="pagination" style="text-align:center;">
 		  <ul>
 	  	  	<?php echo $pagination_block; ?>
-		    <!--li class="active"><a href="">1</a></li -->
 		  </ul>
 		</div>
 	</div>
