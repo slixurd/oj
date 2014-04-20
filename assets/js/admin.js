@@ -255,24 +255,30 @@ function check_ness() {
 //验证是否有学生名单
 function check_students() {
 	if($('#students')[0] && $('#excel')[0]) {
-		if($('#students').val() === '' && $('#excel').val() === '') {
-			if($('#students').parent().siblings('i.popTip').length==0) {
+		if($('#students').val().length > 0) {
+			var regE = /^((\d{12}[ \t(\r\n)]+)+)$/;
+			//var str = $('#students').val().trim() + ' ';
+			var str = $.trim($('#students').val()) + ' ';
+			if(!regE.test(str)) {
+				$('#students').parent().siblings('i.popTip').remove();
+				popTip($('#students')[0],'学生名单格不正确','top','permanent');
+				return false;
+			}else {
 				$('#students').siblings('i.popTip').remove();
-				popTip($('#students')[0].parentNode,'未导入学生名单','top','permanent');
+				$('#students').parent().siblings('i.popTip').remove();
+				return true;
 			}
-			return false;
-		}
-
-		var regE = /^((\d{12}[ \t(\r\n)]+)+)$/;
-		//var str = $('#students').val().trim() + ' ';
-		var str = $.trim($('#students').val()) + ' ';
-		if(!regE.test(str)) {
-			$('#students').parent().siblings('i.popTip').remove();
-			popTip($('#students')[0],'学生名单格不正确','top','permanent');
-			return false;
-		}else {
-			$('#students').siblings('i.popTip').remove();
-			$('#students').parent().siblings('i.popTip').remove();
+		} else {
+			if($('#excel').val().length > 0) {
+				$('#students').siblings('i.popTip').remove();
+				$('#students').parent().siblings('i.popTip').remove();
+				return true;
+			} else {
+				$('#students').siblings('i.popTip').remove();
+				$('#students').parent().siblings('i.popTip').remove();
+				popTip($('#students')[0].parentNode,'未导入学生名单','top','permanent');
+				return false;
+			}
 		}
 	}
 	return true;

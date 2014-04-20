@@ -1,9 +1,9 @@
     <div class="add-tab pull-right">
         <table class="table">
-            <caption>课程列表</caption>
+            <caption>单元列表</caption>
             <thead>
                 <tr>
-                    <th class="span1">课程ID</th>
+                    <th class="span1">单元ID</th>
                     <th class="span7">名称</th>
                     <th class="span6">开始时间</th>
                     <th class="span6">结束时间</th>
@@ -14,20 +14,20 @@
             <tbody>
                 <?php foreach ($plist as $item) { ?>
                 <tr>
-                    <td><?php echo $item['unitId'] ?></td>
+                    <td class="uid"><?php echo $item['unitId'] ?></td>
                     <td><?php echo $item['title'] ?></td>
                     <td><?php echo $item['startTime'] ?></td>
                     <td><?php echo $item['endTime'] ?></td>
-                    <td><a href="#">编辑</a></td>
-                    <td><a href="#">删除</a></td>
+                    <td><a href="<?php echo site_url('admin/course/problem/'.$item['unitId']) ?>">编辑</a></td>
+                    <td><a class="del" href="">删除</a></td>
                 </tr>
                 <?php } ?>
             </tbody>
         </table>
-
         <div>
+
         <form action="#" method="post">
-            <h3>新建实验\作业</h3>
+            <h3>新建单元</h3>
             <div class="row1">
                 <span class="tip">名称：</span>
                 <input type="text" name="title" />
@@ -88,21 +88,28 @@
                     </select>
                 </div>
             </div>
-            <hr />
-            <div class="row6">
-                <span class="tip">名单：</span>
-                <textarea name="list"></textarea>
-            </div>
-            <hr />
-            <div class="row7">
-                <span class="tip">描述：</span>
-                <textarea name="describe"></textarea>
-            </div>
             <div class="submit-footer">
-                <input type="submit" class="btn" value="添加题目" />
+                <input type="submit" class="btn" value="添加单元" />
             </div>
         </form>
         </div>
     </div>
 </div>
 </div>
+
+<script type="text/javascript">
+    $(".del").on("click",function(c){
+        c.preventDefault();
+        var line = $(this).parent().parent();
+        var uid = line.find(".uid").text();
+        var url = '<?php echo site_url("admin/course/unit_del"); ?>'+'/'+uid;
+            $.getJSON(url,function(data){
+                if(data.status == true ){
+                    line.fadeOut();
+                }else{
+                    alert(data.reason);
+                }
+
+            });
+    })
+</script>
