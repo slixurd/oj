@@ -121,10 +121,69 @@ class Course_edit extends CI_Model
 		$courseId = $this->db->escape($courseId);
 		$userId = $this->db->escape($userId);
 		$kind = $this->db->escape($kind);
-		$common = "common";
+		$common = "course";
 		$sql = "INSERT INTO privilege_common(common,userId,commonId,privilege) 
 		 VALUES(".$common.",".$userId.",".$courseId.",".$kind.")";
 		$this->db->query($sql);
+	}
+	
+	public function del_unit($unitId){
+		$unitId = $this->db->escape($unitId);
+		$sql1= "DELETE FROM course_unit WHERE unitId =  ".$unitId;
+		$sql2 = "DELETE FROM unit_problem WHERE unitId = ".$unitId;
+		$this->db->trans_start();//事务开始
+		$this->db->query($sql1);
+		$this->db->query($sql2);
+		$this->db->trans_complete();//事务结束
+	}
+	
+	public function get_user_course_list($userId,$limit_from,$limit_row){
+		$userId = $this->db->escape($userId);
+		$sql = "SELECT type FROM user WHERE userId = ".$userId;
+		$query=$this->db->query($sql);
+		$type = $query->row_array(0);
+		$type = $type['type'];
+		if($type == "admin"){
+			return get_course_list($limit_from,$limit_row);
+		}
+		else if($type == "teacher"){
+			$sql = "SELECT courseId , course.userId , course.name as courseName,startTime ,endTime,private, user.name 
+				FROM course LEFT JOIN user ON course.userId = user.userId WHERE user.userId = ".$userId.
+				" LIMIT ".$limit_from." , ".$limit_row;
+			$query = $this->db->query($sql);
+			return $query->result_array();
+		}
+		else if($type == "assistant"){
+			$sql = "SELECT courseId , course.userId , course.name as courseName,startTime ,endTime,private, user.name 
+				FROM course LEFT JOIN user ON course.userId = user.userId WHERE courseId  IN
+				(SELECT distinct(commonId) FROM privilege_common WHERE userId =  ".$userId." AND common = 'course' AND privilege = 'edit') 
+				LIMIT ".$limit_from." , ".$limit_row;
+				//echo $sql;
+			$query = $this->db->query($sql);
+			return $query->result_array();
+		}
+		return NULL;
+	}
+	
+	public function add_assistant($courseId,$name_email){
+		$ciurseId = $this->db->escape($courseId);
+		$name_email = $this->db->escape($name_email);
+		$sql = "SELECT userId ,type FROM user WHERE  name = ".$name_email." OR email = ".$name_email;
+		$query=$this->db->query($sql);
+		$user = $query->row_array(0);
+		if(empty($user))
+			return 0;//找不到用户
+		if($user['type'] != "student" && $user['type'] != "assistant")
+			return 1;//不能把高权限用户设置为助教
+		$userId = $user['userId'];
+		$privilege_array = array("read","submit","add","edit");
+		for($i = 0;$i<4;$i++){
+			$sql = "INSERT INTO privilege_common(common,commonId,userId,privilege) VALUES('course',".$courseId.",".$userId.",'".$privilege_array[$i]."')";
+			$this->db->query($sql);
+		}
+		$sql = "UPDATE user SET type = 'assistant' WHERE userId = ".$userId;
+		$this->db->query($sql);
+		return 2;//成功添加
 	}
 	
 }
