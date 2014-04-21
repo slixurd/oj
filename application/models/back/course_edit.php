@@ -31,13 +31,22 @@ class Course_edit extends CI_Model
 				FROM course LEFT JOIN user ON course.userId = user.userId 
 				LIMIT ".$limit_from." , ".$limit_row;
 		$query = $this->db->query($sql);
-		return $query->result_array();
+		$result = $query->result_array();
+		if(empty($result))
+			return false;
+		return $result;
 	}
 	
 	public function del_course($courseId){
 		$courseId = $this->db->escape($courseId);
+		$sql = "DELETE FROM privilege_common WHERE common = 'course' AND commonId = ".$courseId;
+		$this->db->query($sql);
 		$sql = "DELETE FROM course WHERE courseId = ".$courseId;
 		$this->db->query($sql);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
 	}
 	
 	public function get_course_unit_list($courseId)
@@ -46,7 +55,10 @@ class Course_edit extends CI_Model
 		$sql = "SELECT unitId , courseId , title ,startTime , endTime FROM course_unit
 				WHERE courseId = ".$courseId;
 		$query = $this->db->query($sql);
-		return $query->result_array();
+		$result =  $query->result_array();
+		if(empty($result))
+			return false;
+		return $result;
 	}
 	
 	 
@@ -57,7 +69,10 @@ class Course_edit extends CI_Model
 				FROM unit_problem LEFT JOIN problem ON unit_problem.problemId = problem.problemId 
 				WHERE unit_problem.unitId =  ".$unitId;
 		$query = $this->db->query($sql);
-		return $query->result_array();
+		$result =  $query->result_array();
+		if(empty($result))
+			return false;
+		return $result;
 	}
 	
 	/*
@@ -99,8 +114,17 @@ class Course_edit extends CI_Model
 	 
 	public function add_unit_problem($unitId,$problemId)
 	{
+		$sql = "SELECT count(problemId) as count WHERE problemId = ".$this->db->escape($problemId);
+		$query = $this->db->query();
+		$count = $query->row_array(0);
+		if($count['count'] <= 0 || empty($count))
+			return false;
 		$column_array = array('unitId'=>$unitId,'problemId'=>$problemId);
 		$this->db->insert('unit_problem',$column_array);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
 	} 
 	
 	public function get_course_privilege($courseId,$userId,$kind)
@@ -125,6 +149,10 @@ class Course_edit extends CI_Model
 		$sql = "INSERT INTO privilege_common(common,userId,commonId,privilege) 
 		 VALUES(".$common.",".$userId.",".$courseId.",".$kind.")";
 		$this->db->query($sql);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
 	}
 	
 	public function del_unit($unitId){
@@ -132,9 +160,24 @@ class Course_edit extends CI_Model
 		$sql1= "DELETE FROM course_unit WHERE unitId =  ".$unitId;
 		$sql2 = "DELETE FROM unit_problem WHERE unitId = ".$unitId;
 		$this->db->trans_start();//事务开始
-		$this->db->query($sql1);
 		$this->db->query($sql2);
+		$this->db->query($sql1);
 		$this->db->trans_complete();//事务结束
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
+	}
+	
+	public function del_unit_problem($unitId,$problemId){
+		$unitId = $this->db->escape($unitId);
+		$problemId = $this->db->escape($problemId);
+		$sql = "DELETE FROM unit_problem WHERE unitId = ".$unitId." AND problemId = ".$problemId;
+		$this->db->query($sql);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
 	}
 	
 	public function get_user_course_list($userId,$limit_from,$limit_row){
@@ -151,7 +194,10 @@ class Course_edit extends CI_Model
 				FROM course LEFT JOIN user ON course.userId = user.userId WHERE user.userId = ".$userId.
 				" LIMIT ".$limit_from." , ".$limit_row;
 			$query = $this->db->query($sql);
-			return $query->result_array();
+			$result =  $query->result_array();
+			if(empty($result))
+				return false;
+			return $result;
 		}
 		else if($type == "assistant"){
 			$sql = "SELECT courseId , course.userId , course.name as courseName,startTime ,endTime,private, user.name 
@@ -160,9 +206,12 @@ class Course_edit extends CI_Model
 				LIMIT ".$limit_from." , ".$limit_row;
 				//echo $sql;
 			$query = $this->db->query($sql);
-			return $query->result_array();
+			$result =  $query->result_array();
+			if(empty($result))
+				return false;
+			return $result;
 		}
-		return NULL;
+		return false;
 	}
 	
 	public function add_assistant($courseId,$name_email){
@@ -172,18 +221,20 @@ class Course_edit extends CI_Model
 		$query=$this->db->query($sql);
 		$user = $query->row_array(0);
 		if(empty($user))
-			return 0;//找不到用户
+			return -1;//找不到用户
 		if($user['type'] != "student" && $user['type'] != "assistant")
-			return 1;//不能把高权限用户设置为助教
+			return -2;//不能把高权限用户设置为助教
 		$userId = $user['userId'];
 		$privilege_array = array("read","submit","add","edit");
+		$affect = 0;
 		for($i = 0;$i<4;$i++){
 			$sql = "INSERT INTO privilege_common(common,commonId,userId,privilege) VALUES('course',".$courseId.",".$userId.",'".$privilege_array[$i]."')";
 			$this->db->query($sql);
+			$affect = $this->db->affected_rows();
 		}
 		$sql = "UPDATE user SET type = 'assistant' WHERE userId = ".$userId;
 		$this->db->query($sql);
-		return 2;//成功添加
+		return $affect;//返回受影响行数
 	}
 	
 }
