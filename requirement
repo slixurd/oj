@@ -1,0 +1,5 @@
+#redis
+wget http://download.redis.io/releases/redis-2.8.0.tar.gz
+tar -xvf redis-2.8.0.tar.gz
+cd redis-2.8.0
+sudo make install

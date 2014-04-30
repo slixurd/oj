@@ -1,0 +1,344 @@
+//通用变量声明
+//1.所有蓝底字的颜色酱
+@blue-bg-font : #3B3B3B;
+//2.背景色君
+@bg-color : #F4F4F4;
+//3.搜索按钮颜色
+@search-color: #F6A22E;
+//4.hr颜色
+@hr-color: #30B3A6;
+//5.导航栏颜色
+@header-color: #FCFCFC;
+//蓝色文字
+@strong: #38B3FF;
+//表格一行的默认高度
+@tr-height: 29px;
+//input,textarea,select 背景色
+@text-bg: #fafafa;
+//输入类框边框色
+@border-clr: #ddd;
+
+@import "base";
+@import "table";
+@import "admin_additional";
+
+//创建选项卡导航栏类
+ul.nav-tabs {
+	.nav-tabs();
+}
+
+//创建选项卡内容类
+div.tab-content {
+	.tab-content();
+}
+
+//创建下拉列表类
+.select-down {
+	.select-down();
+}
+
+//创建checkbox类
+.checkbox {
+	.checkbox(18px);
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: @bg-color;
+	color: #3c3c3c;
+}
+
+.checkbox {
+	.checkbox();
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: @bg-color;
+	color: #3c3c3c;
+}
+
+.submit-footer {
+	background-color: @bg-color;
+	padding: 20px 0;
+	text-align: center;
+
+	.btn {
+		margin: 0 20px;
+	}
+
+	input.btn,
+	button.btn {
+		margin-bottom: 4px;
+	}
+}
+
+.container {
+	margin: 0 auto;
+	width: 960px;
+}
+
+.table {
+	font-size: 16px;
+	caption {
+		height: 50px;
+		text-align: left;
+		padding-left: 10px;
+		color: @strong;
+		font-size: 28px;
+		line-height: 50px;
+		background-color: white;
+	}
+
+	thead tr {
+		border-left: solid 4px @strong;
+		border-right: solid 4px @strong;
+	}
+
+	td,
+	th {
+		display: table-cell;
+		.avoid-overflow;
+	}
+
+	td {
+		background-color: white;
+		height: @tr-height;
+		line-height: @tr-height;
+		max-width: 60px;
+	}
+
+	a {
+		text-decoration: underline;
+		cursor: pointer;
+		
+	}
+}
+
+.active {
+	background-color: @bg-color;
+}
+.footer{
+	color:#777;
+	height: 58px-15*2;
+	text-align: center;
+	padding: 15px;
+}
+
+.header{
+	width: 100%;
+	background-color: @header-color;
+	color: @blue-bg-font;
+	font-size: 16px;
+	line-height: 20px;
+	.box-shadow(0 0 0 4px #EEE);
+	.i-c{
+		display: inline-block;
+	}
+	a {
+		color: #3c3c3c;
+	}
+
+	.panel{
+		width: 270px;
+		padding: 15px;
+		float: right;
+		> div{
+			cursor: pointer;
+			a{
+				color: @blue-bg-font;
+			}
+		}
+		.return{
+			background-color: @strong;
+			color: white;
+			padding: 3px 20px;
+			cursor: pointer;
+			display: inline-block;
+			margin-right: 10px;
+			max-width: 120px;
+			.avoid-overflow();
+		}
+		.admin-name{
+			font-size: 24px;
+			vertical-align: top;
+			text-align: right;
+			padding:3px 10px;
+			display:inline-block;
+			color:@strong;
+			font-weight: bold;
+			.avoid-overflow();
+			width: 120px;
+		}
+
+	}
+
+}
+
+
+.slide-bar {
+	width: 195px;
+
+	li {
+		height: 40px;
+		margin-bottom: 1px;
+		background-color: white;
+		font-size: 20px;
+		line-height: 40px;
+		text-align: center;
+
+		a {
+			display: inline-block;
+			width: 100%;
+		}
+
+		&:hover {
+			background-color: @strong;
+
+			a {
+				color: white;
+			}
+		}
+	}
+
+	li.active {
+		background-color: @strong;
+
+		a {
+			color: white;
+		}
+	}
+}
+
+.wrapper {
+	padding-top: 50px;
+
+	> .container {
+		a {
+			color: #3c3c3c;
+		}
+
+		> div {
+			width: 745px;
+		}
+	}
+}
+
+.add-problem {
+	.submit-footer {
+		padding: 0;
+	}
+
+	.add-problem-form > div {
+		background-color: white;
+		margin-bottom: 25px;
+
+		&.submit-footer {
+			background-color: @bg-color;
+		}
+
+		&:first-child {
+			padding-bottom: 1px;
+			.row {
+				padding: 0 20px;
+				margin-bottom: 20px;
+			}
+		}
+
+		ul.nav-tabs {
+			background-color: @bg-color;
+			width: 100%;
+		}
+
+		.tab-pane {
+			background-color: white;
+		}
+
+		.tab-content div[id *= "tab1"] textarea {
+			.size(205px,694px);
+		}
+
+		.tab-content div[id *= "tab2"] textarea {
+			.size(205px,230px);
+		}
+	}
+}
+
+.problem-list {
+	.select-down {
+		.select-down(28px,100px);
+	}
+}
+
+.add-tab {
+	> div {
+		margin-top: 50px;
+		background-color: white;
+
+		.select-down {
+			.select-down(32px,103px);
+			vertical-align: middle;
+			margin-right: 16px;
+			&.last-child {
+				margin-right: 0;
+			}
+		}		
+	}
+}
+
+.add-course {
+	background-color: white;
+
+	.tip {
+		width: 100px;
+	}
+
+	.select-down {
+		.select-down(32px,88px);
+		vertical-align: middle;
+	}
+}
+
+.authority,
+.password {
+	.select-down {
+		.select-down(32px,195px);
+		vertical-align: middle;
+		text-align: left;
+	}
+
+	> div {
+		background-color: white;
+	}
+
+	.tip {
+		width: 80px;
+		text-align: right;
+	}
+
+	input[type="text"],
+	input[type="password"] {
+		width: 195px;
+		vertical-align: middle;
+	}
+
+	.submit-footer {
+		background-color: white;
+		.btn {
+			margin-left: 90px;
+		}
+	}
+
+	h3 {
+		padding-bottom: 15px;
+		border-bottom: solid 1px @bg-color;
+		margin-bottom: 35px;
+	}
+
+	.row {
+		margin-top: 25px;
+		text-align: center;
+	}			
+}

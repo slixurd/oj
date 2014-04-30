@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>权限管理</title>
+<meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+<link rel="stylesheet" type="text/css" href="css/admin.css">
+<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="js/admin.js"></script>
+</head>
+<body>
+<div class="wrapper">
+	<div class="container clearfix">
+		<ul class="slide-bar pull-left">
+		<li><a href="#">题目列表</a></li>
+		<li><a href="#">添加题目</a></li>
+		<li><a href="#">课程列表</a></li>
+		<li><a href="#">添加课程</a></li>
+		<li><a href="#">竞赛列表</a></li>
+		<li><a href="#">添加竞赛</a></li>
+		<li><a href="#">排名</a></li>
+		<li><a href="#">状态</a></li>
+		<li><a href="#">账号生成器</a></li>
+		<li class="active"><a href="#">权限管理</a></li>
+		<li><a href="#">修改密码</a></li>
+		<li><a href="#">新手须知</a></li>
+		</ul>
+
+		<div class="authority pull-right">
+			<table class="table">
+				<caption>用户列表</caption>
+				<thead>
+					<tr>
+						<th class="span3">用户</th>
+						<th class="span4">权限</th>
+						<th class="span4">备注</th>
+						<th class="span2">删除</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td title="AdminAdminAdminAdminAdmin">AdminAdminAdminAdminAdmin</td>
+						<td>administrator</td>
+						<td title="拥有最高管理权限">拥有最高管理权限</td>
+						<td><a class="pdel" href="#">删除</a></td>
+					</tr>
+					<tr>
+						<td title="Admin">Admin</td>
+						<td>administrator</td>
+						<td title="拥有最高管理权限拥有最高管理权限拥有最高管理权限拥有最高管理权限">拥有最高管理权限拥有最高管理权限拥有最高管理权限拥有最高管理权限</td>
+						<td><a class="pdel" href="#">删除</a></td>
+					</tr>
+					<tr>
+						<td title="Admin">Admin</td>
+						<td>administrator</td>
+						<td title="拥有最高管理权限">拥有最高管理权限</td>
+						<td><a class="pdel" href="#">删除</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="margin-top">
+			<form action="#" method="post">
+			<h3>权限设置</h3>
+			<div class="row">
+				<span class="tip">用户：</span>
+				<div class="select-down">
+					<span class="select-down-span">Cherlse<i class="down"></i></span>
+					<select autocomplete="off" class="select-down-select">
+						<option value="1001">Cherlse</option>
+						<option value="1002">Slixurd</option>
+						<option value="1003">Oujiangping</option>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<span class="tip">权限：</span>
+				<div class="select-down">
+					<span class="select-down-span">administrator<i class="down"></i></span>
+					<select autocomplete="off" class="select-down-select">
+						<option value="0">administrator</option>
+						<option value="teacher">teacher</option>
+					</select>
+				</div>
+			</div>
+			<div class="submit-footer">
+				<input type="submit" class="btn" value="添加" />
+			</div>
+			</form>
+			</div>
+		</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+//实现下拉列表动作
+	$("select").change(function() {
+		var value = this.value;
+		var text = $(this).find("option[value="+value+"]").text();
+		$(this).siblings("span").text(text)
+		.append("<i class='down'></i>");
+	})
+
+	$('.pdel').bind('click', function(event) {
+		$(this).parents('tr').fadeOut();
+	});
+</script>
+</body>
+</html>

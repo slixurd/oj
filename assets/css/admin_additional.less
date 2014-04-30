@@ -1,0 +1,422 @@
+@bg-color: #F4F4F4;
+@pd-color: silver; //placeholder颜色
+@baseMargin: 50px;
+//input,textarea,select 背景色
+@text-bg: #fafafa;
+//出错警告颜色
+@error-clr: #FA9290;
+//正确颜色
+@correct-clr: #79ff79;
+//输入类框边框色
+@border-clr: #ddd;
+//蓝色文字
+@strong: #38B3FF;
+@import 'base';
+
+//下拉列表类
+.select-down(@height:25px,@width:90px,@padding_top: 2px,@padding_left: 8px) {
+	display: inline-block;
+	position: relative;
+	margin: 0;
+	padding: 0;
+
+	select {
+		.size(@height,@width);
+		opacity: 0;
+		filter: alpha(opacity=0);
+		z-index: 999;
+		position: absolute;
+		left: 1px;
+		top: 0;
+
+		option {
+			padding-left: @padding_left;
+		}
+	}
+
+	span {
+		position: relative;
+		display: inline-block;
+		.size(@height - @padding_top*2 - 2px,@width - @padding_left - 2px);
+		border: solid 1px #e9e9e9;
+		line-height: @height - @padding_top*2;
+		padding: @padding_top 0 @padding_top @padding_left;
+		background-color: @text-bg;
+
+		.avoid-overflow;
+
+		&.placeholder {
+			color: @pd-color;
+		}
+
+		i.down,
+		i.up {
+			position: absolute;
+			top: 13px;
+			right: 5px;
+		}
+	}
+}
+
+//选项卡导航栏类
+.nav-tabs(@height: 45px,@width: 95px,@background: white) {
+	.clearfix;
+	li {
+		display: block;
+		.size(@height,@width);
+		font-size: 18px;
+		cursor: pointer;
+		float: left;
+		border-left: solid 2px @bg-color;
+		margin-left: -2px;
+		border-top: solid 1px @bg-color;
+		border-bottom: none;
+		background-color: @background;
+		text-align: center;
+		line-height: @height;
+		.border-top-left-radius(4px);
+		.border-top-right-radius(4px);
+
+		&:hover,
+		&.active {
+			a {
+				color: @strong;
+			}
+		}
+	}
+}
+
+//各个选项卡内容放置类
+.tab-content(@background: white) {
+	background-color: @background;
+	padding: 55px 0;
+	text-align: center;
+	width: 100%;
+
+	//单个选项卡的内容
+	.tab-pane {
+		display: none;
+		width: 100%;
+
+		&.active {
+			display: block;
+		}
+	}
+}
+
+//checkbox类
+.checkbox(@size: 17px) {
+	display: inline-block;
+	.square(@size); 
+	border: solid gray 1px;
+	background-color: white;
+	position: relative;
+	margin-top: 5px;
+
+	input[type="checkbox"] {
+		display: inline-block;
+		.size(100%,100%);
+		position: absolute;
+		top: 0;
+		left: 0;
+		cursor: pointer;
+		z-index: 999;
+		opacity: 0;
+		padding: 0;
+		border: none;
+	}
+}
+
+.text-left {
+	text-align: left;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.text-right {
+	text-align: right;
+}
+
+.margin-top {
+	margin-top: @baseMargin;
+}
+
+.margin-bottom {
+	margin-bottom: @baseMargin;
+}
+
+//带有后缀的输入框
+.append {
+	display: inline-block;
+	vertical-align: middle;
+
+	.add-on {
+		display: inline-block;
+		vertical-align: middle;
+		border: solid 1px @border-clr;
+		border-left: none;
+		margin-left: -6px;
+		padding: 0 0.5em;
+		text-align: center;
+		width: auto !important;
+		background-color: @text-bg;
+		color: @pd-color;
+	}
+}
+
+.btn {
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 25px;
+	background-color: @strong;
+	color: white !important;
+	border: none;
+	.border-radius(4px);
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+
+.down {
+	display: inline-block;
+	.size(5px,9px);
+	border: none;
+	vertical-align: middle;
+	background-image: url("../img/list_button.jpg");
+}
+
+.up {
+	display: inline-block;
+	width: 9px;
+	height: 5px;
+	vertical-align: middle;
+	background-image: url("../img/list_button_up.jpg");
+}
+
+
+.Down {
+	display: inline-block;
+	.size(14px,28px);
+	border: none;
+	vertical-align: middle;
+	background-image: url("../img/down.jpg");
+	margin-top: 10px;
+
+	&:hover {
+		filter: alpha(opacity=60);
+		opacity: 0.6;
+	}
+}
+
+.Up {
+	display: inline-block;
+	.size(14px,28px);
+	border: none;
+	vertical-align: middle;
+	background-image: url("../img/up.jpg");
+	margin-top: 10px;
+
+	&:hover {
+		filter: alpha(opacity=60);
+		opacity: 0.6;
+	}
+}
+
+.hidden {
+	display: none;
+}
+
+.partion-h {
+	display: inline-block;
+	.size(3px,40px);
+	background-color: #3c3c3c;
+	vertical-align: middle;
+}
+
+.row {
+	margin-bottom: 20px;
+	padding: 0 20px;
+}
+
+.error {
+	border-color: @error-clr;
+	.box-shadow(0 0 8px 0 @error-clr);
+}
+
+.correct {
+	border-color: @correct-clr;
+	.box-shadow(0 0 8px 0 @correct-clr);
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+	background-color: @text-bg;
+	border: solid 1px @border-clr;
+	font-size: 14px;
+	color: #3c3c3c;
+	padding: 0 5px;
+	vertical-align: middle;
+	box-sizing: content-box;
+
+	&:focus {
+		outline: 0;
+	}
+}
+
+textarea {
+	padding: 5px;
+	resize: none;
+	overflow: auto;
+	font-size: 16px;
+}
+
+input[type="submit"],
+input[type="reset"] {
+	margin-bottom: 0 !important;
+	margin-top: 0 !important;
+	vertical-align: middle;
+}
+
+input:focus,
+textarea:focus {
+	outline: 0;
+}
+
+input[type="text"],
+input[type="password"] {
+	height: 35px;
+}
+
+.tip {
+	display: inline-block;
+	.size(37px,95px);
+	line-height: 42px;
+	vertical-align: middle;
+	font-size: 17px;
+}
+
+#language {
+	.select-down(32px,120px);
+}
+#list {
+	.size(188px,590px);
+}
+
+#describe {
+	.size(108px,590px);
+}
+
+#private {
+	.select-down(32px,120px);
+}
+
+#teacher,
+#assistant {
+	width: 240px;
+	margin-right: 20px;
+}
+
+#describe {
+	.size(113px,583px);
+}
+
+#title,
+#source {
+	//.size(30px,590px);
+	width: 590px;
+}
+
+.append {
+	//.size(32px,340px);
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0;
+}
+
+.add-on {
+	height: 35px;
+	line-height: 40px;
+}
+
+#time-limit {
+	//.size(30px,200px);
+	width: 200px;
+}
+
+#memory-limit {
+	//.size(32px,193px);
+	width: 193px;
+}
+
+#-time-limit {
+	//.size(30px,200px);
+	width: 190px;
+}
+
+#-memory-limit {
+	//.size(32px,193px);
+	width: 193px;
+}
+
+
+.import {
+	height: 200px;
+	line-height: 200px;
+
+	a {
+		text-decoration: underline;
+
+		&.btn {
+			text-decoration: none;
+		}
+	}
+
+	textarea {
+		.size(188px,245px);
+	}
+
+	> div {
+		display: inline-block;
+		height: 80px;
+		width: 335px;
+		line-height: 100px;
+		vertical-align: bottom;
+
+		input[type="text"] {
+			.size(28px,303px);
+			margin-left: 23px;
+		}
+
+		input[type="file"] {
+			.size(28px,50px);
+		}
+
+		.row {
+			height: 30px;
+			margin-top: 15px;
+			line-height: 0;
+			vertical-align: bottom;
+			padding: 0 0 0 23px;
+
+			.btn {
+				margin-left: 36px;
+			}
+		}
+	}
+}
+
+.empty-row {
+	caption-side: bottom;
+	text-align: center !important;
+	height: 60px !important;
+	line-height: 60px !important;
+	font-style: italic;
+}
+
+.checked {
+	background: url("../img/right.jpg") no-repeat 3px 6px;
+}

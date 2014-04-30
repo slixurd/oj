@@ -1,0 +1,85 @@
+div.wrapper>.side-split{
+	background-color: transparent;
+	h4{
+		width: 700-4px*2-20px;
+	}
+}
+@side-color: #FCFCFC;
+.wrapper{
+	.side-main{
+		h4{
+			font-weight: bold;
+		}
+		background-color: @side-color;
+		.problem-info{
+			span{
+				display: inline-block;
+				font-size: 14px;
+				line-height: 20px;
+				padding: 0 20px; 
+				margin-bottom: 15px;
+			}
+			padding:0 0 20px 0;
+		}
+		.button-side{
+			text-align: center;
+			margin-top: 20px;
+			button{
+				margin-left: 20px;
+				padding: 4px 20px;
+			}
+		}
+		.problem-brief{
+			text-align: left;
+			margin: 0 auto;
+			margin-top:-10px;
+			margin-bottom: 15px;
+			tr{
+				height: 35px;
+			}
+			td{
+				width: 220px;
+				padding-left: 10px;
+				border:1px solid @strong;
+			}
+		}
+
+		.detail-title{
+			margin: 0 20px;
+			padding: 15px 0;
+			color: @strong;
+			font-size: 24px;
+			border-top: 1px solid #DDD;
+		}
+	}
+
+	.side-appendix{
+		border-top: 4px solid @strong;
+		margin-left: 30px;
+		float: right;
+		padding: 0 15px;
+		width: 200px;
+		background-color: @side-color;
+		span{
+			display: inline-block;
+		}
+		.problem-appendix{
+			div{
+				border-bottom: 1px solid #D7D7D7;
+				padding: 6px 0;
+			}
+			div:last-child{
+				border-bottom: 0;
+			}
+			span:first-child{
+				width: 80px;
+			}	
+		}
+
+
+	}
+}
+
+.center{
+	text-align: center;
+}

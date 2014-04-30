@@ -1,0 +1,12 @@
+scutoj.txt是用来建一个空的数据库的
+scutoj.sql是有测试数据在里面的，只是用来测试界面效果的
+
+scutoj.txt与scutoj.sql用了一个就不用另外一个
+
+命令如下：
+
+mysql -u user -ppass < scutoj.sql
+
+或者
+
+mysql -u user -ppass < scutoj.txt

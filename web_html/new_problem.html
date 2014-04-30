@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>实验\作业列表</title>
+<meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
+<link rel="stylesheet" type="text/css" href="css/admin.css">
+<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="js/admin.js"></script>
+</head>
+<body>
+<div class="wrapper">
+	<div class="container clearfix">
+		<ul class="slide-bar pull-left">
+		<li><a href="#">题目列表</a></li>
+		<li><a href="#">添加题目</a></li>
+		<li class="active"><a href="#">课程列表</a></li>
+		<li><a href="#">添加课程</a></li>
+		<li><a href="#">竞赛列表</a></li>
+		<li><a href="#">添加竞赛</a></li>
+		<li><a href="#">排名</a></li>
+		<li><a href="#">状态</a></li>
+		<li><a href="#">账号生成器</a></li>
+		<li><a href="#">权限管理</a></li>
+		<li><a href="#">修改密码</a></li>
+		<li><a href="#">新手须知</a></li>
+		</ul>
+
+		<div class="pull-right">
+			<table class="table margin-bottom">
+				<caption>××实验\作业</caption>
+				<thead>
+					<tr>
+						<th class="span3">ID</th>
+						<th class="span3">编辑</th>
+						<th class="span1">删除</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1001</td>
+						<td><a class="pdel" href="#">删除</a></td>
+						<td><a href="#">编辑</a></td>
+					</tr>
+					<tr>
+						<td>1002</td>
+						<td><a class="pdel" href="#">删除</a></td>
+						<td><a href="#">编辑</a></td>
+					</tr>
+					<tr>
+						<td>1003</td>
+						<td><a class="pdel" href="#">删除</a></td>
+						<td><a href="#">编辑</a></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="add-problem">
+			<form class="add-problem-form" action="http://www.baidu.com" method="post">
+				<div>
+					<h3>添加题目</h3>
+					<div class="row">
+						<span class="tip">题目：</span>
+						<input class="necessary" id="title" type="text" name="title" />
+					</div>
+					<div class="row">
+						<span class="tip">题目来源：</span>
+						<input id="source" type="text" name="title" />
+					</div>
+					<div class="row">
+						<div class="append">
+							<span class="tip">时间限制：</span>
+							<input class="necessary" id="time-limit" type="text" name="time-limit" />
+							<span class="add-on">秒</span>
+						</div>
+						<div class="append text-right">
+							<span class="tip">内存限制：</span>
+							<input class="necessary" id="memory-limit" type="text" name="memory-limit" />
+							<span class="add-on">MByte</span>
+						</div>
+					</div>
+				</div>
+				<div>
+					<ul class="nav-tabs">
+						<li class="active"><a rel="#tab11">描述</a></li>
+						<li><a rel="#tab12">输入</a></li>
+						<li><a rel="#tab13">输出</a></li>
+						<li><a rel="#tab14">提示</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab11"><textarea name="describe"></textarea></div>
+						<div class="tab-pane" id="tab12"><textarea class="necessary" name="input"></textarea></div>
+						<div class="tab-pane" id="tab13"><textarea class="necessary" name="output"></textarea></div>
+						<div class="tab-pane" id="tab14"><textarea name="prompt"></textarea></div>
+					</div>
+				</div>
+				<div class="vertical-middle">
+					<ul class="nav-tabs">
+						<li class="active"><a rel="#tab21">样例</a></li>
+						<li><a rel="#tab22">测试</a></li>
+					</ul>
+					<div class="tab-content">
+						<div class="tab-pane active" id="tab21">
+							<div class="row">
+								<span class="tip">输入样例：</span>
+								<textarea name="input-sam"></textarea>
+								<span class="tip">输出样例：</span>
+								<textarea name="output-sam"></textarea>
+							</div>
+						</div>
+						<div class="tab-pane" id="tab22">
+							<div class="row">
+								<span class="tip">测试输入：</span>
+								<textarea class="necessary" name="input-test"></textarea>
+								<span class="tip">测试输出：</span>
+								<textarea class="necessary" name="output-test"></textarea>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="submit-footer">
+					<a href="#" class="btn back">返回</a>
+					<input type="submit" class="btn" value="添加" />
+					<input type="reset" class="btn" value="取消" />
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	load_tab();
+
+	$('.back').bind('click', function(event) {
+		history.back();
+	});
+
+    $(".pdel").on("click",function(c){
+        c.preventDefault();
+        var line = $(this).parents('tr');
+        var unid = line.find("td:first").text();
+        var url = 'http://www.baidu.com?' + unid;
+        $.getJSON(url,function(data){
+            if(data.status == true ){
+                line.fadeOut();
+            }else{
+                alert(data.reason);
+            }
+        });
+    })
+
+	$('form').bind('submit', function(event) {
+		if(!check_ness() | !check_num()) return false;
+	});
+</script>
+</body>
+</html>

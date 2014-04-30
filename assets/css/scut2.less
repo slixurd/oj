@@ -1,0 +1,529 @@
+@import 'base';
+@import 'table';
+@import 'problem_detail';
+@import 'register';
+@import 'bootstrap';
+
+//个人主页
+@import 'personal_info';
+
+//通用变量声明
+//1.所有蓝底字的颜色酱
+@blue-bg-font : #3B3B3B;
+//2.背景色君
+@bg-color : #F4F4F4;
+//3.搜索按钮颜色
+@search-color: #F6A22E;
+//4.hr颜色
+@hr-color: #30B3A6;
+//5.导航栏颜色
+@header-color: #FCFCFC;
+//蓝色文字
+@strong: #38B3FF; 
+
+body{
+	background-color: @bg-color;
+}
+
+//顶部导航栏
+
+.container{
+	width: 960px;
+	margin: 0 auto;
+}
+
+.noback{
+	width: 960px;
+	margin: 0 auto;
+}
+
+.header{
+	width: 100%;
+	background-color: @header-color;
+	color: @blue-bg-font;
+	font-size: 16px;
+	line-height: 20px;
+	.box-shadow(0 0 0 4px #EEE);
+	a,a:hover,a:visit{
+		color: @blue-bg-font;
+	}
+	.i-c{
+		position: relative;
+		width: 650px;
+		display: inline-block;
+	}
+		.i-b{
+			position: absolute;
+			background-color: @strong;
+			height: 4px;
+			top: 0;
+			width: 130px;
+			border: 0;
+			line-height: 4px;
+		}
+		.main-nav{
+
+		>li{
+			width: 130px;
+			float: left;
+			> a{
+				width: 130px;
+				display: block;
+				color: @blue-bg-font;
+				margin-left: -4px;//去掉li自带的间隔
+				padding: 15px 0px;
+			}		
+			
+			display: inline-block;
+			//border-right:1px solid #69c7bf;
+			border-top:4px solid @header-color;
+			text-align: center;
+			position: relative;
+			cursor: pointer;
+			img{
+				vertical-align: middle;
+			}
+		}
+		a:first-child{
+			margin-left: 0;
+		}
+		li.active{
+			background-color: #F9F9F9;
+			border-top:4px solid #F9F9F9;
+		}
+		li:hover{
+			border-top:4px solid @header-color;
+			//background-color: #F9F9F9;
+			.sub-nav{
+				display: block;
+				li{
+					border: none;
+					line-height: 28px;
+					font-size: 14px;					
+				}
+				li:hover{
+					background-color: @strong;
+					a{
+						color: white;
+					}
+				}
+			}
+		}
+	}
+
+	.sub-nav{
+		display: none;
+		position: absolute;
+		background-color: #F9F9F9;
+		a{
+			width: 130px;
+			color:@blue-bg-font;
+			display: block;
+		}		
+	}
+
+
+	#log-reg{
+		width: 220px;
+		padding: 15px;		
+		text-align: center;
+		display: inline-block;
+		position: relative;
+		vertical-align: top;
+		> div{
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+			a{
+				color: @blue-bg-font;
+			}
+		}
+		.uname,button{
+			background-color: @strong;
+			color: white;
+			padding: 3px 20px;
+		}
+		.uname{
+			cursor: pointer;
+			display: inline-block;
+			float: right;
+			margin-right: 10px;
+			max-width: 120px;
+			.avoid-overflow();
+		}
+		.logout{
+			float: right;
+			padding: 3px 0;
+		}
+		.login-popup{
+			z-index: 100;
+			display: none;
+			margin-top: 15px;
+			padding: 25px 15px 20px 15px;
+			position: absolute;
+			left: -75px;
+			background: #FCFCFC;
+			.box-shadow(0px 2px 2px 1px #CCC);
+			color: #666;
+			button{
+				width: 100%;
+				.placeholder(#666);
+				margin-bottom: 15px;
+				padding: 8px 10px;
+			}
+			input{
+				
+				border: 1px solid #DDD;
+				padding: 8px 10px;
+			}
+			div > input{width: 200px;margin-bottom: 15px;};
+			.forget-pass{
+				float: right;
+				
+			}
+			a{
+				color: #666;
+			}
+		}
+	}
+
+}
+
+//主体部分
+.wrapper{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	.container{
+		padding-bottom: 15px;
+		margin-top: 30px;
+		background-color: #FCFCFC;
+	}
+	//contest以及problem的表格
+	table{
+		>thead{
+			background-color: #F4F4F4;
+			tr{
+				border-right: 4px solid @strong;
+				border-left: 4px solid @strong;
+			}
+			th{
+				padding: 14px 10px 14px 10px;
+			}
+		}
+	}
+	//problem列表的搜索栏
+	.search{
+		margin-top: 15px;
+		float: right;
+		.search-wrapper{
+			margin-right: 15px;
+			display: inline-block;
+			border:1px solid #E9E9E9;
+			width: 340px;
+			> span{
+				border-right: 1px solid #E9E9E9;
+				cursor: pointer;
+				text-align: center;
+				display: relative;
+				float: left;
+				line-height: 40px;
+				display: inline-block;
+				width:70px;
+				height: 40px;
+				img{
+					vertical-align: middle;
+				}
+			}
+		}
+		input{
+			width: 220px-15px;
+			padding-left: 8px;
+			height: 40px;
+		}
+		.search-button{
+			border-left: 1px solid #E9E9E9;
+			background-color: inherit;
+			float: right;
+			box-sizing:content-box;
+			vertical-align: top;
+			width: 40px;
+			height: 40px;
+		}
+
+		#search-method{
+			img{padding-left:2px;}
+
+			position: relative;
+			ul{
+				background-color: #FCFCFC;
+				left: -1px;
+				width:70+2px;//这两条规则是为了对齐span原本带有的border的位置
+				display: none;
+				position: absolute;
+				li{
+					border: 1px solid #E9E9E9;
+					margin-top: -1px;
+				}
+			}
+
+			&:hover{
+				ul{
+					display: block;
+				}
+			}
+		}
+	}
+
+	//两边带蓝色border的子标题
+	h4{
+		width: 960-4px*2-20px;
+		//box-sizing:border-box;//为了兼容不用border-box
+		border-right: 4px solid @strong;
+		border-left: 4px solid @strong;
+		font-size: 14px;
+		color: #3B3B3B;
+		background-color: #F4F4F4;
+		padding: 16px 0 16px 20px;
+		font-weight: normal;
+		
+	}
+	//=================提交问题页面===============
+	.container 	
+	.submit-code{
+		color: #3B3B3B;
+		padding-top: 35px;
+
+		> form > div >span{
+			vertical-align: top;
+			display: inline-block;
+			width: 80px;
+			padding: 10px 0;
+		}
+		button{
+			padding: 4px 20px;
+		}
+		a{
+			margin-left: 15px;
+		}
+		.table-sel{
+			display: inline-block;
+			position: relative;
+			select{
+				position: absolute;
+				top: 0;
+				left: 0;
+				opacity: 0;
+				z-index: 2;
+				width: 245px;
+				height: 40px;
+				font-size: 14px;
+				color: #999;
+				option{
+					margin-left: 10px;
+				}
+			}
+			span{
+				z-index: 1;
+			}
+			width: 245px;
+			height: 40px;
+			background-color: #F8F8F8;
+			border: 1px solid #CCC;
+			color: #999;
+			i{
+				margin-top: 5px;
+				float: right;
+				margin-right: 10px;
+			}
+			.sel-title{
+				float: left;
+				margin-left: 10px;
+				color: #777;
+				line-height: 40px;
+				font-size: 12px;
+			}
+		}
+
+		textarea{
+			background: #F8F8F8;
+			width: 735px;
+			height: 300px;
+		}
+		::-webkit-scrollbar{
+            background-color: #DDD;
+            width: 4px;
+            opacity: 0.1;
+          }
+          ::-webkit-scrollbar-thumb {
+            box-shadow: inset 0 0 70px #777;
+            border: solid transparent;
+            background-color: #777;
+            border-width: 5px 3px;
+          }
+          .util-block{
+          	margin:30px 0 25px 80px;
+          }
+	}
+
+}
+
+
+
+//页脚
+
+.footer{
+	color:#777;
+
+	//black version
+	//background-color: #2E2E2E;
+	//color: #FFF;
+
+	height: 58px-15*2;
+	text-align: center;
+	
+	padding: 15px;
+}
+
+//公共模块
+input{
+	color:#777;
+	border:none;
+	outline: none;
+}
+button{
+	border:none;
+	outline: none;
+}
+hr{
+	border:none;
+	width: 100%;
+}
+.top-hr{
+	margin-top: 15px;
+	height: 8px;
+}
+.bottom-hr{
+	height: 4px;
+	background-color:#F4F4F4; 
+
+}
+
+//子标题
+.sub-header{
+	height: 70px;
+	h3{
+		padding: 15px;
+		font-weight: normal;
+		font-size: 28px;
+		line-height: 40px;
+		color: @strong;
+	}
+}
+
+
+//表格相关公共模块
+.table tbody tr:hover{
+	color:#30d3a6;
+	font-weight: bold;
+
+	//background-color: #f4f4f4;
+}
+
+.pointer{
+	*{
+		cursor: pointer;
+	}
+}
+
+thead th{
+	font-size: 18px;
+	color:#30D3A6;
+}
+tbody{
+	font-size: 14px;
+	color: #2E2E2E;
+}
+td.empty-answer{
+	text-align: center;
+	font-size: 18px;
+	padding: 20px;
+	border-bottom: 1px solid #ccc;
+}
+//按钮
+.common-button{
+	.border-radius(2px);
+	color: white;
+	background-color: @strong;
+}
+a{
+	color:inherit;
+}
+//textarea
+.textarea{
+	padding: 5px; 
+	border: 1px solid #CCC;
+	color: inherit;
+	font-size: 14px;
+	word-wrap: break-word; 
+	line-height: 18px; 
+	overflow-y: auto; 
+	overflow-x: hidden; 
+	outline: none;
+	background:transparent;
+	resize: none;
+
+}
+
+//提示页面
+.noback{
+	.nbc{
+		margin:50px 0 0 190px;
+		height: 300px;
+		.inform{
+			padding-top: 135px;
+			padding-left: 250px;
+		}
+		img{
+			float: left;
+		}
+	}
+}
+
+
+//===============contest==================
+
+.ctxl{
+	margin:0 auto;
+	width: 600px;
+	padding:10px 20px;
+	margin-bottom: 10px;
+	border: 1px solid #DDD;
+	div{
+		display: inline-block;
+	}
+	.e{
+		float: right;
+	}
+}
+
+
+.judge{
+	width: 160px;
+	margin: 0 auto;
+	background-color:white;
+	padding: 60px 140px;
+	margin-top:60px;
+	margin-bottom: 160px;
+	img{
+		width: 22px;
+		height: 22px;
+	}
+	#result{
+		font-size: 22px;
+		margin-left: 15px;
+		vertical-align: top;
+	}
+	p{
+		margin-bottom: 10px;
+	}
+}
