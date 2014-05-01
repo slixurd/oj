@@ -493,17 +493,29 @@ function compat_layout() {
 }
 
 //刷新网页或者加载网页时正确加载checkbox背景
-function check_box() {
-	//$('input[type="checkbox"]').removeAttr('checked');
+function checkBox() {
 	var $checkboxs = $('[type="checkbox"]');
 	for(var i = 0;i < $checkboxs.length;i++) {
 		if($($checkboxs[i]).prop('checked') == 'checked' ||
 			$($checkboxs[i]).prop('checked') == true) {
 			$($checkboxs[i]).parent().addClass('checked');
-		}else {
-			$($checkboxs[i]).parent().removeClass('checked');
 		}
 	}
+}
+
+//加载题目的初始状态
+function loadStatus() {
+	var tds = $($('table')[0]).find('tbody td:first-child');
+	var trs = $($('table')[1]).find('tbody tr');
+	var td;
+	$.each(trs, function(index1) {
+		$.each(tds, function(index2) {
+			 if($(trs[index1]).children('td:first').text() == $(tds[index2]).text()) {
+			 	$(trs[index1]).find(':checkbox').prop('checked', 'checked');
+			 	$(trs[index1]).find('.checkbox').addClass('checked');
+			 }
+		});
+	});
 }
 
 //动态删减添加助教输入框
@@ -744,6 +756,7 @@ function shrink($trFrom,$tableTo,mode) {
 
 	 	$newTr = $tableTo.find('tbody tr:last').clone();
 	 	$newTr.find('td:first').text($trFrom.find('td:first').text());
+	 	$newTr.find('td:eq(1)').text($trFrom.find('td:eq(1)').text());
 
 	 	$table.animate({
 	 		'width': '0',
