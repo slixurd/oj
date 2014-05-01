@@ -21,6 +21,7 @@
 @import "base";
 @import "table";
 @import "admin_additional";
+@import "bootstrap";
 
 //创建选项卡导航栏类
 ul.nav-tabs {
@@ -41,105 +42,12 @@ div.tab-content {
 .checkbox {
 	.checkbox(18px);
 }
-input,
-textarea {
-	background-color: @text-bg;
-	border: solid 1px #e9e9e9;
-	font-size: 18px;
-	color: #3c3c3c;
-}
-
-input {
-	padding: 0 5px;
-
-	
-}
-
-input[type="submit"],
-input[type="reset"] {
-	margin-bottom: 0 !important;
-	margin-top: 0 !important;
-}
-
-textarea {
-	padding: 5px;
-	resize: none;
-	overflow: auto;
-}
-
-input:focus,
-textarea:focus {
-	outline: 0;
-}
-
-.btn {
-	display: inline-block;
-	height: 30px;
-	line-height: 30px;
-	padding: 0 25px;
-	background-color: @strong;
-	color: white;
-	border: none;
-	.border-radius(4px);
-	cursor: pointer;
-}
-
-.down {
-	display: inline-block;
-	.size(5px,9px);
-	border: none;
-	vertical-align: middle;
-	background-image: url("../img/list_button.png");
-}
-
-.up {
-	display: inline-block;
-	width: 9px;
-	height: 5px;
-	vertical-align: middle;
-	background-image: url("../img/list_button_up.png");
-}
 
 body {
 	margin: 0;
 	padding: 0;
 	background-color: @bg-color;
 	color: #3c3c3c;
-}
-.Down {
-	display: inline-block;
-	.size(14px,28px);
-	border: none;
-	vertical-align: middle;
-	background-image: url("../img/down.png");
-
-	&:hover {
-		filter: alpha(opacity=60);
-		opacity: 0.6;
-	}
-}
-
-.Up {
-	display: inline-block;
-	.size(14px,28px);
-	border: none;
-	vertical-align: middle;
-	background-image: url("../img/up.png");
-
-	&:hover {
-		filter: alpha(opacity=60);
-		opacity: 0.6;
-	}
-}
-
-.hidden {
-	display: none;
-}
-
-.partion-h {
-	display: inline-block;
-	.size(3px,40px);
-	background-color: #3c3c3c;
 }
 
 .checkbox {
@@ -151,27 +59,6 @@ body {
 	padding: 0;
 	background-color: @bg-color;
 	color: #3c3c3c;
-}
-
-a {
-	color: #3c3c3c;
-}
-
-hr {
-	width: 100%;
-	border:0;
-	background-color:#eee;
-	height:2px;
-	.box-shadow(0 4px 10px 0 @border-clr);
-}
-
-h3 {
-	font-size: 28px;
-	color: @strong;
-	font-weight: 500;
-	text-align: center;
-	padding: 15px 0 20px 0;
-	background-color: white;
 }
 
 .submit-footer {
@@ -213,6 +100,7 @@ h3 {
 
 	td,
 	th {
+		display: table-cell;
 		.avoid-overflow;
 	}
 
@@ -235,9 +123,6 @@ h3 {
 }
 .footer{
 	color:#777;
-	//black version
-	//background-color: #2E2E2E;
-	//color: #FFF;
 	height: 58px-15*2;
 	text-align: center;
 	padding: 15px;
@@ -293,16 +178,40 @@ h3 {
 
 }
 
-.error {
-	border-color: @error-clr;
-	.box-shadow(0 0 8px 0 @error-clr);
-}
 
-.correct {
-	border-color: @correct-clr;
-	.box-shadow(0 0 8px 0 @correct-clr);
-}
+.slide-bar {
+	width: 195px;
 
+	li {
+		height: 40px;
+		margin-bottom: 1px;
+		background-color: white;
+		font-size: 20px;
+		line-height: 40px;
+		text-align: center;
+
+		a {
+			display: inline-block;
+			width: 100%;
+		}
+
+		&:hover {
+			background-color: @strong;
+
+			a {
+				color: white;
+			}
+		}
+	}
+
+	li.active {
+		background-color: @strong;
+
+		a {
+			color: white;
+		}
+	}
+}
 
 .wrapper {
 	padding-top: 50px;
@@ -311,278 +220,14 @@ h3 {
 		a {
 			color: #3c3c3c;
 		}
-		ul.slide-bar {
-			width: 195px;
-
-			li {
-				height: 40px;
-				margin-bottom: 1px;
-				background-color: white;
-				font-size: 20px;
-				line-height: 40px;
-				text-align: center;
-
-				a {
-					display: inline-block;
-					width: 100%;
-				}
-
-				&:hover {
-					background-color: @strong;
-
-					a {
-						color: white;
-					}
-				}
-			}
-
-			li.active {
-				background-color: @strong;
-
-				a {
-					color: white;
-				}
-			}
-		}
 
 		> div {
 			width: 745px;
-			.Up,
-			.Down {
-				margin-top: 10px;
-			}
-
-			.checkbox {
-				margin-top: 5px;
-			}
-
-			&.add-tab {
-				> div {
-					margin-top: 50px;
-					background-color: white;
-
-					.submit-footer {
-						padding: 20px 0;
-					}
-
-					input[type="text"] {
-						.size(30px,587px);
-					}
-
-					hr {
-						margin-bottom: 20px;
-					}
-
-					.select-down-select {
-						.size(29px,103px);
-					}
-
-					[class*="row"] {
-						height: 30px;
-						line-height: 30px;
-						margin-bottom: 20px;
-						padding: 0 20px;
-
-						.tip {
-							display: inline-block;
-							.size(29px,95px);
-							vertical-align: top;
-							line-height: 29px;
-
-							&.select-down-span {
-								.size(23px,93px);
-							}
-						}
-
-
-						input {
-							line-height: '';
-						}
-
-						.select-down {
-							margin-right: 16px;
-							&.last-child {
-								margin-right: 0;
-							}
-						}
-
-						&.row4 .select-down,
-						&.row5 .select-down {
-							.select-down(25px,110px);
-						}
-
-						&.row6 {
-							height: 200px;
-							line-height: 200px;
-
-							.tip {
-								vertical-align: middle;
-							}
-
-							textarea {
-								.size(188px,590px);
-							}
-						}
-
-						&.row7 {
-							height: 120px;
-							line-height: 120px;
-
-							.tip {
-								vertical-align: middle;
-							}
-
-							textarea {
-								.size(108px,590px);
-							}
-						}
-					}
-				}
-			}
-
-			&.add-course {
-				background-color: white;
-
-				[class*="row"] {
-					margin-bottom: 20px;
-					padding: 0 20px;
-				}
-
-				span {
-					display: inline-block;
-					.size(30px,100px);
-					vertical-align: middle;
-					line-height: 30px;
-				}
-
-				.select-down {
-					.select-down(25px,80px);
-				}
-
-				.row1 {
-					input {
-						.size(28px,588px);
-					}
-				}
-
-				.row2,
-				.row3 {
-					input {
-						.size(28px,240px);
-					}
-
-					.btn {
-						margin-left: 20px;
-						vertical-align: middle;
-					}
-				}
-
-				.row5 {
-					height: 200px;
-					line-height: 200px;
-
-					a {
-						text-decoration: underline;
-
-						&.btn {
-							text-decoration: none;
-						}
-					}
-
-					textarea {
-						.size(188px,245px);
-					}
-
-					> div {
-						display: inline-block;
-						height: 80px;
-						width: 335px;
-						line-height: 100px;
-						vertical-align: bottom;
-
-						input[type="text"] {
-							.size(28px,303px);
-							margin-left: 23px;
-						}
-
-						input[type="file"] {
-							.size(28px,50px);
-						}
-
-						.row {
-							height: 30px;
-							margin-top: 15px;
-							line-height: 0;
-							vertical-align: bottom;
-							padding: 0 0 0 23px;
-
-							.btn {
-								margin-left: 36px;
-							}
-						}
-					}
-				}
-
-				.row6 {
-					height: 125px;
-					line-height: 125px;
-					textarea {
-						.size(113px,588px);
-					}
-				}
-			}
-
-			&.authority,
-			&.password {
-				> div {
-					background-color: white;
-
-					span {
-						display: inline-block;
-						.size(32px,80px);
-						vertical-align: middle;
-						line-height: 32px;
-					}
-
-					input[type="text"],
-					input[type="password"] {
-						.size(30px,195px);
-					}
-
-					.submit-footer {
-						background-color: white;
-						.btn {
-							margin-left: 90px;
-						}
-					}
-
-					h3 {
-						padding-bottom: 15px;
-						border-bottom: solid 1px @bg-color;
-						margin-bottom: 35px;
-					}
-
-					.row {
-						margin-top: 25px;
-						text-align: center;
-
-						.select-down {
-							.select-down(30px,195px);
-							text-align: left;
-						}
-					}
-				}
-			}
-
 		}
 	}
 }
 
-&.add-problem {
-	.vertical-middle {
-		line-height: 205px;
-	}
-
+.add-problem {
 	.submit-footer {
 		padding: 0;
 	}
@@ -612,27 +257,6 @@ h3 {
 			background-color: white;
 		}
 
-		input[name="title"] {
-			.size(40px,590px);
-		}
-
-		.append {
-			.size(42px,348px);
-		}
-
-		.add-on {
-			height: 40px;
-			line-height: 40px;
-		}
-
-		input[name="time-limit"] {
-			.size(40px,200px);
-		}
-
-		input[name="memory-limit"] {
-			.size(40px,150px);
-		}
-
 		.tab-content div[id *= "tab1"] textarea {
 			.size(205px,694px);
 		}
@@ -641,4 +265,81 @@ h3 {
 			.size(205px,230px);
 		}
 	}
+}
+
+.problem-list {
+	.select-down {
+		.select-down(28px,100px);
+	}
+}
+
+.add-tab {
+	> div {
+		margin-top: 50px;
+		background-color: white;
+
+		.select-down {
+			.select-down(32px,103px);
+			vertical-align: middle;
+			margin-right: 16px;
+			&.last-child {
+				margin-right: 0;
+			}
+		}		
+	}
+}
+
+.add-course {
+	background-color: white;
+
+	.tip {
+		width: 100px;
+	}
+
+	.select-down {
+		.select-down(32px,88px);
+		vertical-align: middle;
+	}
+}
+
+.authority,
+.password {
+	.select-down {
+		.select-down(32px,195px);
+		vertical-align: middle;
+		text-align: left;
+	}
+
+	> div {
+		background-color: white;
+	}
+
+	.tip {
+		width: 80px;
+		text-align: right;
+	}
+
+	input[type="text"],
+	input[type="password"] {
+		width: 195px;
+		vertical-align: middle;
+	}
+
+	.submit-footer {
+		background-color: white;
+		.btn {
+			margin-left: 90px;
+		}
+	}
+
+	h3 {
+		padding-bottom: 15px;
+		border-bottom: solid 1px @bg-color;
+		margin-bottom: 35px;
+	}
+
+	.row {
+		margin-top: 25px;
+		text-align: center;
+	}			
 }

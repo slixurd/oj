@@ -100,7 +100,8 @@ class Course extends CI_Controller {
         if($cid === NULL||!is_numeric($cid)||$cid == 0){
             $this->error->show_error("对不起，没有这个课程",array("课程编号错误"),$data);
             return; 
-        }        
+        }      
+        $data['cid'] = $cid;  
         $data['page_title']='课程';
         $this->load->model("user_model");
         $this->load->model("back/course_edit","course_edit");
@@ -217,6 +218,7 @@ class Course extends CI_Controller {
 
         $plist = $this->course_edit->get_unit_problem_list($uid);
         $data['plist'] = $plist;
+        $data['uid'] = $uid;
         //var_dump($plist);
 
         $total = $this->problem_edit->get_count();
@@ -258,12 +260,54 @@ class Course extends CI_Controller {
         $this->load->view("common/admin_footer",$data);     
     }
 
-    public function problem_add(){
+    public function problem_select($uid = 0){
+        Global $data;
+        $pid = $this->input->get('pid',true);
+        $action = $this->input->get('add',true);
 
-    }
+        if(!$data['is_login']){
+            $result = array('status' => false , 'reason' => '未登录');
+            echo json_encode($result);
+            return;
+        }
+        if($uid <0 ||!is_numeric($uid)|| $pid <0 ||!is_numeric($pid)){
+            $result = array('status' => false , 'reason' => '题目ID出错');
+            echo json_encode($result);
+            return;
+        }
+        if($action==='1'||$action==='0'){
+            $this->load->model("user_model");
+            $this->load->model("back/course_edit","course_edit");
+            $type = $this->user_model->get_user_item_id($data['user']['userId'],array('type'));
+            $type = $type['type'];
 
-    public function problem_del(){
-        
+            // if($type != "admin"){
+            //     $result = array('status' => false , 'reason' => '没有权限');
+            //     echo json_encode($result);
+            //     return;
+            // }
+            
+            // “1”表示选择. 0 表示删除
+            if ($action === '1') {
+                $status = $this->course_edit->add_unit_problem($uid,$pid);
+            }else if ($action === '0') {
+                $status = $this->course_edit->del_unit_problem($uid,$pid);
+                
+            }
+            if($status != false)
+                $return = array('status' => true);
+            else 
+                $return = array('status' => false,'reason'=>'执行失败');
+
+            echo json_encode($return);
+            return;            
+        }else{
+            $result = array('status' => false , 'reason' => '执行方式出错');
+            echo json_encode($result);
+            return;                       
+        }
+
+
     }
 
 }

@@ -77,11 +77,13 @@ class Problem extends CI_Controller {
         $this->load->model("back/problem_edit","problem_edit");
         $type = $this->user_model->get_user_item_id($data['user']['userId'],array('type'));
         $type = $type['type'];
-        if($type != "admin"){
-            $result = array('status' => false , 'reason' => '无管理员权限');
-            echo json_encode($result);
-            return;
-        }
+        // if($type != "admin"){
+        //     $result = array('status' => false , 'reason' => '无管理员权限');
+        //     echo json_encode($result);
+        //     return;
+        // }
+        
+        //还没有删除文件目录!!!
         
         $this->problem_edit->del_problem($problemId);
         //这里需要增加状态判断，如果删除失败返回false，否则为true
@@ -122,10 +124,10 @@ class Problem extends CI_Controller {
         $this->load->model("back/problem_edit","problem_edit");
         $type = $this->user_model->get_user_item_id($data['user']['userId'],array('type'));
         $type = $type['type'];
-        if($type != "admin"){
-            $this->error->show_error("对不起， 添加普通问题需要管理员权限",array("需要更改问题，请联系管理员"),$data);
-            return;
-        }
+        // if($type != "admin"){
+        //     $this->error->show_error("对不起， 添加普通问题需要管理员权限",array("需要更改问题，请联系管理员"),$data);
+        //     return;
+        // }
         $date_str="%Y-%m-%d %H:%i:%s";
         $this->load->helper('date');
         $now=strtotime("now");
@@ -143,6 +145,11 @@ class Problem extends CI_Controller {
         $timeLimit = stripslashes($_POST['time-limit']);
         $memoryLimit = stripslashes($_POST['memory-limit']);
 
+        if(empty($inputData)||empty($outputData)||empty($title)||empty($timeLimit)||empty($memoryLimit)){
+            $this->error->show_error("关键数据不能为空",array("1.题目标题","2.题目时间及内存消耗","3.测试数据的输入和输出","4.输入输出描述"),$data);
+            return;            
+        }
+
         //这里漏了输入格式和输出格式，input和output应该是格式而不是最终匹配的测试数据，需要修改，增加inputData
         $problem_array = array('title'=>$title,'description'=>$description,'input'=>$input,
         'output'=>$output,'sampleInput'=>$sampleInput,'sampleOutput'=>$sampleOutput,'hint'=>$hint,
@@ -158,6 +165,9 @@ class Problem extends CI_Controller {
         write_file($basedir."/sample.out", $sampleOutput);
 
         //添加完题目应跳转到添加成功页面或者直接跳转到problem detail页
+        
+        $total = $this->problem_edit->get_count();
+        redirect('/admin/problem/index/'.ceil($total/10), 'location', 301);
     }
     
     public function add(){

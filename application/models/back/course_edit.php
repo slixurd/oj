@@ -114,8 +114,8 @@ class Course_edit extends CI_Model
 	 
 	public function add_unit_problem($unitId,$problemId)
 	{
-		$sql = "SELECT count(problemId) as count WHERE problemId = ".$this->db->escape($problemId);
-		$query = $this->db->query();
+		$sql = "SELECT count(problemId) as count FROM problem WHERE problemId = ".$this->db->escape($problemId);
+		$query = $this->db->query($sql);
 		$count = $query->row_array(0);
 		if($count['count'] <= 0 || empty($count))
 			return false;

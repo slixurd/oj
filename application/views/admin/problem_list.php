@@ -45,8 +45,17 @@
         <div class="clearfix"></div>
     </div>
 </div>
+<script type="text/javascript" src="<?php echo base_url("assets") ?>/js/bootstrap.js"></script>
 
 <script type="text/javascript">
+    //实现下拉列表的动作
+    $(".select-down > select").change(function() {
+        var value = this.value;
+        var text = $(this).find("option[value="+value+"]").text();
+        $(this).siblings("span").text(text)
+                .append("<i class='down'></i>").removeClass("placeholder");
+    })
+
     $(".problem-list select[name='status']").change(function() {
         var status = this.value;
         var pid = $(this).parents("tr").find(".pid").text();
@@ -64,15 +73,20 @@
 
     $(".pdel").on("click",function(c){
         c.preventDefault();
-        var line = $(this).parent().parent();
+        //var line = $(this).parent().parent();
+        var line = $(this).parents('tr');
+        var t = $(this);
         var pid = line.find(".pid").text();
         var url = '<?php echo site_url("admin/problem/del"); ?>'+'/'+pid;
             $.getJSON(url,function(data){
                 if(data.status == true ){
                     line.fadeOut();
                 }else{
-                    alert(data.reason);
+                    t.attr("data-content","删除失败");
+                    t.popover('show');
+                    setTimeout("t.popover('destroy')",1000);
                 }
             });
     })
 </script>
+
