@@ -4,8 +4,10 @@
 <title>添加课程</title>
 <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
 <link rel="stylesheet" type="text/css" href="css/admin.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="js/admin.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -39,7 +41,7 @@
 -->
 			<div class="row">
 				<span class="tip">指定教师：</span>
-				<input class="necessary" id="teacher" type="text" name="teacher" />
+				<input class="necessary op" id="teacher" type="text" name="teacher" />
 				<a id="teacher-id" href="#" class="btn chk-id">ID是否存在</a>
 			</div>
 			<input type="text" id="assis-count" class="hidden" value="1" name="assis_count" />
@@ -95,7 +97,8 @@
 				</div>
 			</div>
 			<hr />
-			<div class="row import">
+			<div class="row">
+				<!--
 				<span class="tip">导入学生：</span>
 				<textarea id="students" name="students"></textarea>
 				<div>
@@ -104,6 +107,25 @@
 						<a href="#">查看excel格式要求</a>
 						<a class="btn file" id="excel">从excel导入</a>
 						<input id="excel" type="file" class="hidden" name="excel" />
+					</div>
+				</div>
+			-->
+				<ul class="nav-tabs">
+					<li class="active"><a rel="#tab11">输入数据</a></li>
+					<li style="display:none"><a rel="#tab12">导入表格</a></li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="tab11">
+						<span class="tip text-left">学生名单：</span>
+						<textarea id="students" name="students"></textarea>
+					</div>
+					<div class="tab-pane" id="tab12">
+						<input type="text" id="excel" readonly />
+						<div class="row">
+							<a href="#">查看excel格式要求</a>
+							<a class="btn file" id="excel">从excel导入</a>
+							<input id="excel" type="file" class="hidden" name="excel" />
+						</div>
 					</div>
 				</div>
 			</div>
@@ -126,6 +148,7 @@
 	doSelect();
 	loadTimeWidget();
 	fitAssistant();
+	load_tab();	//这函数的取名将错就错吧
 //触发file的点击事件
 	$('a#excel').click(function() {
 		$('input[type="file"]#excel').trigger('click');
@@ -155,9 +178,9 @@
 	});
 
     $('form').bind('submit',function(c) {
-        c.preventDefault();
-        if(!check_ness() | !check_students()) {
-			return false;
+    	c.preventDefault();
+        if(!check_ness() || !check_students()) {
+      		return false;
 		}
         adapt_name();
 
@@ -215,18 +238,15 @@
         if(s < e) {
             $('#stime').val(stime);
             $('#etime').val(etime);
-       		this.submit();
+            $('form')[0].submit();
         } else {
             if($('#syear').parents('.row')[0] == $('#eyear').parents('.row')[0]){
-                $('#syear').parents('.row').next('.popTip').remove();
-                popTip($('#syear').parents('.row')[0],'开始时间必须小于结束时间','top','permanent');
+                myPopover($('#syear').parents('.row'),'开始时间必须小于结束时间','top');
             } else {
-                $('#syear').parents('.row').next('.popTip').remove();
-                $('#eyear').parents('.row').next('.popTip').remove();
-                popTip($('#syear').parents('.row')[0],'开始时间必须小于结束时间','top','permanent');
-                popTip($('#eyear').parents('.row')[0],'结束时间必须大于开始时间','top','permanent')
+                myPopover($('#syear').parents('.row'),'开始时间必须小于结束时间','top');
+                myPopover($('#eyear').parents('.row'),'结束时间必须大于开始时间','top');
             }
-            return false;
+        	return false;
         }
     })
 </script>

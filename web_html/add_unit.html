@@ -4,8 +4,10 @@
 <title>为课程添加实验\作业</title>
 <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
 <link rel="stylesheet" type="text/css" href="css/admin.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="js/admin.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
 </head>
 <body>
 <div class="wrapper">
@@ -170,6 +172,7 @@
 	$('body').on('click','.pdel',function(event) {
 		$(this).parents('tr').fadeOut();
 	})
+	
 	$('#submit').bind('click', function(event) {
         if(!check_ness()) {
             return false;
@@ -250,13 +253,10 @@
         	
         } else {
             if($('#syear').parents('.row')[0] == $('#eyear').parents('.row')[0]){
-                $('#syear').parents('.row').next('.popTip').remove();
-                popTip($('#syear').parents('.row')[0],'开始时间必须小于结束时间','top','permanent');
+                myPopover($('#syear').parents('.row'),'开始时间必须小于结束时间','top');
             } else {
-                $('#syear').parents('.row').next('.popTip').remove();
-                $('#eyear').parents('.row').next('.popTip').remove();
-                popTip($('#syear').parents('.row')[0],'开始时间必须小于结束时间','top','permanent');
-                popTip($('#eyear').parents('.row')[0],'结束时间必须大于开始时间','top','permanent')
+                myPopover($('#syear').parents('.row'),'开始时间必须小于结束时间','top');
+                myPopover($('#eyear').parents('.row'),'结束时间必须大于开始时间','top');
             }
             return false;
         }
