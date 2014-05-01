@@ -135,15 +135,15 @@ function check_pwd() {
 		if(pwd !== conf) {
 			$('#pwd').siblings('i.popTip').remove();
 			$('#conf').siblings('i.popTip').remove();
-			popTip($('#pwd')[0],'密码输入不一致','top','permanent');
-			popTip($('#conf')[0],'密码输入不一致','top','permanent');
+			popTip($('#pwd')[0],'密码输入不一致','top');
+			popTip($('#conf')[0],'密码输入不一致','top');
 			return false;
 		}else {
 			if(pwd.length < 6 || pwd.length > 16) {
 				$('#pwd').siblings('i.popTip').remove();
 				$('#conf').siblings('i.popTip').remove();
-				popTip($('#pwd')[0],'密码长度须为6-16位','top','permanent');
-				popTip($('#conf')[0],'密码长度须为6-16位','top','permanent');
+				popTip($('#pwd')[0],'密码长度须为6-16位','top');
+				popTip($('#conf')[0],'密码长度须为6-16位','top');
 				return false;
 			}
 		}
@@ -160,13 +160,13 @@ function check_ness() {
 		if(ness[i].value === '') {
 			if($(ness[i]).parents('.tab-pane').length==0) {
 				$(ness[i]).siblings('i.popTip').remove();
-				popTip(ness[i],'此项必须填写','top','permanent');
+				popTip(ness[i],'此项必须填写','top');
 				rev = false;
 			}else {
 				var id = $(ness[i]).parents('.tab-pane')[0].id;
 				var nav_tab = $('a[rel="#' + id + '"]').parent();
 				$(nav_tab[0]).next('i.popTip').remove();
-				popTip(nav_tab[0],'此项必填','top','permanent');
+				popTip(nav_tab[0],'此项必填','top');
 				rev = false;
 			}
 		}
@@ -201,7 +201,7 @@ function check_students() {
 			var str = $.trim($('#students').val()) + ' ';
 			if(!regE.test(str)) {
 				$('#students').parent().siblings('i.popTip').remove();
-				popTip($('#students')[0],'学生名单格不正确','top','permanent');
+				popTip($('#students')[0],'学生名单格不正确','top');
 				return false;
 			}else {
 				$('#students').siblings('i.popTip').remove();
@@ -216,7 +216,7 @@ function check_students() {
 			} else {
 				$('#students').siblings('i.popTip').remove();
 				$('#students').parent().siblings('i.popTip').remove();
-				popTip($('#students')[0].parentNode,'未导入学生名单','top','permanent');
+				popTip($('#students')[0].parentNode,'未导入学生名单','top');
 				return false;
 			}
 		}
@@ -231,28 +231,28 @@ function check_num() {
 		if(+($('#memory-limit').val())) {
 			if(+($('#memory-limit').val()) < 0) {
 				$('#memory-limit').next('i.popTip').remove();
-				popTip($('#memory-limit')[0],'请填写正整数','top','permanent');
+				popTip($('#memory-limit')[0],'请填写正整数','top');
 				rev = false;
 			}
 		}else if($('#memory-limit').val()=='') {
 			rev = false;
 		}else {
 			$('#memory-limit').next('i.popTip').remove();
-			popTip($('#memory-limit')[0],'请填写正整数','top','permanent');
+			popTip($('#memory-limit')[0],'请填写正整数','top');
 			rev = false;
 		}
 
 		if(+($('#time-limit').val())) {
 			if(+($('#time-limit').val()) < 0) {
 				$('#time-limit').next('i.popTip').remove();
-				popTip($('#time-limit')[0],'请填写正整数','top','permanent');
+				popTip($('#time-limit')[0],'请填写正整数','top');
 				rev = false;
 			}
 		}else if($('#time-limit').val()=='') {
 			rev = false;
 		}else {
 			$('#time-limit').next('i.popTip').remove();
-			popTip($('#time-limit')[0],'请填写正整数','top','permanent');
+			popTip($('#time-limit')[0],'请填写正整数','top');
 			rev = false;
 		}
 	}
@@ -285,10 +285,11 @@ function popTip(obj,str) {
 	if(permanent == 'permanent') {
 		tip.showTime = 9000000;
 	}else {
-		tip.showTime = 2000;
+		tip.showTime = 1000;
 	}
 
 	tip.myFadeout = function() {
+		/*
 		if(tip.currentStep > tip.fadeTime) {
 			clearTimeout(tip.fadeTimer);
 			tip.remove();
@@ -299,6 +300,10 @@ function popTip(obj,str) {
 			if(tip.fadeTimer) clearTimeout(tip.fadeTimer);
 			tip.fadeTimer = setTimeout(tip.myFadeout,tip.fadeoutStep);
 		}
+		*/
+		tip.fadeOut(tip.fadeTime, function() {
+			tip.remove();
+		});
 	}
 
 	tip.text(str);
@@ -371,6 +376,7 @@ function popTip(obj,str) {
 
 	tip.append(tip.close);
 
+/*
 	switch(BROWER) {
 		case 'ns': {
 			tip.close.bind('mouseout', function(event) {
@@ -398,6 +404,7 @@ function popTip(obj,str) {
 			});
 		}break;
 	}
+*/
 
 	tip.close.bind('click', function(event) {
 		clearTimeout(tip.fadeTimer);
@@ -411,6 +418,7 @@ function popTip(obj,str) {
 	if(tip.fadeTimer) clearTimeout(tip.fadeTimer);
 	tip.fadeTimer = setTimeout(tip.myFadeout,tip.showTime);
 
+/*
 	if(permanent != 'permanent') {
 		tip.bind('mouseover', function(event) {
 			if(tip.fadeTimer) {
@@ -428,6 +436,7 @@ function popTip(obj,str) {
 			}
 		});
 	}
+*/
 }
 
 function getTop(obj) {

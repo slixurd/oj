@@ -125,6 +125,7 @@
 <script type="text/javascript">
 	doSelect();
 	loadTimeWidget();
+	fitAssistant();
 //触发file的点击事件
 	$('a#excel').click(function() {
 		$('input[type="file"]#excel').trigger('click');
@@ -136,14 +137,6 @@
 		var fileNames = file.split('\\');
 		var fileName = fileNames[fileNames.length - 1];
 		$('input[type="text"]#excel').val(fileName);
-	});
-
-	fitAssistant();
-	$('form').bind('submit', adapt_name);
-	$('form').bind('submit', function(event) {
-		if(!check_ness() | !check_students()) {
-			return false;
-		}
 	});
 
 //验证ID是否存在时相应闪烁边框*********ajax
@@ -163,11 +156,13 @@
 
     $('form').bind('submit',function(c) {
         c.preventDefault();
+        if(!check_ness() | !check_students()) {
+			return false;
+		}
         adapt_name();
+
         var url = 'http://www.baidu.com';
-        if(!check_ness()) {
-            return false;
-        }
+       
         var title;
         var syear,smonth,sdate,shour,sminute,stime;
         var eyear,emonth,edate,ehour,eminute,etime;
