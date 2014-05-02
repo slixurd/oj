@@ -146,6 +146,7 @@ class Course_edit extends CI_Model
 		$userId = $this->db->escape($userId);
 		$kind = $this->db->escape($kind);
 		$common = "course";
+		$common = $this->db->escape($common);
 		$sql = "INSERT INTO privilege_common(common,userId,commonId,privilege) 
 		 VALUES(".$common.",".$userId.",".$courseId.",".$kind.")";
 		$this->db->query($sql);
@@ -187,7 +188,7 @@ class Course_edit extends CI_Model
 		$type = $query->row_array(0);
 		$type = $type['type'];
 		if($type == "admin"){
-			return get_course_list($limit_from,$limit_row);
+			return $this->get_course_list($limit_from,$limit_row);
 		}
 		else if($type == "teacher"){
 			$sql = "SELECT courseId , course.userId , course.name as courseName,startTime ,endTime,private, user.name 
