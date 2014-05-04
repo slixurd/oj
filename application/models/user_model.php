@@ -63,7 +63,27 @@ class User_model extends CI_Model
 			return true;
 		return false;
 	}
-	
+	public function check_user_by_name($info)
+	{
+		$info = $this->db->escape($info);
+		$sql = "SELECT count(*) as count FROM user WHERE email = ".$info." OR name = ".$info ;
+		$query = $this->db->query($sql);
+		$user_info = $query->row_array(0);
+		if($user_info['count'] == 0)
+			return false;
+		return true;
+	}
+
+	public function get_id_by_name($info){
+		$info = $this->db->escape($info);
+		$sql = "SELECT userId FROM user WHERE email = ".$info." OR name = ".$info ;
+		$query = $this->db->query($sql);
+		$user_info = $query->row_array(0);
+		if(!empty($user_info['userId']))
+			return $user_info['userId'];
+		return false;		
+	}
+		
 	/**
 	 * check_user_password_id 用来检查用户的密码是否正确,id是指用户id，$pass是密码，注意密码是未经sha1之前
 	 * 如果用户不存在或者密码不正确，返回false，否则返回true

@@ -115,15 +115,22 @@ function doSelect() {
 		.append("<i class='down'></i>").removeClass("placeholder");
 	})
 }
-//检验checkbox是否至少选中一个
-function check_box() {
-	if($('input[type="checkbox"]').length > 0 && 
-		$('input[type="checkbox"][checked="checked"]').length == 0) {
-		$('table').siblings('i.popTip').remove();
-		popTip($('table')[1],'请至少选择一个选项','top');
-		return false;
-	}
-	return true;
+
+//自定义弹出提示框
+function myPopover($obj,str,place) {
+	str = arguments[1] ? arguments[1] : '';
+	place = arguments[2] ? arguments[2] : 'right';
+	$obj.attr({
+		'data-content': str,
+		'data-placement': place
+	});
+	$obj.popover('show');
+	setTimeout(destroyPop($obj),1000);
+}
+
+//销毁弹出对象
+function destroyPop($obj) {
+	$obj.popover('destroy');
 }
 
 
@@ -133,23 +140,17 @@ function check_pwd() {
 		var pwd = $('#pwd').val(),conf = $('#conf').val();
 		var regPwd = /^[\x00-\x7F]*$/; //检验密码只含ASCII字符
 		if(pwd !== conf) {
-			$('#pwd').siblings('i.popTip').remove();
-			$('#conf').siblings('i.popTip').remove();
-			popTip($('#pwd')[0],'密码输入不一致','top');
-			popTip($('#conf')[0],'密码输入不一致','top');
+			myPopover($('#pwd'),'密码输入不一致');
+			myPopover($('#conf'),'密码输入不一致');
 			return false;
 		}else {
 			if(pwd.length < 6 || pwd.length > 16) {
-				$('#pwd').siblings('i.popTip').remove();
-				$('#conf').siblings('i.popTip').remove();
-				popTip($('#pwd')[0],'密码长度须为6-16位','top');
-				popTip($('#conf')[0],'密码长度须为6-16位','top');
+				myPopover($('#pwd'),'密码长度须为6-16位');
+				myPopover($('#conf'),'密码长度须为6-16位');
 				return false;
 			}
 		}
 	}
-	$('#pwd').siblings('i.popTip').remove();
-	$('#conf').siblings('i.popTip').remove();
 	return true;
 }
 
@@ -159,37 +160,17 @@ function check_ness() {
 	for(var i = 0;i < ness.length;i++) {
 		if(ness[i].value === '') {
 			if($(ness[i]).parents('.tab-pane').length==0) {
-				$(ness[i]).siblings('i.popTip').remove();
-				popTip(ness[i],'此项必须填写','top');
+				myPopover($(ness[i]),'此项必须填写','top');
 				rev = false;
 			}else {
 				var id = $(ness[i]).parents('.tab-pane')[0].id;
 				var nav_tab = $('a[rel="#' + id + '"]').parent();
-				$(nav_tab[0]).next('i.popTip').remove();
-				popTip(nav_tab[0],'此项必填','top');
+				myPopover($(nav_tab[0]),'此项必须填写','top');
 				rev = false;
 			}
 		}
 	}
 	return rev;
-/*
-	ness = $('textarea[id!="students"]');
-	for(var i = 0;i < ness.length;i++) {
-		if($(ness[i]).val()=='') {
-			if($(ness[i]).parents('.tab-pane').length==0) {
-				$(ness[i]).siblings('i.popTip').remove();
-				popTip(ness[i],'此项必须填写','top','permanent');
-				rev = false;
-			}else {
-				var id = $(ness[i]).parents('.tab-pane')[0].id;
-				var nav_tab = $('a[rel="#' + id + '"]').parent();
-				$(nav_tab[0]).next('i.popTip').remove();
-				popTip(nav_tab[0],'此项必填','top','permanent');
-			}
-		}
-	}
-*/
-	//return rev;
 }
 
 //验证是否有学生名单
@@ -197,26 +178,22 @@ function check_students() {
 	if($('#students')[0] && $('#excel')[0]) {
 		if($('#students').val().length > 0) {
 			var regE = /^((\d{12}[ \t(\r\n)]+)+)$/;
-			//var str = $('#students').val().trim() + ' ';
 			var str = $.trim($('#students').val()) + ' ';
 			if(!regE.test(str)) {
-				$('#students').parent().siblings('i.popTip').remove();
-				popTip($('#students')[0],'学生名单格不正确','top');
+				var id = $('#students').parents('.tab-pane')[0].id;
+				var nav_tab = $('a[rel="#' + id + '"]').parent();
+				myPopover($(nav_tab[0]),'学生名单格不正确','top');
 				return false;
 			}else {
-				$('#students').siblings('i.popTip').remove();
-				$('#students').parent().siblings('i.popTip').remove();
 				return true;
 			}
 		} else {
 			if($('#excel').val().length > 0) {
-				$('#students').siblings('i.popTip').remove();
-				$('#students').parent().siblings('i.popTip').remove();
 				return true;
 			} else {
-				$('#students').siblings('i.popTip').remove();
-				$('#students').parent().siblings('i.popTip').remove();
-				popTip($('#students')[0].parentNode,'未导入学生名单','top');
+				var id = $('#excel').parents('.tab-pane')[0].id;
+				var nav_tab = $('a[rel="#' + id + '"]').parent();
+				myPopover($(nav_tab[0]),'未导入学生名单','top');
 				return false;
 			}
 		}
@@ -230,29 +207,26 @@ function check_num() {
 	if($('#memory-limit')[0] && $('#time-limit')[0]) {
 		if(+($('#memory-limit').val())) {
 			if(+($('#memory-limit').val()) < 0) {
-				$('#memory-limit').next('i.popTip').remove();
-				popTip($('#memory-limit')[0],'请填写正整数','top');
+				myPopover($('#memory-limit'),'请填写正整数','top');
 				rev = false;
 			}
 		}else if($('#memory-limit').val()=='') {
 			rev = false;
 		}else {
-			$('#memory-limit').next('i.popTip').remove();
-			popTip($('#memory-limit')[0],'请填写正整数','top');
+			myPopover($('#memory-limit'),'请填写正整数','top');
 			rev = false;
 		}
 
 		if(+($('#time-limit').val())) {
 			if(+($('#time-limit').val()) < 0) {
-				$('#time-limit').next('i.popTip').remove();
-				popTip($('#time-limit')[0],'请填写正整数','top');
+				myPopover($('#time-limit'),'请填写正整数','top');
 				rev = false;
 			}
 		}else if($('#time-limit').val()=='') {
 			rev = false;
 		}else {
 			$('#time-limit').next('i.popTip').remove();
-			popTip($('#time-limit')[0],'请填写正整数','top');
+			myPopover($('#time-limit'),'请填写正整数','top');
 			rev = false;
 		}
 	}
@@ -344,6 +318,7 @@ function popTip(obj,str) {
 		'width': '256px',
 		'height': '256px',
 		'opacity': tip.opacity,
+		'background': 'url("img/close.gif") no-repeat',
 		'position': 'absolute',
 		'left': -256/2 + tip.innerWidth() + 'px',
 		'top': -256/2 + 'px'
@@ -492,17 +467,29 @@ function compat_layout() {
 }
 
 //刷新网页或者加载网页时正确加载checkbox背景
-function check_box() {
-	//$('input[type="checkbox"]').removeAttr('checked');
+function checkBox() {
 	var $checkboxs = $('[type="checkbox"]');
 	for(var i = 0;i < $checkboxs.length;i++) {
 		if($($checkboxs[i]).prop('checked') == 'checked' ||
 			$($checkboxs[i]).prop('checked') == true) {
 			$($checkboxs[i]).parent().addClass('checked');
-		}else {
-			$($checkboxs[i]).parent().removeClass('checked');
 		}
 	}
+}
+
+//加载题目的初始状态
+function loadStatus() {
+	var tds = $($('table')[0]).find('tbody td:first-child');
+	var trs = $($('table')[1]).find('tbody tr');
+	var td;
+	$.each(trs, function(index1) {
+		$.each(tds, function(index2) {
+			 if($(trs[index1]).children('td:first').text() == $(tds[index2]).text()) {
+			 	$(trs[index1]).find(':checkbox').prop('checked', 'checked');
+			 	$(trs[index1]).find('.checkbox').addClass('checked');
+			 }
+		});
+	});
 }
 
 //动态删减添加助教输入框
@@ -743,6 +730,7 @@ function shrink($trFrom,$tableTo,mode) {
 
 	 	$newTr = $tableTo.find('tbody tr:last').clone();
 	 	$newTr.find('td:first').text($trFrom.find('td:first').text());
+	 	$newTr.find('td:eq(1)').text($trFrom.find('td:eq(1)').text());
 
 	 	$table.animate({
 	 		'width': '0',

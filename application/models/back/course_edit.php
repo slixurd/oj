@@ -80,11 +80,11 @@ class Course_edit extends CI_Model
 	 * 返回插入的课程id
 	 */
 	 
-	public function add_course($userId,$name,$startTime,$endTime,$private,$programLan)
+	public function add_course($userId,$title,$startTime,$endTime,$private,$programLan)
 	{
 		Global $pri;
 		$defunct = 0;
-		$column_array = array('userId'=>$userId,'name'=>$userId,'startTime'=>$startTime,'endTime'=>$endTime,'private'=>$private,
+		$column_array = array('userId'=>$userId,'name'=>$title,'startTime'=>$startTime,'endTime'=>$endTime,'private'=>$private,
 		'defunct'=>$defunct,'programLan'=>$programLan);
 		$userId = $column_array['userId'];
 		$this->db->insert('course',$column_array);
@@ -93,6 +93,9 @@ class Course_edit extends CI_Model
 		foreach($pri as $pri_type){
 			$privilege_array['privilege'] = $pri_type;
 			$this->db->insert('privilege_common',$privilege_array);
+		}
+		if (!is_numeric($courseId)) {
+			return false;
 		}
 		return $courseId;
 	}

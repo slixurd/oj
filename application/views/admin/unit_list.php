@@ -12,7 +12,9 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($plist as $item) { ?>
+                <?php 
+                if(!empty($plist)){
+                foreach ($plist as $item) { ?>
                 <tr>
                     <td class="uid"><?php echo $item['unitId'] ?></td>
                     <td><?php echo $item['title'] ?></td>
@@ -21,6 +23,9 @@
                     <td><a href="<?php echo site_url('admin/course/problem/'.$item['unitId']) ?>">编辑</a></td>
                     <td><a class="del" href="">删除</a></td>
                 </tr>
+                <?php }}else{ ?>
+
+                    <td colspan='6'>暂无单元内容,请于下方添加</td>
                 <?php } ?>
             </tbody>
         </table>
@@ -93,8 +98,6 @@
     </div>
 </div>
 </div>
-
-<script type="text/javascript" src="<?php echo base_url("assets") ?>/js/bootstrap.js"></script>
 
 <script type="text/javascript">
     loadTimeWidget();

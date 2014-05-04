@@ -256,4 +256,46 @@ class User extends CI_Controller {
 		$this->load->view('common/footer');				
 	}
 
+	public function check_user_id(){
+		Global $data;
+		if(!$data['is_login']){
+			$return = array('status' => false,'reason'=> 'no privilege');
+			echo json_encode($return);
+			return;
+		}
+		$this->load->model('user_model','umodel');
+		$uid = $this->input->get("id",true);
+		if(!empty($uid) && is_numeric($uid)){
+			$o = $this->umodel->get_user_item_id($uid);
+			if(!empty($o)){
+				$return = array('status' => true);
+				echo json_encode($return);				
+				return;			
+			}
+
+		}
+		$return = array('status' => false,'reason'=> 'no such person');
+		echo json_encode($return);
+	}
+	public function check_user_name(){
+		Global $data;
+		if(!$data['is_login']){
+			$return = array('status' => false,'reason'=> 'no privilege');
+			echo json_encode($return);
+			return;
+		}
+		$this->load->model('user_model','umodel');
+		$name = $this->input->get("name",true);
+		if(!empty($name)){
+			$o = $this->umodel->check_user_by_name($name);
+			if($o){
+				$return = array('status' => true);
+				echo json_encode($return);				
+				return;			
+			}
+
+		}
+		$return = array('status' => false,'reason'=> 'no such person');
+		echo json_encode($return);
+	}
 }

@@ -91,6 +91,69 @@ class Course extends CI_Controller {
         echo json_encode($result);
     }
 
+    public function add(){
+        Global $data;
+        if(!$data['is_login']){
+            $this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
+            return;
+        }
+
+        $this->load->view("common/admin_header",$data);
+        $this->load->view("admin/course_add",$data);
+        $this->load->view("common/admin_footer",$data);    
+    }
+
+    public function put_course(){
+        Global $data;
+        if(!$data['is_login']){
+            $this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
+            return;
+        }
+
+        $title = $this->input->post('title',true);
+        $teacher = $this->input->post('teacher',true);
+        $acount = intval($this->input->post('assis_count',true));
+        $stime = $this->input->post('stime',true);
+        $etime = $this->input->post('etime',true);
+        $private = $this->input->post('private',true) == "public"? 1 : 0 ;
+        //$describe = $this->input->post('describe',true);
+        $students = $this->input->post('students',true);
+
+
+        $s = getTime($stime);
+        $e = getTime($etime);
+        //检测时间是否出错
+        if($s === false || $e === false || $s > $e){
+            $this->error->show_error("提交时间出错",array("重新检查"),$data);
+            return;            
+        }
+
+
+        $this->load->model("back/course_edit",'cedit');
+        $this->load->model("user_model",'umodel');
+
+        if(!is_numeric($tid = $this->umodel->get_id_by_name($teacher)) || $tid == false ){
+            $this->error->show_error("提交时间出错",array("重新检查"),$data);
+            return;            
+        }
+
+        $cid = $this->cedit->add_course($tid,$title,$stime,$etime,$private,1);
+        if (!is_numeric($cid)) {
+             $this->error->show_error("提交出错",array("请重新提交"),$data);
+            return;                
+        }
+        for ($i=0; $i < $acount; $i++) { 
+            $assis = "assistant".$i;
+            $assistant = $this->input->post($assis,true);
+            $status = $this->cedit->add_assistant(913,$assistant);
+            //status 为 -1是找不到用户.这里不检查直接跳过,添加后面的助教
+        }
+
+        redirect('/admin/course/unit_list/'.$cid, 'location', 301);
+
+    }
+
+
     public function unit_list($cid = 0){
         Global $data;
         if(!$data['is_login']){
