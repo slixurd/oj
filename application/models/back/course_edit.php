@@ -130,6 +130,36 @@ class Course_edit extends CI_Model
 		return false;
 	} 
 	
+	public function add_course_user($stu_num,$pass,$courseId){
+		$CI = &get_instance();
+		$CI->load->model("back/user_edit","user_edit");
+		$CI->load->library('encrypt');
+		$salt = $CI->user_edit->salt();
+		$pass = $this->encrypt->sha1($salt.$pass);
+		$user_array=array('name'=>$stu_num,'email'=>$stu_num."@example.com",'password'=>$pass,'salt'=>$salt);
+		if($CI->user_edit->unique_user($user_array['name']) && $CI->user_edit->unique_email($user_array['email']))
+			$id = $CI->user_edit->add_user($user_array);
+		else
+			$id = $CI->user_edit->get_id_by_name($stu_num);
+		$this->add_course_privilege($courseId,$id,"read");
+		$this->add_course_privilege($courseId,$id,"submit");
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
+	}
+	
+	public function del_course_privilege($courseId,$userId){
+		$courseId = $this->db->escape($courseId);
+		$userId = $this->db->escape($userId);
+		$sql =  "DELETE FROM privilege_common WHERE common = 'course'  AND commonId = ".$courseId." AND userId = ".$userId;
+		$this->db->query($sql);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
+	}
+	
 	public function get_course_privilege($courseId,$userId,$kind)
 	{
 		$userId = $this->db->escape($userId);

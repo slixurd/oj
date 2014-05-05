@@ -144,6 +144,7 @@ CREATE TABLE `course` (
   `defunct` tinyint(3) NOT NULL DEFAULT '0',
   `private` tinyint(3) NOT NULL,
   `programLan` tinyint(4) DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`courseId`),
   KEY `userId` (`userId`),
   CONSTRAINT `course_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE CASCADE
