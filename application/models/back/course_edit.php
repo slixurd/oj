@@ -49,6 +49,45 @@ class Course_edit extends CI_Model
 		return false;
 	}
 	
+	public function update_course($courseId,$course_array){
+		$this->db->where('courseId', $courseId);
+		$this->db->update('course', $course_array); 
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
+	}
+	
+	public function update_unit($courseId,$unitId,$unit_array){
+		$courseId = $this->db->escape($courseId);
+		$unitId = $this->db->escape($unitId);
+		$where = " courseId = ".$courseId." AND unitId = ".$unitId;
+		$this->db->update('course_unit', $unit_array,$where); 
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
+	}
+	
+	public function update_course_teacher($courseId,$userId){
+		$courseId = $this->db->escape($courseId);
+		$userId = $this->db->escape($userId);
+		$sql ="SELECT userId FROM course WHERE courseId = ".$courseId;
+		$query = $this->db->query($sql);
+		$old_user = $query->row_array(0);
+		$old_user = $old_user['userId'];
+		$this->db->where('userId', $courseId);
+		$course_array = array('userId'=>$userId);
+		$this->db->update('course', $course_array); 
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0){
+			$sql ="DELETE FROM privilege_common WHERE common = course AND commonId = ".$courseId." AND userId = ".$userId;
+			$this->db->query($sql);
+		}else
+			return false;
+		return true;
+	}
+	
 	public function get_course_unit_list($courseId)
 	{
 		$courseId = $this->db->escape($courseId);
