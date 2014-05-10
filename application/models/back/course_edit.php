@@ -8,9 +8,7 @@ class Course_edit extends CI_Model
 		Global $pri ;
 		$pri['read'] = "read";
 		$pri['submit'] = "submit";
-		$pri['add'] = "add";
 		$pri['edit'] = "edit";
-		$pri['del'] = "del";
 		//用之前请先声明Global $pri
 	}
 	
@@ -76,13 +74,15 @@ class Course_edit extends CI_Model
 		$query = $this->db->query($sql);
 		$old_user = $query->row_array(0);
 		$old_user = $old_user['userId'];
-		$this->db->where('userId', $courseId);
 		$course_array = array('userId'=>$userId);
-		$this->db->update('course', $course_array); 
+		$this->db->update('course', $course_array,'courseId = '.$courseId); 
 		$affect = $this->db->affected_rows();
 		if(is_numeric($affect) && $affect > 0){
-			$sql ="DELETE FROM privilege_common WHERE common = course AND commonId = ".$courseId." AND userId = ".$userId;
+			$sql ="DELETE FROM privilege_common WHERE common = 'course' AND commonId = ".$courseId." AND userId = ".$old_user;
 			$this->db->query($sql);
+			Global $pri;
+			foreach($pri as $privilege)
+				$this->db->insert("privilege_common",array('userId'=>$userId,'common'=>"course",'commonId'=>$courseId,'privilege'=>$privilege));
 		}else
 			return false;
 		return true;
@@ -298,7 +298,7 @@ class Course_edit extends CI_Model
 		if($user['type'] != "student" && $user['type'] != "assistant")
 			return -2;//不能把高权限用户设置为助教
 		$userId = $user['userId'];
-		$privilege_array = array("read","submit","add","edit");
+		$privilege_array = array("read","submit","edit");
 		$affect = 0;
 		for($i = 0;$i<4;$i++){
 			$sql = "INSERT INTO privilege_common(common,commonId,userId,privilege) VALUES('course',".$courseId.",".$userId.",'".$privilege_array[$i]."')";

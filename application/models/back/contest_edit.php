@@ -8,9 +8,7 @@ class Contest_edit extends CI_Model
 		Global $pri ;
 		$pri['read'] = "read";
 		$pri['submit'] = "submit";
-		$pri['add'] = "add";
 		$pri['edit'] = "edit";
-		$pri['del'] = "del";
 		//用之前请先声明Global $pri
 	}
 	
@@ -55,13 +53,6 @@ class Contest_edit extends CI_Model
 	
 	public function add_contest_problem($contestId,$problemId)
 	{
-		echo "hello";
-		$sql = "SELECT count(problemId) as count FROM problem WHERE problemId = ".$this->db->escape($problemId);
-		$query = $this->db->query($sql);
-		$count = $query->row_array(0);
-		echo "hello";
-		if($count['count'] <= 0 || empty($count))
-			return false;
 		$column_array = array('contestId'=>$contestId,'problemId'=>$problemId);
 		$this->db->insert('contest_problem',$column_array);
 		$affect = $this->db->affected_rows();
@@ -142,6 +133,25 @@ class Contest_edit extends CI_Model
 				return false;
 			return $result;
 		}
+		return false;
+	}
+	
+	public function add_contest_user($stu_num,$pass,$courseId){
+		$CI = &get_instance();
+		$CI->load->model("back/user_edit","user_edit");
+		$CI->load->library('encrypt');
+		$salt = $CI->user_edit->salt();
+		$pass = $this->encrypt->sha1($salt.$pass);
+		$user_array=array('name'=>$stu_num,'email'=>$stu_num."@example.com",'password'=>$pass,'salt'=>$salt);
+		if($CI->user_edit->unique_user($user_array['name']) && $CI->user_edit->unique_email($user_array['email']))
+			$id = $CI->user_edit->add_user($user_array);
+		else
+			$id = $CI->user_edit->get_id_by_name($stu_num);
+		$this->add_course_privilege($courseId,$id,"read");
+		$this->add_course_privilege($courseId,$id,"submit");
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
 		return false;
 	}
 }
