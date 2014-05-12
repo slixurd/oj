@@ -67,6 +67,18 @@
                     </select>
                 </div>
             </div>
+            <div class="row">
+                <span class="tip">语言选择:</span>
+                <div class="select-down">
+                    <span class="select-down-span placeholder">C++<i class="down"></i></span>
+                    <select class="select-down-select" autocomplete="off" name="language">
+                        <?php foreach ($lan as $index => $l) { ?>
+                            <option value='<?php echo $index; ?>' <?php if($index == 1) echo 'selected="selected"'?>><?php echo $l; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+
             <hr />
             <div class="row">
                 <!--

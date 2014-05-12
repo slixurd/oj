@@ -15,7 +15,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($problem_list as $item) { ?>
+                    <?php 
+                    if (!empty($problem_list)) {
+                    foreach ($problem_list as $item) { ?>
                     <tr>
                         <td class="pid"><?php echo $item['problemId'] ?></td>
                         <td class="avoid-overflow" title="<?php echo $item['title'] ?>"><?php echo $item['title'] ?></td>
@@ -33,6 +35,8 @@
                         <td><a href="#">编辑</a></td>
                         <td><a href="#">测试数据</a></td>
                     </tr>
+                    <?php }}else{ ?>
+                        <tr><td colspan="7">暂无内容</td> </tr>
                     <?php } ?>
                 </tbody>
             </table>

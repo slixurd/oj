@@ -98,6 +98,8 @@ class Course extends CI_Controller {
             return;
         }
 
+        GLOBAL $lan;
+        $data['lan'] = $lan;
         $this->load->view("common/admin_header",$data);
         $this->load->view("admin/course_add",$data);
         $this->load->view("common/admin_footer",$data);    
@@ -116,9 +118,10 @@ class Course extends CI_Controller {
         $stime = $this->input->post('stime',true);
         $etime = $this->input->post('etime',true);
         $private = $this->input->post('private',true) == "public"? 1 : 0 ;
-        //$describe = $this->input->post('describe',true);
+        $describe = $this->input->post('describe',true);
         $students = $this->input->post('students',true);
-
+        $lang = $this->input->post('language',true);
+        $lang = is_numeric($lang)? $lang : 1;
 
         $s = getTime($stime);
         $e = getTime($etime);
@@ -127,26 +130,35 @@ class Course extends CI_Controller {
             $this->error->show_error("提交时间出错",array("重新检查"),$data);
             return;            
         }
-
+        $this->load->model("user_model",'user_edit');
 
         $this->load->model("back/course_edit",'cedit');
-        $this->load->model("user_model",'umodel');
-
-        if(!is_numeric($tid = $this->umodel->get_id_by_name($teacher)) || $tid == false ){
-            $this->error->show_error("提交时间出错",array("重新检查"),$data);
+        if(!is_numeric($tid = $this->user_edit->get_id_by_name($teacher)) || $tid == false ){
+            $this->error->show_error("教师ID出错",array("请重新检查"),$data);
             return;            
         }
 
-        $cid = $this->cedit->add_course($tid,$title,$stime,$etime,$private,1);
+    //添加课程
+        $cid = $this->cedit->add_course($tid,$title,$describe,$stime,$etime,$private,$lang);
         if (!is_numeric($cid)) {
              $this->error->show_error("提交出错",array("请重新提交"),$data);
             return;                
         }
+
+
+    //添加助教
         for ($i=0; $i < $acount; $i++) { 
             $assis = "assistant".$i;
             $assistant = $this->input->post($assis,true);
-            $status = $this->cedit->add_assistant(913,$assistant);
+            $status = $this->cedit->add_assistant($cid,$assistant);
             //status 为 -1是找不到用户.这里不检查直接跳过,添加后面的助教
+        }
+
+    //添加学生,用户密码默认设置为12345678.如果用户名已经存在,不修改密码
+        $slist = preg_split("/\ |\n|\r/",$students);
+        foreach ($slist as $student) {
+            var_dump($student);
+            $this->cedit->add_course_user($student,"12345678",$cid);
         }
 
         redirect('/admin/course/unit_list/'.$cid, 'location', 301);
