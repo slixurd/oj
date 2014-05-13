@@ -58,7 +58,7 @@ function loadTimeWidget() {
 	for(var i = 0;i <= 23;i++) {
 		$('select.hour').append('<option value='+i+'>'+i+'</option>');
 	}
-	for(var i = 1;i <= 59;i++) {
+	for(var i = 0;i <= 59;i++) {
 		$('select.minute').append('<option value='+i+'>'+i+'</option>');
 	}
 	$('select.year option[value='+now.getFullYear()+']').attr('selected','true');
@@ -125,7 +125,7 @@ function myPopover($obj,str,place) {
 		'data-placement': place
 	});
 	$obj.popover('show');
-	setTimeout(destroyPop($obj),3000);
+	setTimeout(destroyPop($obj), 5000);
 }
 
 //销毁弹出对象
