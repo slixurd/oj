@@ -8,6 +8,8 @@
 <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
 <script type="text/javascript" src="js/admin.js"></script>
 <script type="text/javascript" src="js/bootstrap.js"></script>
+<style type="text/css">
+</style>
 </head>
 <body>
 <div class="wrapper">
@@ -45,32 +47,32 @@
 					<td>1001</td>
 					<td title="数据结构数据结构数据结构">数据结构数据结构数据结构</td>
 					<td>2014-07-21 14:00</td>
-					<td>2014-07-21 14:00</td>
-					<td><a href="#">编辑</a></td>
+					<td>2015-08-11 14:00</td>
+					<td><a class="edit" href="#">编辑</a></td>
 					<td><a class="pdel" href="#">删除</a></td>
 				</tr>
 				<tr>
-					<td>1001</td>
+					<td>1002</td>
 					<td title="数据结构数据结构数据结构">数据结构数据结构数据结构</td>
 					<td>2014-07-21 14:00</td>
-					<td>2014-07-21 14:00</td>
-					<td><a href="#">编辑</a></td>
+					<td>2025-08-11 14:40</td>
+					<td><a class="edit" href="#">编辑</a></td>
 					<td><a class="pdel" href="#">删除</a></td>
 				</tr>
 				<tr>
-					<td>1001</td>
+					<td>1003</td>
 					<td title="数据结构数据结构数据结构">数据结构数据结构数据结构</td>
 					<td>2014-07-21 14:00</td>
-					<td>2014-07-21 14:00</td>
-					<td><a href="#">编辑</a></td>
+					<td>2014-11-01 16:00</td>
+					<td><a class="edit" href="#">编辑</a></td>
 					<td><a class="pdel" href="#">删除</a></td>
 				</tr>
 				<tr>
-					<td>1001</td>
+					<td>1004</td>
 					<td title="数据结构数据结构数据结构">数据结构数据结构数据结构</td>
-					<td>2014-07-21 14:00</td>
-					<td>2014-07-21 14:00</td>
-					<td><a href="#">编辑</a></td>
+					<td class="stime">2014-07-21 14:00</td>
+					<td>2017-07-21 14:00</td>
+					<td><a class="edit" href="#">编辑</a></td>
 					<td><a class="pdel" href="#">删除</a></td>
 				</tr>
 			</tbody>
@@ -164,6 +166,76 @@
 		</div>
 	</div>
 </div>
+
+<!--修改时间模态对话框 -->
+<div style="width:50%" id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <a class="close pull-right" onmouseover="this.style.opacity=0.6" onmouseout="this.style.opacity=1"style="cursor:pointer" data-dismiss="modal" aria-hidden="true">×</a>
+    <h3 id="myModalLabel">修改单元时间</h3>
+  </div>
+  <div class="modal-body">
+  	<input id="unitid" class="hidden" />
+    <div class="row">
+		<span class="tip">开始时间：</span>
+		<div class="select-down">
+			<span class="select-down-span year placeholder">年<i class="down"></i></span>
+			<select class="select-down-select year" autocomplete="off" id="m_syear">
+			</select>
+		</div>
+		<div class="select-down">
+			<span class="select-down-span month placeholder">月<i class="down"></i></span>
+			<select class="select-down-select month" autocomplete="off" id="m_smonth">
+			</select>
+		</div>
+		<div class="select-down">
+			<span class="select-down-span date placeholder">日<i class="down"></i></span>
+			<select class="select-down-select date" autocomplete="off" id="m_sdate">
+			</select>
+		</div>
+		<div class="select-down">
+			<span class="select-down-span hour placeholder">时<i class="down"></i></span>
+			<select class="select-down-select hour" autocomplete="off" id="m_shour" >
+			</select>
+		</div>
+		<div class="select-down last-child">
+			<span class="select-down-span minute placeholder">分<i class="down"></i></span>
+			<select class="select-down-select minute" autocomplete="off" id="m_sminute">
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<span class="tip">结束时间：</span>
+		<div class="select-down">
+			<span class="select-down-span year placeholder">年<i class="down"></i></span>
+			<select class="select-down-select year" autocomplete="off" id="m_eyear">
+			</select>
+		</div>
+		<div class="select-down">
+			<span class="select-down-span month placeholder">月<i class="down"></i></span>
+			<select class="select-down-select month" autocomplete="off" id="m_emonth">
+			</select>
+		</div>
+		<div class="select-down">
+			<span class="select-down-span date placeholder">日<i class="down"></i></span>
+			<select class="select-down-select date" autocomplete="off" id="m_edate">
+			</select>
+		</div>
+		<div class="select-down">
+			<span class="select-down-span hour placeholder">时<i class="down"></i></span>
+			<select class="select-down-select hour" autocomplete="off" id="m_ehour">
+			</select>
+		</div>
+		<div class="select-down last-child"> 
+			<span class="select-down-span minute placeholder">分<i class="down"></i></span>
+			<select class="select-down-select minute" autocomplete="off" id="m_eminute">
+			</select>
+		</div>
+	</div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+    <button id="mode" style="margin-right:55px;" class="btn btn-primary">确认修改</button>
+  </div>
 </div>
 <script type="text/javascript">
 	doSelect();
@@ -258,6 +330,126 @@
                 myPopover($('#syear').parents('.row'),'开始时间必须小于结束时间','top');
                 myPopover($('#eyear').parents('.row'),'结束时间必须大于开始时间','top');
             }
+            return false;
+        }
+	});
+
+	$('body').on('click', '.edit', function(event) {
+		$("#myModal").modal("show");
+		$("#unitid").val($(this).parents('tr').children('td:first').text());
+		var syear,smonth,sdate,shour,sminute;
+		var eyear,emonth,edate,ehour,eminute;
+		var regEx = /[- :]/;
+		var stime = $(this).parents('tr').children('td:eq(2)').text().split(regEx);
+		var etime = $(this).parents('tr').children('td:eq(3)').text().split(regEx);
+		$("#m_syear").prev("span").html(stime[0] + " 年<i class='down'></i>");
+		$("#m_syear option[value=" + (+stime[0]) + "]").prop('selected', 'true');
+
+		$("#m_smonth").prev("span").html(stime[1] + " 月<i class='down'></i>");
+		$("#m_smonth option[value=" + (+stime[1]) + "]").prop('selected', 'true');
+		
+		$("#m_sdate").prev("span").html(stime[2] + " 日<i class='down'></i>");
+		$("#m_sdate option[value=" + (+stime[2]) + "]").prop('selected', 'true');
+
+		$("#m_shour").prev("span").html(stime[3] + " 时<i class='down'></i>");
+		$("#m_shour option[value=" + (+stime[3]) + "]").prop('selected', 'true');
+
+		$("#m_sminute").prev("span").html(stime[4] + " 分<i class='down'></i>");
+		$("#m_sminute option[value=" + (+stime[4]) + "]").prop('selected', 'true');
+
+		$("#m_eyear").prev("span").html(etime[0] + " 年<i class='down'></i>");
+		$("#m_eyear option[value=" + (+etime[0]) + "]").prop('selected', 'true');
+
+		$("#m_emonth").prev("span").html(etime[1] + " 月<i class='down'></i>");
+		$("#m_emonth option[value=" + (+etime[1]) + "]").prop('selected', 'true');
+
+		$("#m_edate").prev("span").html(etime[2] + " 日<i class='down'></i>");
+		$("#m_edate option[value=" + (+etime[2]) + "]").prop('selected', 'true');
+
+		$("#m_ehour").prev("span").html(etime[3] + " 时<i class='down'></i>");
+		$("#m_ehour option[value=" + (+etime[3]) + "]").prop('selected', 'true');
+
+		$("#m_eminute").prev("span").html(etime[4] + " 分<i class='down'></i>");
+		$("#m_eminute option[value=" + (+etime[4]) + "]").prop('selected', 'true');
+	})
+
+/*
+*	修改时间
+*/
+	$('#mode').bind('click', function(event) {
+        var url = 'http://www.baidu.com';
+        var unitid = $("#unitid").val();
+        var syear,smonth,sdate,shour,sminute,stime;
+        var eyear,emonth,edate,ehour,eminute,etime;
+
+        syear = $('#m_syear').val();
+        smonth = parseInt($('#m_smonth').val()) < 10 ? '0' + $('#m_smonth').val() : $('#m_smonth').val();
+        sdate = parseInt($('#m_sdate').val()) < 10 ? '0' + $('#m_sdate').val() : $('#m_sdate').val();
+        if($('#shour')[0])
+            shour = parseInt($('#m_shour').val()) < 10 ? '0' + $('#m_shour').val() : $('#m_shour').val();
+        else 
+            shour = '00';
+        if($('#m_sminute')[0])
+            sminute = parseInt($('#m_sminute').val()) < 10 ? '0' + $('#m_sminute').val() : $('#m_sminute').val();
+         else 
+            sminute = '00';
+
+        eyear = $('#m_eyear').val();
+        emonth = parseInt($('#m_emonth').val()) < 10 ? '0' + $('#m_emonth').val() : $('#m_emonth').val();
+        edate = parseInt($('#m_edate').val()) < 10 ? '0' + $('#m_edate').val() : $('#m_edate').val();
+        if($('#m_ehour')[0])
+            ehour = parseInt($('#m_ehour').val()) < 10 ? '0' + $('#m_ehour').val() : $('#m_ehour').val();
+        else
+            ehour = '00';
+        if($('#m_minute')[0])
+            eminute = parseInt($('#m_eminute').val()) < 10 ? '0' + $('#m_eminute').val() : $('#m_eminute').val();
+        else
+            eminute = '00';
+
+        stime = syear + '-' + smonth + '-' + sdate + ' ' + shour + ':' + sminute + ':00';
+        etime = eyear + '-' + emonth + '-' + edate + ' ' + ehour + ':' + eminute + ':00';
+            
+        //开始时间必须小于结束时间
+        var s = new Date(),e = new Date();
+        s.setFullYear(parseInt(syear));
+        s.setMonth(parseInt(smonth));
+        s.setDate(parseInt(sdate));
+        s.setHours(parseInt(shour));
+        s.setMinutes(parseInt(sminute));
+        s.setSeconds(parseInt(0));
+
+        e.setFullYear(parseInt(eyear));
+        e.setMonth(parseInt(emonth));
+        e.setDate(parseInt(edate));
+        e.setHours(parseInt(ehour));
+        e.setMinutes(parseInt(eminute));
+        e.setSeconds(parseInt(0));
+
+        if(s < e) {
+        	$.ajax({
+        		url: url,
+        		type: 'POST',
+        		dataType: 'json',
+        		data: {
+        			unitid: unitid,
+        			stime: stime,
+        			etime: etime
+        		},
+        	})
+        	.done(function() {
+        		console.log("success");
+        		//成功后可以刷新该页面
+        		location.replace(location.href);
+        	})
+        	.fail(function() {
+        		console.log("error");
+        	})
+        	.always(function() {
+        		console.log("complete");
+        	});
+        	
+        } else {
+            myPopover($('#m_eyear').parents('.row'),'结束时间必须大于开始时间','top');
             return false;
         }
 	});
