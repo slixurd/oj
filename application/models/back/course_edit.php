@@ -56,11 +56,11 @@ class Course_edit extends CI_Model
 		return false;
 	}
 	
-	public function update_unit($courseId,$unitId,$unit_array){
-		$courseId = $this->db->escape($courseId);
+	public function update_unit($unitId,$unit_array){
 		$unitId = $this->db->escape($unitId);
-		$where = " courseId = ".$courseId." AND unitId = ".$unitId;
-		$this->db->update('course_unit', $unit_array,$where); 
+		//where的第一个字符一定不能为空格,否则会生成 WHERE ` unitId = 'xxx';这样的错误
+		$where = "unitId = ".$unitId;
+		$this->db->update('course_unit', $unit_array, $where); 
 		$affect = $this->db->affected_rows();
 		if(is_numeric($affect) && $affect > 0)
 			return true;

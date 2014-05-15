@@ -1,6 +1,6 @@
         <div class="pull-right">
             <table class="table">
-                <caption>××实验\作业</caption>
+                <caption><?php echo "" ?></caption>
                 <thead>
                     <tr>
                         <th class="span2">ID</th>

@@ -58,6 +58,7 @@ class Course extends CI_Controller {
         $this->load->view("common/admin_footer",$data);
     }
 
+
     /**
      * 删除课程
      * @param  int $cid
@@ -119,7 +120,6 @@ class Course extends CI_Controller {
         $etime = $this->input->post('etime',true);
         $private = $this->input->post('private',true) == "public"? 1 : 0 ;
         $describe = $this->input->post('describe',true);
-        $students = $this->input->post('students',true);
         $lang = $this->input->post('language',true);
         $lang = is_numeric($lang)? $lang : 1;
 
@@ -143,7 +143,7 @@ class Course extends CI_Controller {
         if (!is_numeric($cid)) {
              $this->error->show_error("提交出错",array("请重新提交"),$data);
             return;                
-        }
+        } 
 
 
     //添加助教
@@ -154,12 +154,8 @@ class Course extends CI_Controller {
             //status 为 -1是找不到用户.这里不检查直接跳过,添加后面的助教
         }
 
-    //添加学生,用户密码默认设置为12345678.如果用户名已经存在,不修改密码
-        $slist = preg_split("/\ |\n|\r/",$students);
-        foreach ($slist as $student) {
-            var_dump($student);
-            $this->cedit->add_course_user($student,"12345678",$cid);
-        }
+    //添加学生
+        $this->add_student($cid);
 
         redirect('/admin/course/unit_list/'.$cid, 'location', 301);
 
@@ -274,6 +270,50 @@ class Course extends CI_Controller {
         echo json_encode($result);
     }        
 
+    /*
+     * 修改单元的开始和结束时间
+     */
+    public function unit_time_change(){
+        Global $data;
+        $uid = $this->input->post("unitid",true);
+        $stime = $this->input->post("stime",true);
+        $etime = $this->input->post("etime",true);
+
+        $s = getTime($stime);
+        $e = getTime($etime);
+        //检测时间是否出错
+        if($s === false || $e === false || $s > $e){
+            $result = array('status' => false , 'reason' => '时间错误,结束时间需要晚于开始时间');
+            echo json_encode($result);
+            return;            
+        }
+        if($uid === NULL||!is_numeric($uid)||$uid <= 0){
+            $result = array('status' => false , 'reason' => '错误的单元编号');
+            echo json_encode($result);
+            return;
+        }
+        if(!$data['is_login']){
+            $result = array('status' => false , 'reason' => '未登录');
+            echo json_encode($result);
+            return;
+        }
+
+        $this->load->model("back/course_edit","course_edit");
+        // if($type != "admin"){
+        //     $result = array('status' => false , 'reason' => '没有权限');
+        //     echo json_encode($result);
+        //     return;
+        // }
+        $tochange = array('startTime' => $stime,'endTime' => $etime);
+        $check = $this->course_edit->update_unit($uid,$tochange);
+        if ($check) {
+            $result = array('status' => true);
+            echo json_encode($result);
+        }
+        
+    }
+
+
     public function problem($uid,$page = 1){
         Global $data;
         if(!$data['is_login']){
@@ -385,4 +425,66 @@ class Course extends CI_Controller {
 
     }
 
+    public function update_course($type = NULL){
+        Global $data;
+
+        if(!$data['is_login']){
+            $result = array('status' => false , 'reason' => '未登录');
+            echo json_encode($result);
+            return;
+        }
+        $cid = $this->input->post("courseId",true);
+        if($cid === NULL||!is_numeric($cid)||$cid <= 0 || $type == NULL){
+            $result = array('status' => false , 'reason' => '错误的课程编号或者没有选择执行内容');
+            echo json_encode($result);
+            return;
+        }
+
+        $this->load->model("back/course_edit","cedit");
+
+        if($type == "time")
+            $result = $this->change_course_time();
+        else if($type == "description")
+            $result = $this->update_course_description();
+        else if($type == "name")
+            $result = $this->update_course_name();
+        else if($type == "pri")
+            $result = $this->update_pri();
+        else if($type == "assit")
+            $result = $this->update_assit();
+        else if($type == "student")
+            $result = $this->add_student($cid);
+
+        echo json_encode($result);
+    }
+
+    private function change_course_time(){
+
+    }
+
+    private function update_course_description(){
+
+    }
+
+    private function update_course_name(){
+
+    }
+
+    private function update_pri(){
+
+    }
+
+    private function update_assit(){
+
+    }
+
+//添加学生,用户密码默认设置为12345678.如果用户名已经存在,不修改密码
+    private function add_student($cid){
+        $students = $this->input->post('students',true);
+        $slist = preg_split("/\ |\n|\r/",$students);
+        foreach ($slist as $student) {
+            //var_dump($student);
+            $this->cedit->add_course_user($student,"12345678",$cid);
+        }
+    }
 }

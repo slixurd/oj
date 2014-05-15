@@ -14,7 +14,7 @@
 @import 'base';
 
 //下拉列表类
-.select-down(@height:25px,@width:90px,@padding_top: 2px,@padding_left: 8px) {
+.select-down(@height:36px,@width:90px,@padding_top: 2px,@padding_left: 8px) {
 	display: inline-block;
 	position: relative;
 	margin: 0;
@@ -42,6 +42,7 @@
 		line-height: @height - @padding_top*2;
 		padding: @padding_top 0 @padding_top @padding_left;
 		background-color: @text-bg;
+		vertical-align: middle;
 
 		.avoid-overflow;
 
@@ -362,7 +363,7 @@ h3 {
 }
 
 #memory-limit {
-	width: 185px;
+	width: 195px;
 }
 
 
@@ -422,8 +423,4 @@ h3 {
 
 .checked {
 	background: url("../img/right.jpg") no-repeat 3px 6px;
-}
-
-.transparent {
-	filter: alpha(opacity=0);
 }
