@@ -118,6 +118,7 @@ function doSelect() {
 
 //自定义弹出提示框
 function myPopover($obj,str,place) {
+	rewriteSetTimeout();
 	str = arguments[1] ? arguments[1] : '';
 	place = arguments[2] ? arguments[2] : 'right';
 	$obj.attr({
@@ -125,7 +126,7 @@ function myPopover($obj,str,place) {
 		'data-placement': place
 	});
 	$obj.popover('show');
-	setTimeout(destroyPop($obj), 5000);
+	setTimeout(destroyPop, 5000, $obj);
 }
 
 //销毁弹出对象
@@ -391,6 +392,17 @@ function blink_border($input,right) {
 	},500);
 }
 
+function rewriteSetTimeout() {
+	var _st = window.setTimeout;
+	window.setTimeout = function(fRef, mDelay) {
+	    if(typeof fRef == 'function') {
+	        var argu = Array.prototype.slice.call(arguments,2);
+	        var f = (function(){ fRef.apply(null, argu); });
+	        return _st(f, mDelay);
+	    }
+        return _st(fRef,mDelay);
+	}
+}
 
 $(function() {
 	//compat_layout();
