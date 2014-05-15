@@ -4,7 +4,9 @@
 <title>权限管理</title>
 <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
 <link rel="stylesheet" type="text/css" href="css/admin.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 <script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="js/bootstrap.js"></script>
 <script type="text/javascript" src="js/admin.js"></script>
 </head>
 <body>
@@ -121,6 +123,11 @@
 		url = 'http://www.baidu.com';
 		userid = $('#userid1').val();
 		type = $('#type1').val();
+		console.log(userid.length)
+		if(userid.length == 0) {
+			myPopover($('#userid1'),'ID不能为空','right');
+			return false;
+		}
 
 		$.ajax({
 			url: url,
@@ -149,6 +156,10 @@
 		var url,userid,type,authority,read,write,exec;
 		url = 'http://www.baidu.com';
 		userid = $('#userid2').val();
+		if(userid.length == 0) {
+			myPopover($('#userid2'),'ID不能为空','right');
+			return false;
+		}
 		type = $('#type2').val();
 		read = $('#read').prop('checked') ? 1 : 0;
 		write = $('#write').prop('checked') ? 1 : 0;

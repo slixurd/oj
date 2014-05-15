@@ -388,6 +388,12 @@
 		} else {
 			etime += '-' + $('#c_edate').val();
 		}
+		console.log(new Date(stime), new Date(etime));
+
+		if(new Date(stime) >= new Date(etime)) {
+			myPopover($('.partion-h', '#myModal2'), '开始时间必须小于结束时间', 'bottom');
+			return false;
+		}
 
 		pri = $('#private-sel').val();
 		ifadd = $('input[name="add"]:checked').val();
