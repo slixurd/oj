@@ -2,6 +2,45 @@
 
 class User_edit extends CI_Controller {
 	
+	public function del_user_privilege($common,$commonId,$userId,$kind){
+		$commonId = $this->db->escape($commonId);
+		$common = $this->db->escape($common);
+		$userId = $this->db->escape($userId);
+		$kind = $this->db->escape($kind);
+		$sql =  "DELETE FROM privilege_common WHERE common = ".$common." AND commonId = "
+		.$commonId." AND userId = ".$userId."AND privilege = ".$kind;
+		$this->db->query($sql);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
+	}
+	
+	public function update_user_type($userId,$type){
+		$userId = $this->db->escape($userId);
+		$type = $this->db->escape($type);
+		$sql = "UPDATE user SET type = ".$type." WHERE userId = ".$userId;
+		$this->db->query($sql);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
+	}
+	
+	//获取对应竞赛或者单元的全部权限
+	public function get_user_privilege_list($userId,$common,$commonId){
+		$commonId = $this->db->escape($commonId);
+		$common = $this->db->escape($common);
+		$userId = $this->db->escape($userId);
+		$sql = "SELECT privilege FROM privilege_common WHERE common = ".$common." AND commonId = "
+		.$commonId." AND userId = ".$userId;
+		$query = $this->db->query($sql);
+		$result = $query->result_array();
+		if(empty($result))
+			return false;
+		return $result;
+	}
+	
 	public function add_user($user_array=array('name'=>"name",'email'=>"example@qq.com",'password'=>"123456",'salt'=>""),$user_state_array=array('submit'=>0,'solved'=>0))
 	{
 		$this->db->trans_start();
