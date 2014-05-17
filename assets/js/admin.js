@@ -125,7 +125,7 @@ function myPopover($obj,str,place) {
 		'data-placement': place
 	});
 	$obj.popover('show');
-	setTimeout(destroyPop($obj), 5000);
+	setTimeout(function(){destroyPop($obj);}, 3000);
 }
 
 //销毁弹出对象
@@ -141,12 +141,10 @@ function check_pwd() {
 		var regPwd = /^[\x00-\x7F]*$/; //检验密码只含ASCII字符
 		if(pwd !== conf) {
 			myPopover($('#pwd'),'密码输入不一致');
-			myPopover($('#conf'),'密码输入不一致');
 			return false;
 		}else {
 			if(pwd.length < 6 || pwd.length > 16) {
 				myPopover($('#pwd'),'密码长度须为6-16位');
-				myPopover($('#conf'),'密码长度须为6-16位');
 				return false;
 			}
 		}
@@ -240,7 +238,6 @@ function checkIdInput() {
 	var conf = $('#conf').val();
 	if(user !== conf) {
 		myPopover($('#user'),'ID输入不一致','top');
-		myPopover($('#conf'),'ID输入不一致','top');
 		return false;
 	}
 	return true;

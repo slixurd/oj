@@ -174,8 +174,9 @@ class Course_edit extends CI_Model
 		// $CI->load->model("back/user_edit","user_edit");
 		$CI->load->library('encrypt');
 		$salt = $this->salt();
-		$user_array=array('name'=>$stu_num,'email'=>$stu_num."@example.com",'password'=>$pass,'salt'=>$salt);
 		$pass = $this->encrypt->sha1($salt.$pass);
+		$user_array=array('name'=>$stu_num,'email'=>$stu_num."@example.com",'password'=>$pass,'salt'=>$salt);
+		
 		if($this->unique_user($user_array['name']) && $this->unique_email($user_array['email']))
 			$id = $this->add_user($user_array);
 		else
@@ -289,7 +290,7 @@ class Course_edit extends CI_Model
 	}
 	
 	public function add_assistant($courseId,$name_email){
-		$ciurseId = $this->db->escape($courseId);
+		$courseId = $this->db->escape($courseId);
 		$name_email = $this->db->escape($name_email);
 		$sql = "SELECT userId ,type FROM user WHERE  name = ".$name_email." OR email = ".$name_email;
 		$query=$this->db->query($sql);

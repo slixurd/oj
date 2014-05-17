@@ -132,7 +132,7 @@ class Contest extends CI_Controller {
         }
 
         $this->load->view("common/admin_header",$data);
-        $this->load->view("admin/contest_add",$data);
+        //$this->load->view("admin/contest_add",$data);
         $this->load->view("common/admin_footer",$data);    
     }
     

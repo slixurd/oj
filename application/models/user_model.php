@@ -245,4 +245,13 @@ class User_model extends CI_Model
 		return true;
 	}
 	
+
+	public function get_type_list(){
+		$sql = "SELECT userId,name,type FROM user
+				WHERE type IN ('admin','assistant','teacher')";
+		$result = $this->db->query($sql);
+		if (empty($result)) 
+			return false;
+		return $result->result_array();
+	}
 }
