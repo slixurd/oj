@@ -278,7 +278,7 @@ CREATE TABLE `privilege_common` (
   `commonId` int(11) NOT NULL,
   `common` varchar(15) NOT NULL,
   `privilege` varchar(20) NOT NULL,
-  KEY `pri_idx` (`userId`,`commonId`,`common`),
+  KEY `pri_idx` (`userId`,`commonId`,`common`,`privilege`),
   CONSTRAINT `privilege_common_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -471,7 +471,7 @@ CREATE TABLE `user` (
   `email` varchar(100) NOT NULL,
   `password` varchar(50) NOT NULL,
   `salt` varchar(40) NOT NULL,
-  `type` varchar(10) DEFAULT NULL,
+  `type` varchar(10) DEFAULT 'student',
   `programLan` tinyint(4) DEFAULT '0',
   `language` varchar(20) DEFAULT NULL,
   `regTime` datetime DEFAULT NULL,

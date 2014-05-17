@@ -297,9 +297,11 @@ class Course_edit extends CI_Model
 		$user = $query->row_array(0);
 		if(empty($user))
 			return -1;//找不到用户
-		if($user['type'] != "student" && $user['type'] != "assistant")
-			return -2;//不能把高权限用户设置为助教
 		$userId = $user['userId'];
+		if($user['type'] == "student" || $user['type'] == "assistant" || $user['type'] == null){
+			$sql = "UPDATE user SET type = 'assistant' WHERE userId = ".$userId;
+			$this->db->query($sql);
+		}
 		$privilege_array = array("read","submit","edit");
 		$affect = 0;
 		for($i = 0;$i<4;$i++){
@@ -307,9 +309,7 @@ class Course_edit extends CI_Model
 			$this->db->query($sql);
 			$affect = $this->db->affected_rows();
 		}
-		$sql = "UPDATE user SET type = 'assistant' WHERE userId = ".$userId;
-		$this->db->query($sql);
-		return $affect;//返回受影响行数
+		return 1;//返回受影响行数
 	}
 
 	public function add_user($user_array=array('name'=>"name",'email'=>"example@qq.com",'password'=>"123456",'salt'=>""),$user_state_array=array('submit'=>0,'solved'=>0))

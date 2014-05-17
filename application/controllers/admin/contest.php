@@ -6,14 +6,15 @@ class Contest extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        $this->load->model("user_model");
-        $this->load->model("back/contest_edit","contest_edit");
-        $this->load->model("back/user_edit","user_edit");
     }
     
     public function index($page = 1){
 		Global $data;
 		
+		 $this->load->model("user_model");
+        $this->load->model("back/contest_edit","contest_edit");
+        $this->load->model("back/user_edit","user_edit");
+        
 		if(!is_numeric($page) || $page< 1){
 			 $this->error->show_error("对不起，地址错误",array("页面编号错误"),$data);
             return; 
@@ -64,38 +65,37 @@ class Contest extends CI_Controller {
         $this->load->view("common/admin_footer",$data);
     }
     
-    public function problem($contestId = 0,$page = 1){
-		Global $data;
-		
-		if(!is_numeric($contestId)||$contestId <= 0||$page < 1 || !is_numeric($page)){
-            $this->error->show_error("对不起，地址错误",array("单元编号错误或者页数错误"),$data);
-            return; 
-        }
-		
-		 if(!$data['is_login']){
+    public function problem($cid,$page = 1){
+        Global $data;
+        if(!$data['is_login']){
             $this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
             return;
         }
-		$data['page_title']='竞赛';
-        
+        if($cid === NULL||!is_numeric($cid)||$cid == 0||$page < 1 || !is_numeric($page)){
+            $this->error->show_error("对不起，地址错误",array("单元编号错误或者页数错误"),$data);
+            return; 
+        }
+        $data['page_title']='竞赛';
+        $this->load->model("user_model");
+        $this->load->model("back/contest_edit","contest_edit");
+        $this->load->model("back/problem_edit","problem_edit");
         $type = $this->user_model->get_user_item_id($data['user']['userId'],array('type'));
         $type = $type['type'];
-        
-        $this->load->model("back/problem_edit","problem_edit");
 
-		$plist = $this->contest_edit->get_contest_problem_list($contestId);
+        $plist = $this->contest_edit->get_contest_problem_list($cid);
         $data['plist'] = $plist;
-        $data['contestId'] = $contestId;
-		
-		$total = $this->problem_edit->get_count();
-		$data['problem_list'] = $this->problem_edit->get_problem_list(($page-1)*10,10);
-		
-		 $this->load->library('pagination');
+        $data['uid'] = $cid;
+        //var_dump($plist);
+
+        $total = $this->problem_edit->get_count();
+        $data['problem_list'] = $this->problem_edit->get_problem_list(($page-1)*10,10);
+
+        $this->load->library('pagination');
         $config['first_link'] = TRUE;
         $config['last_link'] = TRUE;
         $config['use_page_numbers'] = TRUE;
 
-        $config['base_url'] = site_url("admin/contest/problem").'/'.$contestId.'/';
+        $config['base_url'] = site_url("admin/contest/problem").'/'.$cid.'/';
         $config['total_rows'] = $total;
         $config['per_page'] =10;
         $config['first_link'] = '首页';
@@ -118,9 +118,11 @@ class Contest extends CI_Controller {
         $config['last_tag_close'] = '</li>';    
         $this->pagination->initialize($config);
         $data['pagination_block'] = $this->pagination->create_links();
+
+
         
         $this->load->view("common/admin_header",$data);
-        //$this->load->view("admin/contest_problem_add",$data);
+        $this->load->view("admin/contest_problem_add",$data);
         $this->load->view("common/admin_footer",$data);     
     }
     
@@ -132,46 +134,47 @@ class Contest extends CI_Controller {
         }
 
         $this->load->view("common/admin_header",$data);
-        //$this->load->view("admin/contest_add",$data);
+        $this->load->view("admin/contest_add",$data);
         $this->load->view("common/admin_footer",$data);    
     }
     
     public function add_up(){
+		$this->load->model("user_model");
+        $this->load->model("back/contest_edit","contest_edit");
 		Global $data;
         if(!$data['is_login']){
             $this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
             return;
         }
 
-        $title = $this->input->post('title',true);
-        $stime = $this->input->post('stime',true);
-        $etime = $this->input->post('etime',true);
-        $private = $this->input->post('private',true) == "public"? 1 : 0 ;
-        $describe = $this->input->post('describe',true);
-        $students = $this->input->post('students',true);
+        $title = "hello contest";$this->input->post('title',true);
+        $stime = "2013-10-10 23:23:23";//$this->input->post('stime',true);
+        $etime = "2013-10-11 23:23:23";//;$this->input->post('etime',true);
+        $private = 1;//$this->input->post('private',true) == "public"? 1 : 0 ;
+        $describe = "describe contesr ";//$this->input->post('describe',true);
+        $students = "t123aa45\nt123aa456\nt12aa3457";//$this->input->post('students',true);
         $userId = $data['user']['userId'];
         
-        if(strtotime($stime)>strtotime($time)){
+        if(strtotime($stime)>strtotime($etime)){
 			 $this->error->show_error("结束时间必须大于开始时间",array("重新检查"),$data);
             return;      
 		}
 		
-		$cid = $this->contest_edit->add_contest($userId,$title,$stime,$etime,$private);
+		$cid = $this->contest_edit->add_contest($userId,$title,$stime,$etime,$private,$describe);
 		if($cid == false || !is_numeric($cid)){
 			 $this->error->show_error("提交出错",array("请重新提交"),$data);
             return;        
 		}
 		
 		//批量插入学生
-		$stu_nums = preg_split('/\r\n/',$students);
+		$stu_nums = preg_split("/\ |\n|\r/",$students);
 		foreach($stu_nums as $stu_num){
-			if($this->user_help->check_name($user['name']) == 1){
-				//echo "student: ".$name."<br>";
-				$this->contest_edit->add_contest_user($stu_num,$stu_num,$cid);
+			if($this->contest_edit->unique_user($stu_num )){
+				$this->contest_edit->add_contest_user($stu_num,"12345678",$cid);
 			}
 		}
 		
-		 redirect('/admin/contest/problem/'.$cid, 'location', 301);
+		 //redirect('/admin/contest/problem/'.$cid, 'location', 301);
 		 
 	}
 	
