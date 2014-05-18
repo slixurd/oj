@@ -31,7 +31,37 @@
 
 	<div class="add-tab pull-right">
 		<table class="table">
-			<caption>单元列表<small id="mode-course" style="cursor:pointer;font-size:14px;margin-left:1em;">修改课程信息</small></caption>
+			<caption>课程信息&nbsp;<i style="margin-bottom:5px" class="edit" id="mode-course"></i></caption>
+			<tr>
+				<td>课程名称：</td>
+				<td id="i-title">数据结构
+					<input class="hidden" />
+				</td>
+			</tr>
+			<tr>
+				<td>有效期：</td>
+				<td>
+					<span id="i-stime">2015-05-12</span>
+					&nbsp;&nbsp;至&nbsp;&nbsp;
+					<span id="i-etime">2029-12-09</span>
+				</td>
+			</tr>
+			<tr>
+				<td>private：</td>
+				<td id="i-pri">public</td>
+			</tr>
+			<tr>
+				<td>描述：</td>
+				<td id="i-describe">这是一门很有用的课程
+				</td>
+			</tr>
+			<tr>
+				<td>助教人数：</td>
+				<td id="i-count">1</td>
+			</tr>
+		</table>
+		<table class="table margin-top">
+			<caption>单元列表</caption>
 			<thead>
 				<tr>
 					<th class="span1">单元ID</th>
@@ -48,7 +78,7 @@
 					<td title="数据结构数据结构数据结构">数据结构数据结构数据结构</td>
 					<td>2014-07-21 14:00</td>
 					<td>2015-08-11 14:00</td>
-					<td><a class="edit" href="#">编辑</a></td>
+					<td><a class="pedit" href="#">编辑</a></td>
 					<td><a class="pdel" href="#">删除</a></td>
 				</tr>
 				<tr>
@@ -56,7 +86,7 @@
 					<td title="数据结构数据结构数据结构">数据结构数据结构数据结构</td>
 					<td>2014-07-21 14:00</td>
 					<td>2025-08-11 14:40</td>
-					<td><a class="edit" href="#">编辑</a></td>
+					<td><a class="pedit" href="#">编辑</a></td>
 					<td><a class="pdel" href="#">删除</a></td>
 				</tr>
 				<tr>
@@ -64,7 +94,7 @@
 					<td title="数据结构数据结构数据结构">数据结构数据结构数据结构</td>
 					<td>2014-07-21 14:00</td>
 					<td>2014-11-01 16:00</td>
-					<td><a class="edit" href="#">编辑</a></td>
+					<td><a class="pedit" href="#">编辑</a></td>
 					<td><a class="pdel" href="#">删除</a></td>
 				</tr>
 				<tr>
@@ -72,7 +102,7 @@
 					<td title="数据结构数据结构数据结构">数据结构数据结构数据结构</td>
 					<td class="stime">2014-07-21 14:00</td>
 					<td>2017-07-21 14:00</td>
-					<td><a class="edit" href="#">编辑</a></td>
+					<td><a class="pedit" href="#">编辑</a></td>
 					<td><a class="pdel" href="#">删除</a></td>
 				</tr>
 			</tbody>
@@ -434,24 +464,18 @@
 		
 	});
 
-//修改课程，需要后台动态填写信息
+//修改课程
 	$('#mode-course').on('click', function(event) {
-		var url = 'http://www.baidu.com';
-
-/*
-**********以下代码纯属演示和自己测试，有ajax存在的话应该删除*********************************
-*/
-		//json可以采用这种格式
-		var jsonStr = '{ "title": "数据结构", "describe": "这是一门很有用的课程", ';
-		jsonStr += '"stime": "2015-05-12", "etime": "2029-12-09", ';
-		jsonStr += '"private": "public" }';
-		var json = $.parseJSON(jsonStr);
-
-		var stime = json.stime.split('-'), etime = json.etime.split('-');
+		var title, stime, etime, pri, describe;
+		title = $('#i-title').text();
+		stime = $('#i-stime').text().split('-');
+		etime = $('#i-etime').text().split('-');
+		pri = $('#i-pri').text();
+		describe = $('#i-describe').text();
 
 		var $modal = $('#myModal2');
-		$('#title', $modal).val(json.title);
-		$('#describe', $modal).val(json.describe);
+		$('#title', $modal).val(title);
+		$('#describe', $modal).val(describe);
 		$('#c_syear', $modal).val(+stime[0]).prev('span').html(stime[0] + ' 年<i class="down"></i>');
 		$('#c_smonth', $modal).val(+stime[1]).prev('span').html(stime[1] + ' 月<i class="down"></i>');
 		$('#c_sdate', $modal).val(+stime[2]).prev('span').html(stime[2] + ' 日<i class="down"></i>');
@@ -460,34 +484,9 @@
 		$('#c_emonth', $modal).val(+etime[1]).prev('span').html(etime[1] + ' 月<i class="down"></i>');
 		$('#c_edate', $modal).val(+etime[2]).prev('span').html(etime[2] + ' 日<i class="down"></i>');
 
-		$('#private option[value="' + json.private + '"]', $modal).prop('selected', 'true');
-		$('#private-sel', $modal).prev('span').html(json.private + '<i class="down"></i>');
-/*
-************************************************************************************************
-*/		
-		$.getJSON(url, {courseid: '1000'}, function(data) {
-			var jsonStr = '{ "title": "数据结构", "describe": "这是一门很有用的课程", ';
-			jsonStr += '"stime": "2015-05-12", "etime": "2029-12-09", ';
-			jsonStr += '"private": "public" }';
-			var json = $.parseJSON(jsonStr);
+		$('#private option[value="' + pri + '"]', $modal).prop('selected', 'true');
+		$('#private-sel', $modal).prev('span').html(pri + '<i class="down"></i>');
 
-			var stime = json.stime.split('-'), etime = json.etime.split('-');
-
-			var $modal = $('#myModal2');
-			$('#title', $modal).val(json.title);
-			$('#describe', $modal).val(json.describe);
-			$('#c_syear', $modal).val(+stime[0]).prev('span').html(stime[0] + ' 年<i class="down"></i>');
-			$('#c_smonth', $modal).val(+stime[1]).prev('span').html(stime[1] + ' 月<i class="down"></i>');
-			$('#c_sdate', $modal).val(+stime[2]).prev('span').html(stime[2] + ' 日<i class="down"></i>');
-
-			$('#c_eyear', $modal).val(+etime[0]).prev('span').html(etime[0] + ' 年<i class="down"></i>');
-			$('#c_emonth', $modal).val(+etime[1]).prev('span').html(etime[1] + ' 月<i class="down"></i>');
-			$('#c_edate', $modal).val(+etime[2]).prev('span').html(etime[2] + ' 日<i class="down"></i>');
-
-			$('#private option[value="' + json.private + '"]', $modal).prop('selected', 'true');
-			$('#private-sel', $modal).prev('span').html(json.private + '<i class="down"></i>');
-		});
-		
 		$("#myModal2").modal("show");
 	});
 
@@ -584,7 +583,7 @@
         }
 	});
 
-	$('body').on('click', '.edit', function(event) {
+	$('body').on('click', '.pedit', function(event) {
 		$("#myModal").modal("show");
 		$("#unitid").val($(this).parents('tr').children('td:first').text());
 		var syear,smonth,sdate,shour,sminute;
