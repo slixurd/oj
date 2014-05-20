@@ -55,9 +55,9 @@ class Contest extends CI_Controller {
         $config['prev_tag_open'] = '<li>';
         $config['prev_tag_close'] = '</li>';
         $config['first_tag_open'] = '<li>';
-        $config['first_tag_close'] = '</li>';           
+        $config['first_tag_close'] = '</li>';
         $config['last_tag_open'] = '<li>';
-        $config['last_tag_close'] = '</li>';    
+        $config['last_tag_close'] = '</li>';
         $this->pagination->initialize($config);
         $data['pagination_block'] = $this->pagination->create_links();
         $this->load->view("common/admin_header",$data);
@@ -132,10 +132,20 @@ class Contest extends CI_Controller {
             $this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
             return;
         }
+        $data['page_title'] = "添加竞赛";
+        $this->load->model("back/user_edit","uedit");
+        $type = $this->uedit->get_user_type($data['user']['userId']);
+        $type = empty($type)? false : $type['type'];
+        $data['type'] = $type;
 
-        $this->load->view("common/admin_header",$data);
-        $this->load->view("admin/contest_add",$data);
-        $this->load->view("common/admin_footer",$data);    
+        if( $data['type'] == "teacher"  || $data['type'] == "admin" || $data['type'] == "assistant"){
+            $this->load->view("common/admin_header",$data);
+            $this->load->view("admin/add_contest",$data);
+            $this->load->view("common/admin_footer",$data);
+            return;
+        }
+        $this->error->show_error("对不起，没有权限",array("只有老师/助教和管理员才有资格添加竞赛"),$data);
+        return;
     }
     
     public function add_up(){
@@ -147,20 +157,18 @@ class Contest extends CI_Controller {
             return;
         }
 
-        $title = "hello contest";$this->input->post('title',true);
-        $stime = "2013-10-10 23:23:23";//$this->input->post('stime',true);
-        $etime = "2013-10-11 23:23:23";//;$this->input->post('etime',true);
-        $private = 1;//$this->input->post('private',true) == "public"? 1 : 0 ;
-        $describe = "describe contesr ";//$this->input->post('describe',true);
-        $students = "t123aa45\nt123aa456\nt12aa3457";//$this->input->post('students',true);
-        $userId = $data['user']['userId'];
-        
+        $title = $this->input->post('title',true);
+        $stime = $this->input->post('stime',true);
+        $etime = $this->input->post('etime',true);
+        $private = $this->input->post('private',true) == "public" ? 1 : 0 ;
+        $describe = $this->input->post('describe',true);
+        $students = $this->input->post('students',true);
         if(strtotime($stime)>strtotime($etime)){
 			 $this->error->show_error("结束时间必须大于开始时间",array("重新检查"),$data);
             return;      
 		}
 		
-		$cid = $this->contest_edit->add_contest($userId,$title,$stime,$etime,$private,$describe);
+		$cid = $this->contest_edit->add_contest($title,$stime,$etime,$private,$describe);
 		if($cid == false || !is_numeric($cid)){
 			 $this->error->show_error("提交出错",array("请重新提交"),$data);
             return;        
@@ -174,7 +182,7 @@ class Contest extends CI_Controller {
 			}
 		}
 		
-		 //redirect('/admin/contest/problem/'.$cid, 'location', 301);
+		//redirect('/admin/contest/problem/'.$cid, 'location', 301);
 		 
 	}
 	

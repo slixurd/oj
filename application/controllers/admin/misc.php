@@ -112,4 +112,26 @@ class Misc extends CI_Controller {
         echo json_encode(array('status'=>true));
     }
 
+    public function del_pri($uid){
+        Global $data;
+        if(!$data['is_login']){
+            echo json_encode(array('status'=>false,'reason'=>'not login'));
+            return;
+        }
+        $this->load->model("back/user_edit","user_edit");
+        $user_pri = $this->user_edit->get_user_type($data['user']['userId']);
+        $user_pri = $user_pri['type'];
+        $user_pri = get_pri_key($user_pri);
+        if($user_pri !== false && ($user_pri == 0 || $user_pri < $pri_submit)){
+            if( $uid != false && $this->user_edit->del_user_type($uid) != false ){
+                $result = array('status'=>true);
+                echo json_encode($result);
+                return;           
+            }
+        }
+        $result = array('status'=>false,'reason'=>"越权修改权限.");
+        echo json_encode($result);
+        return;        
+    }
+
 }

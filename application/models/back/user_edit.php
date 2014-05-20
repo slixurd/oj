@@ -92,6 +92,17 @@ class User_edit extends CI_Controller {
 		return false;		
 	}
 
+	public function del_user_type($uid){
+		$data = array('type' => 'student');
+		$this->db->where("userId",$uid);
+		$this->db->update('user',$data);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;				
+
+	}
+
 	public function add_user($user_array=array('name'=>"name",'email'=>"example@qq.com",'password'=>"123456",'salt'=>""),$user_state_array=array('submit'=>0,'solved'=>0))
 	{
 		$this->db->trans_start();

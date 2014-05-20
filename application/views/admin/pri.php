@@ -15,7 +15,7 @@
                             <td><?php echo $item['userId']; ?> </td>
                             <td><?php echo $item['name']; ?></td>
                             <td><?php echo $item['type']; ?></td>
-                            <td><a class="pdel" href="#">删除</a></td>
+                            <td><a class="pdel" data-link="<?php echo site_url('admin/misc/del_pri').'/'.$item['userId'] ?>">删除</a></td>
                         </tr>
                     <?php } ?>
                 </tbody>
@@ -83,10 +83,15 @@
     doSelect();
 
     $('.pdel').bind('click', function(event) {
-        $.post(url,{userid: userid,type: type},function(data){
-            $(this).parents('tr').fadeOut();   
-
-        },"json");
+        event.preventDefault();
+        var url = $(this).attr("data-link");
+        $t = $(this);
+        $.getJSON(url,function(data){
+            if(data.status == true )
+                $t.parents('tr').fadeOut();  
+            else
+                alert(data.reason);             
+        });
     });
 
     $("#submit1").bind('click', function(event) {
