@@ -182,9 +182,10 @@ class Course extends CI_Controller {
         //     $this->error->show_error("对不起，问题编辑需要管理员权限",array("需要更改问题，请联系管理员"),$data);
         //     return;
         // }
-
+        $this->load->model("course_model","course_model");        
+        
+        $data['cdetail'] = $this->course_model->get_course_item($cid);
         $problem_list = $this->course_edit->get_course_unit_list($cid);
-
         $data['plist'] = $problem_list;
         //var_dump($problem_list);
         $this->load->view("common/admin_header",$data);

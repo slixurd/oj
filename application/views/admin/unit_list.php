@@ -1,6 +1,47 @@
     <div class="add-tab pull-right">
+        <style type="text/css">
+            div.course-detail{
+                margin-bottom: 25px;
+                margin-top: 0;
+                padding:15px 10px;
+            }
+            div.course-detail #i-title{
+                color: #38b3ff;
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+            div.course-detail .sitem div{
+                display: inline-block;
+                line-height: 35px;
+
+            }
+            .sitem{width: 620px;;border-bottom: 1px solid #DDD;}
+            .stitle{
+                display: inline-block;
+                width: 100px;
+            }
+        </style>
+        <div class="course-detail">
+            <div id="i-title"><?php echo $cdetail['courseName'] ?></div>
+            <div class="sitem">
+                <div class='stitle'>有效期</div>
+                <div>
+                    <span id="i-stime"><?php echo $cdetail['startTime'] ?></span>
+                    至
+                    <span id="i-etime"><?php echo $cdetail['endTime'] ?></span>
+                </div>
+            </div>
+            <div class="sitem">
+                <div class='stitle'>private</div>
+                <div id="i-pri"><?php if($cdetail['private'] == 0) echo "public"; else echo "private"; ?></div>
+            </div>
+            <div class="sitem">
+                <div class='stitle'>描述</div>
+                <div id="i-describe"><?php echo $cdetail['description'] ?></div>
+            </div>
+        </div>
         <table class="table">
-            <caption>单元列表<small id="mode-course" style="cursor:pointer;font-size:14px;margin-left:1em;">修改课程信息</small></caption>
+            <caption>单元列表</caption>
             <thead>
                 <tr>
                     <th class="span1">单元ID</th>
@@ -171,88 +212,6 @@
   </div>
 </div>
 
-<!--修改课程信息模态对话框 -->
-<div style="width:805px;left:0;margin-left:280px" id="myModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <a class="close pull-right" onmouseover="this.style.opacity=0.6" onmouseout="this.style.opacity=1"style="cursor:pointer" data-dismiss="modal" aria-hidden="true">×</a>
-        <h3 id="myModalLabel">修改课程信息</h3>
-    </div>
-    <div class="modal-body">
-        <div class="row">
-            <span style="width:100px" class="tip">课程名称：</span>
-            <input style="width:610px" id="title" type="text" />
-        </div>
-        <input type="text" id="assis-count" class="hidden" value="1" />
-        <div class="row">
-            <span style="width:100px" class="tip">添加助教：</span>
-            <input id="assistant" type="text" name="assistant0" />
-            <a id="assitant-id" href="#" class="btn chk-id">ID是否存在</a>
-        </div>
-        <div class="row">
-            <span style="width:100px" class="tip">修改有效期：</span>
-            <div class="select-down">
-                <span class="select-down-span year placeholder">年<i class="down"></i></span>
-                <select class="select-down-select year" autocomplete="off" id="c_syear">
-                </select>
-            </div>
-            <div class="select-down">
-                <span class="select-down-span month placeholder">月<i class="down"></i></span>
-                <select class="select-down-select month" autocomplete="off" id="c_smonth">
-                </select>
-            </div>
-            <div class="select-down">
-                <span class="select-down-span date placeholder">日<i class="down"></i></span>
-                <select class="select-down-select date" autocomplete="off" id="c_sdate">
-                </select>
-            </div>
-            <i class="partion-h"></i>
-            <div class="select-down">
-                <span class="select-down-span year placeholder">年<i class="down"></i></span>
-                <select class="select-down-select year" autocomplete="off" id="c_eyear">
-                </select>
-            </div>
-            <div class="select-down">
-                <span class="select-down-span month placeholder">月<i class="down"></i></span>
-                <select class="select-down-select month" autocomplete="off" id="c_emonth">
-                </select>
-            </div>
-            <div class="select-down">
-                <span class="select-down-span date placeholder">日<i class="down"></i></span>
-                <select class="select-down-select date" autocomplete="off" id="c_edate">
-                </select>
-            </div>
-        </div>
-        <div class="row">
-            <span style="width:100px" class="tip">private：</span>
-            <div class="select-down" id="private">
-                <span class="select-down-span placeholder">private<i class="down"></i></span>
-                <select id="private-sel" class="select-down-select" autocomplete="off">
-                <option value="private" selected="true">private</option>
-                <option value="public">public</option>
-                </select>
-            </div>
-        </div>
-        <hr />
-        <div class="row">
-            <div style="margin-bottom:1em">修改学生名单(
-                <label for="add">添加</label>
-                <input type="radio" id="add" checked="checked" name="add" value="1" autocomplete="off" />&nbsp;&nbsp;
-                <label for="del">删除</label>
-                <input type="radio" id="del" name="add" value="0" autocomplete="off" />
-                )：
-            </div>
-            <textarea style="width:710px;height:205px" id="students" name="students"></textarea>
-        </div>
-        <hr />
-        <div class="row">
-            <span class="tip">描述：</span>
-            <textarea style="width:610px" id="describe"></textarea>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
-            <button id="mode-course-submit" style="margin-right:15px;" class="btn btn-primary">确认修改</button>
-        </div>
-    </div>
 
 
 <script type="text/javascript">
@@ -382,65 +341,6 @@
         });
         
     });
-
-//修改课程，需要后台动态填写信息
-    $('#mode-course').on('click', function(event) {
-        var url = 'http://www.baidu.com';
-
-/*
-**********以下代码纯属演示和自己测试，有ajax存在的话应该删除*********************************
-*/
-        //json可以采用这种格式
-        var jsonStr = '{ "title": "数据结构", "describe": "这是一门很有用的课程", ';
-        jsonStr += '"stime": "2015-05-12", "etime": "2029-12-09", ';
-        jsonStr += '"private": "public" }';
-        var json = $.parseJSON(jsonStr);
-
-        var stime = json.stime.split('-'), etime = json.etime.split('-');
-
-        var $modal = $('#myModal2');
-        $('#title', $modal).val(json.title);
-        $('#describe', $modal).val(json.describe);
-        $('#c_syear', $modal).val(+stime[0]).prev('span').html(stime[0] + ' 年<i class="down"></i>');
-        $('#c_smonth', $modal).val(+stime[1]).prev('span').html(stime[1] + ' 月<i class="down"></i>');
-        $('#c_sdate', $modal).val(+stime[2]).prev('span').html(stime[2] + ' 日<i class="down"></i>');
-
-        $('#c_eyear', $modal).val(+etime[0]).prev('span').html(etime[0] + ' 年<i class="down"></i>');
-        $('#c_emonth', $modal).val(+etime[1]).prev('span').html(etime[1] + ' 月<i class="down"></i>');
-        $('#c_edate', $modal).val(+etime[2]).prev('span').html(etime[2] + ' 日<i class="down"></i>');
-
-        $('#private option[value="' + json.private + '"]', $modal).prop('selected', 'true');
-        $('#private-sel', $modal).prev('span').html(json.private + '<i class="down"></i>');
-/*
-************************************************************************************************
-*/      
-        $.getJSON(url, {courseid: '1000'}, function(data) {
-            var jsonStr = '{ "title": "数据结构", "describe": "这是一门很有用的课程", ';
-            jsonStr += '"stime": "2015-05-12", "etime": "2029-12-09", ';
-            jsonStr += '"private": "public" }';
-            var json = $.parseJSON(jsonStr);
-
-            var stime = json.stime.split('-'), etime = json.etime.split('-');
-
-            var $modal = $('#myModal2');
-            $('#title', $modal).val(json.title);
-            $('#describe', $modal).val(json.describe);
-            $('#c_syear', $modal).val(+stime[0]).prev('span').html(stime[0] + ' 年<i class="down"></i>');
-            $('#c_smonth', $modal).val(+stime[1]).prev('span').html(stime[1] + ' 月<i class="down"></i>');
-            $('#c_sdate', $modal).val(+stime[2]).prev('span').html(stime[2] + ' 日<i class="down"></i>');
-
-            $('#c_eyear', $modal).val(+etime[0]).prev('span').html(etime[0] + ' 年<i class="down"></i>');
-            $('#c_emonth', $modal).val(+etime[1]).prev('span').html(etime[1] + ' 月<i class="down"></i>');
-            $('#c_edate', $modal).val(+etime[2]).prev('span').html(etime[2] + ' 日<i class="down"></i>');
-
-            $('#private option[value="' + json.private + '"]', $modal).prop('selected', 'true');
-            $('#private-sel', $modal).prev('span').html(json.private + '<i class="down"></i>');
-        });
-        
-        $("#myModal2").modal("show");
-    });
-
-
 //================================================
     $('#submit').bind('click',function(c) {
         

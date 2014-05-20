@@ -80,7 +80,7 @@ class Course_model extends CI_Model
 	public function get_course_item($courseId)
 	{
 		$courseId = $this->db->escape($courseId);
-		$sql = "SELECT courseId , course.userId , course.name as courseName ,
+		$sql = "SELECT courseId , course.userId , course.name as courseName ,description,
 					startTime ,endTime,private, course.programLan, user.name 
 				FROM course LEFT JOIN user ON course.userId = user.userId 
 				WHERE courseId = ".$courseId;

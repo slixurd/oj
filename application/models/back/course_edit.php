@@ -304,7 +304,7 @@ class Course_edit extends CI_Model
 		}
 		$privilege_array = array("read","submit","edit");
 		$affect = 0;
-		for($i = 0;$i<4;$i++){
+		for($i = 0;$i<3;$i++){
 			$sql = "INSERT INTO privilege_common(common,commonId,userId,privilege) VALUES('course',".$courseId.",".$userId.",'".$privilege_array[$i]."')";
 			$this->db->query($sql);
 			$affect = $this->db->affected_rows();

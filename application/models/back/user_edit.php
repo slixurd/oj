@@ -26,7 +26,13 @@ class User_edit extends CI_Controller {
 			return true;
 		return false;
 	}
-	
+	public function get_user_type($userId){
+		$userId = $this->db->escape($userId);
+		$sql = "SELECT type FROM user WHERE userId = ".$userId;
+		$result = $this->db->query($sql);
+		return $result->row_array(0);
+	}
+
 	//获取对应竞赛或者单元的全部权限
 	public function get_user_privilege_list($userId,$common,$commonId){
 		$commonId = $this->db->escape($commonId);
@@ -41,6 +47,51 @@ class User_edit extends CI_Controller {
 		return $result;
 	}
 	
+	public function add_pri($adminId,$userId,$common,$commonId){
+		$ptype = $this->get_user_type($adminId);
+		$ptype = empty($ptype)? false : $ptype["type"];
+		//管理员可以添加任意的权限
+		//非管理员必须拥有该课程/竞赛的edit权限
+		if($ptype == "admin"){
+			$check = true;
+		}else{
+			$sql = "SELECT * FROM privilege_common 
+					WHERE common = 'course' AND userId = ".$adminId." AND commonId = ".$commonId;
+			$query = $this->db->query($sql);
+			$query = $query->result_array();
+			$check = false;
+			if(!empty($query))
+			foreach ($query as $pri_query) {
+				if($pri_query['privilege'] === "edit"){
+					$check = true;break;
+				}
+			}			
+		}
+
+		if($check === false)
+			return false;
+		$ctype = $this->get_user_type($userId);
+		$ctype = empty($ctype)? false : $ctype["type"];
+		if($ctype == "teacher" ||$ctype == "assistant"||$ctype == "admin")
+			$this->add_single_pri($userId,$common,$commonId,"edit");
+		$this->add_single_pri($userId,$common,$commonId,"read");
+		$this->add_single_pri($userId,$common,$commonId,"submit");
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;
+	}
+
+	private function add_single_pri($userId,$common,$commonId,$kind){
+		$sql = "INSERT INTO privilege_common(common,userId,commonId,privilege) 
+		 VALUES('".$common."',".$userId.",".$commonId.",'".$kind."')";
+		$this->db->query($sql);
+		$affect = $this->db->affected_rows();
+		if(is_numeric($affect) && $affect > 0)
+			return true;
+		return false;		
+	}
+
 	public function add_user($user_array=array('name'=>"name",'email'=>"example@qq.com",'password'=>"123456",'salt'=>""),$user_state_array=array('submit'=>0,'solved'=>0))
 	{
 		$this->db->trans_start();

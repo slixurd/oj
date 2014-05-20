@@ -22,52 +22,59 @@
             </table>
 
             <div class="margin-top">
-            <h3>类型设置</h3>
-            <div class="row">
-                <span class="tip">用户ID：</span>
-                <input type="text" id="userid1" />
-            </div>
-            <div class="row">
-                <span class="tip">权限类型：</span>
-                <div class="select-down">
-                    <span class="select-down-span">管理员<i class="down"></i></span>
-                    <select id="type1" class="select-down-select">
-                        <option value="0">管理员</option>
-                        <option value="1">老师</option>
-                        <option value="2">助教</option>
-                    </select>
+                <h3>类型设置</h3>
+                <div class="row">
+                    <span class="tip">用户名：</span>
+                    <input type="text" id="userid1" />
                 </div>
-            </div>
-            <div class="submit-footer" style="padding-top:0">
-                <input id="submit1" type="button" class="btn" value="确认修改" />
-            </div>
-            <hr />
-            <h3>权限设置</h3>
-            <div class="row">
-                <span class="tip">用户ID：</span>
-                <input type="text" id="userid2" />
-            </div>
-            <div class="row">
-                <span class="tip">类型选择：</span>
-                <div class="select-down">
-                    <span class="select-down-span">课程<i class="down"></i></span>
-                    <select id="type2" class="select-down-select">
-                        <option value="0">课程</option>
-                        <option value="1">竞赛</option>
-                    </select>
+                <div class="row">
+                    <span class="tip">权限类型：</span>
+                    <div class="select-down">
+                        <span class="select-down-span">管理员<i class="down"></i></span>
+                        <select id="type1" class="select-down-select">
+                            <option value="0">管理员</option>
+                            <option value="1">老师</option>
+                            <option value="2">助教</option>
+                        </select>
+                    </div>
+
                 </div>
-            </div>
-            <div class="row">
-                    <span class="tip">权限：</span>
-                <div style="display:inline-block;width:195px;vertical-align:middle;text-align:left">
-                    <input id="read" style="margin:0 5px 0 10px" type="checkbox" />r
-                    <input id="write" style="margin:0 5px 0 40px" type="checkbox" />w
-                    <input id="exec" style="margin:0 5px 0 40px" type="checkbox" />x
+                <div class="submit-footer" style="padding-top:0">
+                    <input id="submit1" type="button" class="btn" value="确认修改" />
                 </div>
-            </div>
-            <div class="submit-footer" style="padding-top:0">
-                <input id="submit2" type="button" class="btn" value="确认修改" />
-            </div>
+                <div style="width:450px;margin:20px auto;">添加了助教身份后需要设置助教允许修改的课程/竞赛ID,否则没有添加删除的权限</div> 
+                <hr />
+                <h3>权限设置</h3>
+
+                <div class="row">
+                    <span class="tip">用户名：</span>
+                    <input type="text" id="userid2" />
+                </div>
+                <div class="row">
+                    <span class="tip">类型选择：</span>
+                    <div class="select-down">
+                        <span class="select-down-span">课程<i class="down"></i></span>
+                        <select id="type2" class="select-down-select">
+                            <option value="0">课程</option>
+                            <option value="1">竞赛</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <span style="width:100px;" class="tip">课程/竞赛ID：</span>
+                    <input type="text" id="commonId" />
+                </div>
+                <!-- div class="row">
+                        <span class="tip">权限：</span>
+                    <div style="display:inline-block;width:195px;vertical-align:middle;text-align:left">
+                        <input id="read" style="margin:0 5px 0 10px" type="checkbox" />r
+                        <input id="write" style="margin:0 5px 0 40px" type="checkbox" />w
+                        <input id="exec" style="margin:0 5px 0 40px" type="checkbox" />x
+                    </div>
+                </div -->
+                <div class="submit-footer" style="padding-top:0">
+                    <input id="submit2" type="button" class="btn" value="确认修改" />
+                </div>
             </div>
         </div>
     </div>
@@ -83,17 +90,19 @@
     });
 
     $("#submit1").bind('click', function(event) {
-        var url,userid,type;
-        url = '';
-        userid = $('#userid1').val();
+        var url,username,type;
+        url = '<?php echo site_url("admin/misc/update_type") ?>';
+        username = $('#userid1').val();
         type = $('#type1').val();
-        console.log(userid.length)
-        if(userid.length == 0) {
-            myPopover($('#userid1'),'ID不能为空','right');
+        if(username.length == 0) {
+            myPopover($('#userid1'),'用户名不能为空','right');
             return false;
         }
-        $.post(url,{userid: userid,type: type},function(data){
-
+        $.post(url,{username: username,type: type},function(data){
+            if(data.status == true )
+                 window.location.reload();
+             else
+                alert(data.reason);
         },"json");
     });
 
@@ -101,20 +110,20 @@
 
     $("#submit2").bind('click', function(event) {
         var url,userid,type,authority,read,write,exec;
-        url = '';
+        url = '<?php echo site_url("admin/misc/update_pri") ?>';
         userid = $('#userid2').val();
         if(userid.length == 0) {
             myPopover($('#userid2'),'ID不能为空','right');
             return false;
         }
         type = $('#type2').val();
-        read = $('#read').prop('checked') ? 4 : 0;
-        write = $('#write').prop('checked') ? 2 : 0;
-        exec = $('#exec').prop('checked') ? 1 : 0;
-        authority = read + write + exec;
+        cid = $("#commonId").val();
 
-        $.post(url,{ userid: userid, type: type, authority: authority},function(data){
-
+        $.post(url,{ userid: userid, type: type, cid : cid},function(data){
+            if(data.status == true )
+                 window.location.reload();
+             else
+                alert(data.reason);
         },"json");
         
     });

@@ -34,7 +34,7 @@
             event.preventDefault();
         }else{
             $.post(url,{user:userid},function(data){
-                
+                window.location.reload();
             });
         }
         
