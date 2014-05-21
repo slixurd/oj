@@ -85,10 +85,7 @@ CREATE TABLE `contest` (
   `description` text,
   `private` tinyint(4) NOT NULL DEFAULT '0',
   `programLan` tinyint(4) DEFAULT NULL,
-  `userId` int(11) NOT NULL,
   PRIMARY KEY (`contestId`),
-  KEY `userId` (`userId`),
-  CONSTRAINT `contest_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

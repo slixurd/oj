@@ -11,7 +11,7 @@ class Contest extends CI_Controller {
     public function index($page = 1){
 		Global $data;
 		
-		 $this->load->model("user_model");
+		$this->load->model("user_model");
         $this->load->model("back/contest_edit","contest_edit");
         $this->load->model("back/user_edit","user_edit");
         
@@ -149,9 +149,10 @@ class Contest extends CI_Controller {
     }
     
     public function add_up(){
-		$this->load->model("user_model");
-        $this->load->model("back/contest_edit","contest_edit");
 		Global $data;
+		$this->load->model("user_model");
+		//$this->load->model("back/user_edit");
+        $this->load->model("back/contest_edit");
         if(!$data['is_login']){
             $this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
             return;
@@ -168,7 +169,7 @@ class Contest extends CI_Controller {
             return;      
 		}
 		
-		$cid = $this->contest_edit->add_contest($title,$stime,$etime,$private,$describe);
+		$cid = $this->contest_edit->add_contest($data['user']['userId'],$title,$stime,$etime,$private,$describe);
 		if($cid == false || !is_numeric($cid)){
 			 $this->error->show_error("提交出错",array("请重新提交"),$data);
             return;        
