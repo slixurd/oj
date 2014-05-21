@@ -13,7 +13,6 @@ class Contest extends CI_Controller {
 		
 		$this->load->model("user_model");
         $this->load->model("back/contest_edit","contest_edit");
-        $this->load->model("back/user_edit","user_edit");
         
 		if(!is_numeric($page) || $page< 1){
 			 $this->error->show_error("对不起，地址错误",array("页面编号错误"),$data);
@@ -33,7 +32,7 @@ class Contest extends CI_Controller {
         
         $total = $this->contest_edit->get_contest_count();
         $data['contest_list'] = $this->contest_edit->get_contest_list(($page-1)*10,10);
-        //echo var_dump($data);
+        echo var_dump($data);
         
         $this->load->library('pagination');
         $config['first_link'] = TRUE;
@@ -151,7 +150,7 @@ class Contest extends CI_Controller {
     public function add_up(){
 		Global $data;
 		$this->load->model("user_model");
-		//$this->load->model("back/user_edit");
+		$this->load->model("back/user_edit");
         $this->load->model("back/contest_edit");
         if(!$data['is_login']){
             $this->error->show_error("对不起，请先登录",array("你还没有登录，请先登录！"),$data);
@@ -175,12 +174,11 @@ class Contest extends CI_Controller {
             return;        
 		}
 		
+		echo "yaya<BR>";
 		//批量插入学生
 		$stu_nums = preg_split("/\ |\n|\r/",$students);
 		foreach($stu_nums as $stu_num){
-			if($this->contest_edit->unique_user($stu_num )){
-				$this->contest_edit->add_contest_user($stu_num,"12345678",$cid);
-			}
+			$this->contest_edit->add_contest_user($stu_num,"12345678",$cid);
 		}
 		
 		//redirect('/admin/contest/problem/'.$cid, 'location', 301);

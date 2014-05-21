@@ -130,7 +130,7 @@ class Course extends CI_Controller {
             $this->error->show_error("提交时间出错",array("重新检查"),$data);
             return;            
         }
-        $this->load->model("user_model",'user_edit');
+        $this->load->model("back/user_edit",'user_edit');
 
         $this->load->model("back/course_edit",'cedit');
         if(!is_numeric($tid = $this->user_edit->get_id_by_name($teacher)) || $tid == false ){

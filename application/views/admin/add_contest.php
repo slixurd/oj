@@ -1,5 +1,5 @@
         <div class="add-course pull-right">
-        <form action="<?php echo site_url("admin/") ?>" method="post">
+        <form action="<?php echo site_url("admin/contest/add_up") ?>" method="post">
             <h3>添加竞赛</h3>
             <div class="row">
                 <span class="tip">竞赛名称：</span>

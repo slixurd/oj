@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class User_edit extends CI_Controller {
+class User_edit extends CI_Model {
 	
 	public function del_user_privilege($common,$commonId,$userId,$kind){
 		$commonId = $this->db->escape($commonId);
